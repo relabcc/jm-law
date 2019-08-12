@@ -15,11 +15,19 @@ const generateFade = (r, g, b) => range(10, 100, 10)
 
 const flatternColors = mapValues(colors, (listOfColors) => listOfColors[5]);
 
-const font = 'Arial, "PingFang TC", "HeiTi TC", "Microsoft JhengHei", sans-serif';
+const font = 'Comfortaa, Arial, "PingFang TC", "HeiTi TC", "Microsoft JhengHei", sans-serif';
 
 const white = '#fff';
 const black = '#000';
-const primary = 'blue';
+const text = '#292340';
+const gray = '#7d7e80'
+const lightGray = '#bbbdbf'
+const darkGray = '#4d4d4f'
+const orange = '#f1a820'
+const darkOrange = '#ea8034'
+const lightOrange = '#ffcf6d'
+const darkRed = '#ae2119'
+const primary = orange;
 const secondary = 'green';
 const danger = 'red';
 
@@ -28,10 +36,16 @@ export default {
     ...flatternColors,
     white,
     black,
-    text: black,
-    primary: flatternColors[primary],
-    primaryHover: colors[primary][9],
-    primaryVariations: colors[primary],
+    gray,
+    lightGray,
+    darkGray,
+    orange,
+    darkOrange,
+    lightOrange,
+    darkRed,
+    text,
+    primary,
+    primaryHover: darkOrange,
     danger: flatternColors[danger],
     dangerHover: colors[danger][9],
     dangerVariations: colors[danger],
