@@ -54,7 +54,7 @@ class IndexPage extends PureComponent {
               ))}
             </select>
           </Box>
-          <BubbleLine ratio={1 / 3} data={bureauTotal} sortBy={sortBy} sortOrder={sortOrder} />
+          <BubbleLine ratio={1 / 4} data={bureauTotal} sortBy={sortBy} sortOrder={sortOrder} />
         </Container>
       </Layout>
     )

@@ -7,6 +7,7 @@ import { scaleLinear, scalePower } from '@vx/scale';
 import { LinearGradient } from '@vx/gradient';
 
 import ChartBase from 'components/Charts/ChartBase'
+import LineBreakText from 'components/Charts/LineBreakText'
 import theme from 'components/ThemeProvider/theme'
 
 const emPercent = n => (
@@ -22,14 +23,16 @@ const BubbleLine = ({ data, sortBy, sortOrder, ...props }) => {
   return (
     <ChartBase {...props}>
       {({ width, height }) => {
-        const em = Math.floor(width / 70)
-        const rMax = height / 4
-        const labelWidth = width / 10
-        const xStart = labelWidth + rMax
-        const xEnd = width - rMax
-        const lableY = height / 2 + height / 20
-        const rateY = height / 2 + height / 20 + height * 0.15
-        const dollarRateY = height / 2 + height / 20 + height * 0.15 * 2
+        const em = Math.floor(width / 90)
+        const rLabelHeight = 2 * em
+        const rMax = height * 0.2
+        const leftLabelWidth = width * 0.075
+        const rightInfoWidth = width * 0.18
+        const xStart = leftLabelWidth + rMax
+        const xEnd = width - rMax - rightInfoWidth
+        const lableY = rLabelHeight + rMax * 2 + em * 4
+        const rateY = lableY + em * 3
+        const dollarRateY = rateY + em * 2.5
 
         const xScale = scaleLinear({
           domain: [0, data.length - 1],
@@ -41,68 +44,61 @@ const BubbleLine = ({ data, sortBy, sortOrder, ...props }) => {
           range: [0, rMax],
           exponent: 2,
         });
+
         return (
           <Fragment>
-            <LinearGradient from="#383a58" to="#221836" vertical={false} id="dark" />
+            <LinearGradient from={theme.colors.darkBlue} to={theme.colors.darkerBlue} vertical={false} id="dark" />
             <LinearGradient from={theme.colors.darkRed} to={theme.colors.lightOrange} vertical={false} id="rate" />
             <g>
               <rect
-                width={labelWidth}
-                height={height}
+                width={leftLabelWidth}
+                height={height - rLabelHeight / 2}
                 x={0}
-                y={0}
+                y={rLabelHeight / 2}
                 opacity={0.15}
                 fill="url('#dark')"
                 rx={em}
               />
-              <text
-                x={labelWidth / 2}
-                y={rMax - em / 2}
-                textAnchor="middle"
-                fontSize={em}
-              >
-                已開
-              </text>
-              <text
-                x={labelWidth / 2}
-                y={rMax + em * 0.8}
-                textAnchor="middle"
-                fontSize={em}
-              >
-                案件量
-              </text>
-              <text
-                x={labelWidth / 2}
-                y={rateY + em / 3}
-                textAnchor="middle"
-                fontSize={em}
-              >
-                收繳率
-              </text>
-              <text
-                x={labelWidth / 2}
-                y={dollarRateY + em / 3}
-                textAnchor="middle"
-                fontSize={em}
-              >
-                執行率
-              </text>
-              <text
-                x={labelWidth / 2}
-                y={lableY + em / 3}
-                textAnchor="middle"
-                fontSize={em}
-              >
-                局處
-              </text>
+              {[lableY, rateY - 2 * em / 3, dollarRateY - 2 * em / 3].map((y, i) => (
+                <line
+                  key={i}
+                  x1={em}
+                  x2={leftLabelWidth - em}
+                  y1={y - em *2 / 3}
+                  y2={y - em *2 / 3}
+                  stroke={theme.colors.text}
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                />
+              ))}
+              {[
+                { label: '已開案件量', y: rLabelHeight + rMax - em / 2 },
+                { label: '局處', y: lableY + em },
+                { label: '收繳率', y: rateY + em / 3 },
+                { label: '執行率', y: dollarRateY + em / 3 },
+              ].map(({ label, y }, i) => (
+                <LineBreakText
+                  key={i}
+                  x={leftLabelWidth / 2}
+                  y={y}
+                  textAnchor="middle"
+                  fontSize={1.25 * em}
+                  fontWeight="bold"
+                  maxLength={3}
+                  letterSpacing="2"
+                >
+                  {label}
+                </LineBreakText>
+              ))}
             </g>
             <line
               x1={xStart}
-              y1={rMax}
-              x2={xEnd}
-              y2={rMax}
+              y1={rLabelHeight + rMax}
+              x2={width}
+              y2={rLabelHeight + rMax}
               stroke={theme.colors.lightGray}
               strokeWidth="2"
+              strokeLinecap="round"
             />
             <rect
               width={xEnd - xStart + rMax}
@@ -112,14 +108,14 @@ const BubbleLine = ({ data, sortBy, sortOrder, ...props }) => {
               y={rateY - em}
               rx={em}
             />
-            <rect
+            {/* <rect
               width={xEnd - xStart + rMax}
               height={2 * em}
               fill="url('#rate')"
               x={xStart - rMax / 2}
               y={dollarRateY - em}
               rx={em}
-            />
+            /> */}
             <NodeGroup
               // must make react-move think data had been updated, so we inject width and height here
               data={loSortBy(data.map(d => ({ ...d, width, height })), sortBy)}
@@ -150,19 +146,30 @@ const BubbleLine = ({ data, sortBy, sortOrder, ...props }) => {
                       <g key={key}>
                         <Circle
                           cx={cx}
-                          cy={rMax}
+                          cy={rLabelHeight + rMax}
                           r={r}
-                          fill={theme.colors.primary}
+                          fill={theme.colors.lightOrange}
                           opacity={opacity}
                         />
-                        <text
+                        <line
+                          x1={cx}
+                          x2={cx}
+                          y1={rLabelHeight + rMax}
+                          y2={lableY + em}
+                          stroke={theme.colors.lightGray}
+                        />
+                        <LineBreakText
                           x={cx}
-                          y={lableY + em / 3}
+                          y={lableY + em}
                           textAnchor="middle"
                           fontSize={em}
+                          maxLength={3}
+                          lineBefore
+                          em={em}
+                          bg="white"
                         >
                           {d.label}
-                        </text>
+                        </LineBreakText>
                         <text
                           x={cx}
                           y={rateY + em / 3}
@@ -179,7 +186,6 @@ const BubbleLine = ({ data, sortBy, sortOrder, ...props }) => {
                           textAnchor="middle"
                           fontWeight="bold"
                           fontSize={em}
-                          fill="white"
                         >
                           {emPercent(d.receiveDollarRate)}
                         </text>
@@ -191,7 +197,7 @@ const BubbleLine = ({ data, sortBy, sortOrder, ...props }) => {
                       <g key={key}>
                         <Circle
                           cx={cx}
-                          cy={rMax}
+                          cy={rMax + rLabelHeight}
                           r={rMax / 25}
                           fill={theme.colors.darkGray}
                         />

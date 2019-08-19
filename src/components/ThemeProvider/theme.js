@@ -1,8 +1,5 @@
 import merge from 'lodash/merge';
 import range from 'lodash/range';
-import mapValues from 'lodash/mapValues';
-
-import colors from 'open-color/open-color.json';
 
 const emToPx = (em) => `${em * 16}px`;
 
@@ -13,32 +10,42 @@ export const mobileOrDesktop = (mobile, desktop) => [mobile, null, null, desktop
 const generateFade = (r, g, b) => range(10, 100, 10)
   .reduce((fade, opacity) => merge(fade, { [opacity]: `rgba(${[r, g, b, opacity / 100].join()})` }), {});
 
-const flatternColors = mapValues(colors, (listOfColors) => listOfColors[5]);
 
 const font = 'Comfortaa, Arial, "PingFang TC", "HeiTi TC", "Microsoft JhengHei", sans-serif';
 
+const spectrum = [
+  '#9e7961',
+  '#f2bc4a',
+  '#ec921e',
+  '#ec6432',
+  '#d53d1f',
+  '#af1b08',
+]
+
+const darkBlue = '#2d3555'
+const darkerBlue = '#171835'
+
 const white = '#fff';
 const black = '#000';
-const text = '#292340';
+const text = '#040000';
 const gray = '#7d7e80'
-const lightGray = '#bbbdbf'
-const darkGray = '#4d4d4f'
-const orange = '#f1a820'
-const darkOrange = '#ea8034'
-const lightOrange = '#ffcf6d'
-const darkRed = '#ae2119'
+const lightGray = '#c9caca'
+const darkGray = '#4c4948'
+const orange = spectrum[2]
+const darkOrange = spectrum[4]
+const lightOrange = spectrum[1]
+const darkRed = spectrum[5]
 const primary = orange;
-const secondary = 'green';
-const danger = 'red';
 
 export default {
   colors: {
-    ...flatternColors,
     white,
     black,
     gray,
     lightGray,
     darkGray,
+    darkBlue,
+    darkerBlue,
     orange,
     darkOrange,
     lightOrange,
@@ -46,13 +53,7 @@ export default {
     text,
     primary,
     primaryHover: darkOrange,
-    danger: flatternColors[danger],
-    dangerHover: colors[danger][9],
-    dangerVariations: colors[danger],
-    secondary: flatternColors[secondary],
-    secondaryHover: colors[secondary][9],
-    secondaryVariations: colors[secondary],
-    variations: colors,
+    spectrum,
     fade: {
       white: generateFade(255, 255, 255),
       black: generateFade(0, 0, 0),
