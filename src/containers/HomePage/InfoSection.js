@@ -18,8 +18,8 @@ const InfoSection = ({
   const mainValueStart = xEnd - (get(main.unit, 'length', -0.25) + 0.25) * em
   const mainValueWidth = main.value.toString().length * 1.5 * em
   const mainLabelStart = mainValueStart - mainValueWidth
-  const subValueStart = xEnd - (get(sub.unit, 'length', -0.25) + 0.25) * em
-  const subValueWidth = sub.value.toString().length * 0.75 * em
+  const subValueStart = xEnd - (get(sub, ['unit', 'length'], -0.25) + 0.25) * em
+  const subValueWidth = get(sub, 'value', '').toString().length * 0.75 * em
   const subLabelStart = subValueStart - subValueWidth
   const labelStart = Math.min(subLabelStart, mainLabelStart)
   return (

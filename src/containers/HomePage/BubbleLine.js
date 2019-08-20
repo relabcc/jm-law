@@ -153,6 +153,15 @@ const BubbleLine = ({ data, sortBy, sortOrder, ...props }) => {
                           fill={theme.colors.lightOrange}
                           opacity={opacity}
                         />
+                        <text
+                          fill={theme.colors.darkGray}
+                          x={cx}
+                          y={rLabelHeight + rMax - r - 0.5 * em}
+                          textAnchor="middle"
+                          fontSize={em}
+                        >
+                          {d.issued}
+                        </text>
                         <line
                           x1={cx}
                           x2={cx}
@@ -222,6 +231,31 @@ const BubbleLine = ({ data, sortBy, sortOrder, ...props }) => {
                 value: data.reduce((sum, d) => sum + d.issuedDollar, 0),
                 label: '案件金額',
                 unit: '元',
+              }}
+            />
+            <InfoSection
+              xEnd={width}
+              y={rLabelHeight + 9.5 * em}
+              em={em}
+              main={{
+                value: data.reduce((sum, d) => sum + d.received, 0),
+                label: '收繳案件',
+                unit: '件',
+              }}
+              sub={{
+                value: data.reduce((sum, d) => sum + d.receivedDollar, 0),
+                label: '收繳金額',
+                unit: '元',
+              }}
+            />
+            <InfoSection
+              xEnd={width}
+              y={rLabelHeight + 18 * em}
+              em={em}
+              main={{
+                value: data.reduce((sum, d) => sum + d.canceled, 0),
+                label: '撤銷案件量',
+                unit: '件',
               }}
             />
           </Fragment>
