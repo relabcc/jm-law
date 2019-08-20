@@ -46,22 +46,18 @@ const LineBreakText = ({
   }
   const lines = backwardAutoLineBreak(children, maxLength)
   const yPos = lines.map((c, i, { length }) => y + lineHeight * fontSize * (lineBefore ? i - length + 1 : i));
-  const texts = (
-    <g>
-      {lines.map((c, i) => (
-        <text
-          key={i}
-          x={x}
-          y={yPos[i]}
-          textAnchor="middle"
-          fontSize={fontSize}
-          {...props}
-        >
-          {c}
-        </text>
-      ))}
-    </g>
-  )
+  const texts = lines.map((c, i) => (
+    <text
+      key={i}
+      x={x}
+      y={yPos[i]}
+      textAnchor="middle"
+      fontSize={fontSize}
+      {...props}
+    >
+      {c}
+    </text>
+  ))
   return bg ? (() => {
     const w = maxLength * em
     const yStart = Math.min(...yPos)

@@ -10,6 +10,8 @@ import ChartBase from 'components/Charts/ChartBase'
 import LineBreakText from 'components/Charts/LineBreakText'
 import theme from 'components/ThemeProvider/theme'
 
+import InfoSection from './InfoSection'
+
 const emPercent = n => (
   <Fragment>
     {Math.round(n * 100)}
@@ -25,7 +27,7 @@ const BubbleLine = ({ data, sortBy, sortOrder, ...props }) => {
       {({ width, height }) => {
         const em = Math.floor(width / 90)
         const rLabelHeight = 2 * em
-        const rMax = height * 0.2
+        const rMax = height * 0.22
         const leftLabelWidth = width * 0.075
         const rightInfoWidth = width * 0.18
         const xStart = leftLabelWidth + rMax
@@ -207,6 +209,21 @@ const BubbleLine = ({ data, sortBy, sortOrder, ...props }) => {
                 </g>
               )}
             </NodeGroup>
+            <InfoSection
+              xEnd={width}
+              y={rLabelHeight + 2 * em}
+              em={em}
+              main={{
+                value: data.reduce((sum, d) => sum + d.issued, 0),
+                label: '已開案量',
+                unit: '件',
+              }}
+              sub={{
+                value: data.reduce((sum, d) => sum + d.issuedDollar, 0),
+                label: '案件金額',
+                unit: '元',
+              }}
+            />
           </Fragment>
         );
       }}
