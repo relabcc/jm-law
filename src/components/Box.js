@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 import tag from 'clean-tag';
 import {
@@ -50,6 +50,6 @@ Box.defaultProps = {
 
 Box.displayName = 'Box';
 
-Box.inline = (props) => <Box is="span" display="inline-block" verticalAlign="middle" {...props} />;
+Box.inline = forwardRef((props, ref) => <Box is="span" ref={ref} display="inline-block" verticalAlign="middle" {...props} />);
 
 export default Box;
