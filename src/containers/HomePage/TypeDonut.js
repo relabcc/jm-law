@@ -83,7 +83,7 @@ class TypeDonut extends PureComponent {
     return (
       <ChartBase {...props}>
         {({ width, height }) => {
-          const em = this.context.fontSize
+          const { em } = this.context
           const donutR = height * 0.45 - 2 * em;
           const legendBottom = height - 4 * em
           return (

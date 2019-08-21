@@ -25,10 +25,9 @@ const BubbleLine = ({ data, sortBy, sortOrder, ...props }) => {
   // console.log(data)
   return (
     <FontSizeContext.Consumer>
-      {({ fontSize }) => (
+      {({ em }) => (
         <ChartBase {...props}>
           {({ width, height }) => {
-            const em = fontSize
             const rLabelHeight = 2 * em
             const rMax = height * 0.22
             const leftLabelWidth = width * 0.075
@@ -47,7 +46,7 @@ const BubbleLine = ({ data, sortBy, sortOrder, ...props }) => {
             const rScale = scalePower({
               domain: [0, max(data, d => d.issued)],
               range: [0, rMax],
-              exponent: 2,
+              exponent: 0.5,
             });
 
             return (

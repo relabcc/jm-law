@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent, createElement } from 'react'
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
 
@@ -14,6 +14,7 @@ import withData from 'services/api/withData'
 import Layout from '../Layout';
 import BubbleLine from './BubbleLine'
 import TypeDonut from './TypeDonut'
+import PercentBars from './PercentBars'
 
 const keys = [
   'canceled',
@@ -72,7 +73,6 @@ class IndexPage extends PureComponent {
       activeType,
       mappedData
     } = this.state
-    console.log(activeType)
     const bureauTotal = mappedData.map(({ label, monthData }) => ({
       label,
       ...keys.reduce((allData, key) => {
@@ -94,7 +94,6 @@ class IndexPage extends PureComponent {
       })
       return allTypes
     }, {}))
-    console.log('total', bureauTotal)
     return (
       <Layout>
         <Container py={mobileOrDesktop(0, '2em')}>
@@ -113,13 +112,13 @@ class IndexPage extends PureComponent {
             <Flex mx="-1em" borderBottom="1px solid white">
               <Box px="1em" width={1 / 3} borderRight="1px solid white">
                 <Box position="relative">
-                  <TypeDonut
-                    ratio={3 / 4}
-                    data={types}
-                    legends={typeLegends}
-                    onLegendClick={this.handleTypeFilter}
-                    activeLegend={activeType}
-                  />
+                  {createElement(chartIndex ? PercentBars : TypeDonut , {
+                    ratio: 3 / 4,
+                    data: types,
+                    legends: typeLegends,
+                    onLegendClick: this.handleTypeFilter,
+                    activeLegend: activeType,
+                  })}
                   <Box position="absolute" top="0" left="0">
                     <Toggler activeIndex={chartIndex} onToggle={this.handleChartToggle} options={['案件數', '收繳率']} />
                   </Box>

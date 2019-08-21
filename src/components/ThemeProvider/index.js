@@ -16,7 +16,7 @@ export default (props) => (
         {({ size: { width } }) => {
           const fontSize = Math.round(width / 94)
           return (
-            <FontSizeContext.Provider value={{ fontSize }}>
+            <FontSizeContext.Provider value={{ em: fontSize }}>
               <Box fontSize={fontSize} {...props} />
             </FontSizeContext.Provider>
           )
