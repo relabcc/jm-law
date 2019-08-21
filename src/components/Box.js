@@ -13,6 +13,7 @@ import {
   flex,
   opacity,
   style,
+  backgroundImage,
 } from 'styled-system';
 
 import blacklist from './utils/blacklist';
@@ -30,6 +31,7 @@ const Box = styled(tag)`
   ${flex}
   ${borderRadius}
   ${opacity}
+  ${backgroundImage}
   ${injectProps('whiteSpace')}
   ${injectProps('overflow')}
   ${injectProps('transform')}
