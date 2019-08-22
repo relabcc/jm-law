@@ -1179,6 +1179,17 @@
     classnames "^2.2.5"
     prop-types "^15.5.7"
 
+"@vx/grid@^0.0.190":
+  version "0.0.190"
+  resolved "https://registry.yarnpkg.com/@vx/grid/-/grid-0.0.190.tgz#3524ed2d69f77945c09c7e8ae9e6a8d11916cf6d"
+  integrity sha512-qhfRlfxTTwd/43oYEInp9YnPP2kkbUcsBjeaOrJ1pn29/k0pGBiuaJz7gvX844WrgbE0k9cqjb4mIKC7bvt16g==
+  dependencies:
+    "@vx/group" "0.0.190"
+    "@vx/point" "0.0.189"
+    "@vx/shape" "0.0.190"
+    classnames "^2.2.5"
+    prop-types "^15.6.2"
+
 "@vx/group@0.0.190":
   version "0.0.190"
   resolved "https://registry.yarnpkg.com/@vx/group/-/group-0.0.190.tgz#9bc1e568dbd44c04a0abad9a9a74c7364f231a35"

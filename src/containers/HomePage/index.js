@@ -18,6 +18,7 @@ import BubbleLine from './BubbleLine'
 import TypeDonut from './TypeDonut'
 import PercentBars from './PercentBars'
 import LawTop5 from './LawTop5'
+import YearChart from './YearChart'
 
 const keys = [
   'canceled',
@@ -92,7 +93,7 @@ class IndexPage extends PureComponent {
     const bureauTotal = mappedData.map(({ label, monthData }) => ({
       label,
       ...keys.reduce((allData, key) => {
-        allData[key] = monthData.reduce((all, { data, types }) => all + (activeType ? types[activeType].data[key] : data[key]), 0)
+        allData[key] = monthData.reduce((all, d) => all + (activeType ? d.types[activeType].data[key] : d.data[key]), 0)
         return allData
       }, {})
     })).map((d) => ({
@@ -110,6 +111,16 @@ class IndexPage extends PureComponent {
       })
       return allTypes
     }, {}))
+    const monthData = mappedData.reduce((md, d) => {
+      d.monthData.forEach((m) => {
+        md[m.month] = md[m.month] || {}
+        keys.forEach((key) => {
+          md[m.month][key] = md[m.month][key] || 0
+          md[m.month][key] += (activeType ? m.types[activeType].data[key] : m.data[key])
+        }, {})
+      })
+      return md
+    }, {})
     return (
       <Layout>
         <Box
@@ -154,6 +165,14 @@ class IndexPage extends PureComponent {
                   <Text>繳款入市庫平均日數： 5 天</Text>
                 </Flex>
                 <LawTop5 year={year} />
+              </Box>
+            </Flex>
+            <Flex px="5%" py="2em">
+              <Box px="2em">
+                <Text fontSize="1.5em" letterSpacing="0.15em">月案件量分析</Text>
+              </Box>
+              <Box flex="1">
+                <YearChart ratio={1 / 5} data={monthData} />
               </Box>
             </Flex>
           </Container>

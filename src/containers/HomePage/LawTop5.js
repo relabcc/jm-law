@@ -50,9 +50,10 @@ class LawTop5 extends PureComponent {
                             width: [xScale(law.count)],
                             timing: { duration: 200 },
                           }}
+                          key={law.id}
                         >
                           {(state) => (
-                            <Group key={law.id} top={i * em * 2.75}>
+                            <Group top={i * em * 2.75}>
                               <LineBreakText
                                 fill="white"
                                 fontSize={em}
