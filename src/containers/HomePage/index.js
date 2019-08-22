@@ -5,6 +5,8 @@ import reduce from 'lodash/reduce'
 import Container from 'components/Container'
 import Box from 'components/Box'
 import Flex from 'components/Flex'
+import Text from 'components/Text'
+import Button from 'components/Button'
 import Toggler from 'components/Toggler'
 
 import theme, { mobileOrDesktop } from 'components/ThemeProvider/theme';
@@ -15,6 +17,7 @@ import Layout from '../Layout';
 import BubbleLine from './BubbleLine'
 import TypeDonut from './TypeDonut'
 import PercentBars from './PercentBars'
+import LawTop5 from './LawTop5'
 
 const keys = [
   'canceled',
@@ -23,6 +26,12 @@ const keys = [
   'issuedDollar',
   'received',
   'receivedDollar',
+]
+
+const years = [
+  { value: 2019, label: 108 },
+  { value: 2018, label: 107 },
+  { value: 2017, label: 106 },
 ]
 
 const typeOrders= [
@@ -96,21 +105,27 @@ class IndexPage extends PureComponent {
     }, {}))
     return (
       <Layout>
-        <Container py={mobileOrDesktop(0, '2em')}>
-          <select onChange={e => updateParams({ year: e.target.value })}>
-            {[2019, 2018, 2017].map(y => (
-              <option key={y}>{y}</option>
-            ))}
-          </select>
-          <BubbleLine ratio={1 / 4} data={bureauTotal} sortBy={sortBy} sortOrder={sortOrder} />
-        </Container>
+        <Box
+          py="4em"
+          backgroundImage={`linear-gradient(#fff 80%, #e0e0e4 100%)`}
+        >
+          <Container>
+            <select onChange={e => updateParams({ year: e.target.value })}>
+              {years.map(y => (
+                <option key={y.value} value={y.value}>{y.label}</option>
+              ))}
+            </select>
+            <BubbleLine ratio={1 / 4} data={bureauTotal} sortBy={sortBy} sortOrder={sortOrder} />
+          </Container>
+        </Box>
         <Box
           py={mobileOrDesktop(0, '2em')}
+          color="white"
           backgroundImage={`linear-gradient(to right, ${theme.colors.darkBlue}, ${theme.colors.darkerBlue})`}
         >
           <Container>
-            <Flex mx="-1em" borderBottom="1px solid white">
-              <Box px="1em" width={1 / 3} borderRight="1px solid white">
+            <Flex borderBottom="1px solid">
+              <Box pl="1em" pr="2em" width={1 / 3} borderRight="1px solid">
                 <Box position="relative">
                   {createElement(chartIndex ? PercentBars : TypeDonut , {
                     ratio: 3 / 4,
@@ -124,7 +139,15 @@ class IndexPage extends PureComponent {
                   </Box>
                 </Box>
               </Box>
-              <Box px="1em" width={2 / 3}></Box>
+              <Box pl="2em" pr="1em" width={2 / 3}>
+                <Flex pt="0.5em" pb="1.25em" alignItems="center" borderBottom="1px solid">
+                  <Text fontSize="1.5em"><Text.inline letterSpacing="0.15em">違反法條</Text.inline> TOP 5</Text>
+                  <Button mx="2em">查看更多</Button>
+                  <Box flex="1" />
+                  <Text>繳款入市庫平均日數： 5 天</Text>
+                </Flex>
+                <LawTop5 />
+              </Box>
             </Flex>
           </Container>
         </Box>

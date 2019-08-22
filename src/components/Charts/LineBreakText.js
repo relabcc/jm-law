@@ -1,8 +1,9 @@
 import React from 'react';
 
-function backwardAutoLineBreak(str, maxLength) {
+function backwardAutoLineBreak(str, maxLength, fillFront) {
   if (!maxLength) return [str]
-  const strArr = Array.from(str).reverse()
+  const strArr = Array.from(str)
+  if (!fillFront) strArr.reverse()
   let i = 0
   const lines = strArr.reduce((lines, st) => {
     lines[i] = lines[i] || ''
@@ -10,9 +11,16 @@ function backwardAutoLineBreak(str, maxLength) {
       i += 1
       lines[i] = ''
     }
-    lines[i] = st + lines[i]
+    if (fillFront) {
+      lines[i] += st
+    } else {
+      lines[i] = st + lines[i]
+    }
     return lines
-  }, []).reverse()
+  }, [])
+  if (!fillFront) {
+    lines.reverse()
+  }
   if (lines[0].length === 1) {
     lines[0] += lines[1][0]
     lines[1] = lines[1].substr(1)
@@ -28,6 +36,7 @@ const LineBreakText = ({
   maxLength,
   lineHeight,
   lineBefore,
+  fillFront,
   bg,
   em,
   ...props
@@ -44,14 +53,13 @@ const LineBreakText = ({
       </text>
     );
   }
-  const lines = backwardAutoLineBreak(children, maxLength)
+  const lines = backwardAutoLineBreak(children, maxLength, fillFront)
   const yPos = lines.map((c, i, { length }) => y + lineHeight * fontSize * (lineBefore ? i - length + 1 : i));
   const texts = lines.map((c, i) => (
     <text
       key={i}
       x={x}
       y={yPos[i]}
-      textAnchor="middle"
       fontSize={fontSize}
       {...props}
     >
@@ -74,11 +82,12 @@ const LineBreakText = ({
         {texts}
       </g>
     )
-  })() : texts;
+  })() : <g>{texts}</g>;
 };
 
 LineBreakText.defaultProps = {
   lineHeight: 1.3,
+  y: 0,
 }
 
 export default LineBreakText;

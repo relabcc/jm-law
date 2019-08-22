@@ -46,7 +46,7 @@ function* handleRead({ resourceType, resources, requestKey, requestParams }) {
     yield call(
       handleRequest,
       resourceBase,
-      data => ({
+      ({ data }) => ({
         type: actionTypes.READ_RESOURCES_SUCCEEDED,
         resourceType,
         resources: data.map(processData),

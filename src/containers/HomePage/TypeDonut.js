@@ -27,8 +27,17 @@ class DonutShape extends PureComponent {
   render() {
     const { d, ...props } = this.props
     const { prevD, thisD } = this.state
-    const interpolator = interpolate(prevD, thisD)
 
+    if (!prevD) {
+      return (
+        <path
+          d={d}
+          {...props}
+        />
+      )
+    }
+
+    const interpolator = interpolate(prevD, thisD)
     return (
       <Animate
         start={{
@@ -60,12 +69,15 @@ class TypeDonut extends PureComponent {
 
   static getDerivedStateFromProps({ data, legends }) {
     return {
-      sorted: data.sort((a, b) => valueGetter(b) - valueGetter(a)),
       dataLength: data.length,
       getColorByName: legends.reduce((cn, l) => {
         cn[l.label] = l.color
         return cn
-      }, {})
+      }, {}),
+      getIndexByName: legends.reduce((cn, l, i) => {
+        cn[l.label] = i
+        return cn
+      }, {}),
     }
   }
 
@@ -79,7 +91,7 @@ class TypeDonut extends PureComponent {
 
   render() {
     const { data, legends, onLegendClick, activeLegend, ...props } = this.props;
-    const { sorted, dataLength, getColorByName } = this.state;
+    const { dataLength, getColorByName, getIndexByName } = this.state;
     return (
       <ChartBase {...props}>
         {({ width, height }) => {
@@ -95,7 +107,7 @@ class TypeDonut extends PureComponent {
                     left={em}
                     top={legendBottom - (dataLength - 1 - i) * em * 1.75}
                     onClick={() => onLegendClick(legend.label === activeLegend ? null : legend.label)}
-                    opacity={!activeLegend || legend.label === activeLegend ? 1 : 0.5}
+                    opacity={!activeLegend || legend.label === activeLegend ? 1 : 0.3}
                     style={{ cursor: 'pointer' }}
                   >
                     <circle cx={em / 2} cy={-em * 0.3} r={em / 2} fill={legend.color} />
@@ -105,11 +117,12 @@ class TypeDonut extends PureComponent {
               </g>
               <Group top={height / 2} left={width - donutR * 1.1}>
                 <Pie
-                  data={sorted}
+                  data={data}
                   pieValue={valueGetter}
                   outerRadius={donutR * 1.05}
                   innerRadius={donutR * 0.4}
                   padAngle={0}
+                  pieSort={(a, b) => getIndexByName[a.name] - getIndexByName[b.name]}
                 >
                   {pie => pie.arcs.map((arc, i) => {
                     const d = pie.path(arc)
@@ -121,7 +134,7 @@ class TypeDonut extends PureComponent {
                   })}
                 </Pie>
                 <Pie
-                  data={sorted}
+                  data={data}
                   pieValue={valueGetter}
                   outerRadius={donutR * 1.1}
                   innerRadius={donutR * 0.3}
@@ -134,11 +147,12 @@ class TypeDonut extends PureComponent {
                   ))}
                 </Pie>
                 <Pie
-                  data={sorted}
+                  data={data}
                   pieValue={valueGetter}
                   outerRadius={donutR}
                   innerRadius={donutR * 0.4}
                   padAngle={0}
+                  pieSort={(a, b) => getIndexByName[a.name] - getIndexByName[b.name]}
                 >
                   {pie => {
                     return pie.arcs.map((arc, i) => {
@@ -150,9 +164,9 @@ class TypeDonut extends PureComponent {
                           {({ isHover }) => (
                             <g>
                               <DonutShape
-                                d={(!activeLegend && isHover) || activeLegend === arc.data.name ? this.outerShapes[i] : pie.path(arc)}
+                                d={((!activeLegend && isHover) || activeLegend === arc.data.name) && this.outerShapes[i] ? this.outerShapes[i] : pie.path(arc)}
                                 fill={getColorByName[arc.data.name]}
-                                opacity={!activeLegend || arc.data.name === activeLegend ? 1 : 0.5}
+                                opacity={!activeLegend || arc.data.name === activeLegend ? 1 : 0.3}
                                 onClick={() => onLegendClick(arc.data.name === activeLegend ? null : arc.data.name)}
                               />
                               {hasSpaceForLabel && (

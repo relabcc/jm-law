@@ -19,13 +19,13 @@ const Toggler = ({ options, activeIndex, onToggle }) => {
               width={poses[activeIndex][0].width + em}
               transition="all 0.25s"
             >
-              <Box py="1.5em" bg="primary" transform="translateY(-50%)" borderRadius="1.5em" />
+              <Box py="1.25em" bg="primary" transform="translateY(-50%)" borderRadius="1.25em" />
             </Box>
             <Box position="relative">
               {options.map((label, i) => (
-                <Measure bounds onResize={({ bounds }) => poses[i][1](bounds)}>
+                <Measure bounds onResize={({ bounds }) => poses[i][1](bounds)} key={i}>
                   {({ measureRef }) => (
-                    <Box.inline key={i} ref={measureRef} px="1.25em" py="0.75em" color="white" onClick={() => onToggle(i)}>
+                    <Box.inline ref={measureRef} px="1.25em" py="0.5em" color="white" onClick={() => onToggle(i)}>
                       {label}
                     </Box.inline>
                   )}
