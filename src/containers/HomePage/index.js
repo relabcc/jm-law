@@ -72,15 +72,22 @@ class IndexPage extends PureComponent {
 
   handleChartToggle = chartIndex => this.setState({ chartIndex })
 
+  handleYearChange = e => {
+    const { updateParams } = this.props
+    const year = e.target.value
+    updateParams({ year })
+    this.setState({ year })
+  }
+
   render() {
     const data = this.props['data/bureaus']
-    const { updateParams } = this.props
     const {
       sortBy,
       sortOrder,
       chartIndex,
       activeType,
-      mappedData
+      mappedData,
+      year,
     } = this.state
     const bureauTotal = mappedData.map(({ label, monthData }) => ({
       label,
@@ -110,7 +117,7 @@ class IndexPage extends PureComponent {
           backgroundImage={`linear-gradient(#fff 80%, #e0e0e4 100%)`}
         >
           <Container>
-            <select onChange={e => updateParams({ year: e.target.value })}>
+            <select onChange={this.handleYearChange}>
               {years.map(y => (
                 <option key={y.value} value={y.value}>{y.label}</option>
               ))}
@@ -146,7 +153,7 @@ class IndexPage extends PureComponent {
                   <Box flex="1" />
                   <Text>繳款入市庫平均日數： 5 天</Text>
                 </Flex>
-                <LawTop5 />
+                <LawTop5 year={year} />
               </Box>
             </Flex>
           </Container>

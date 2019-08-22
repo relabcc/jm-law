@@ -21,9 +21,17 @@ function backwardAutoLineBreak(str, maxLength, fillFront) {
   if (!fillFront) {
     lines.reverse()
   }
-  if (lines[0].length === 1) {
-    lines[0] += lines[1][0]
-    lines[1] = lines[1].substr(1)
+  if (fillFront) {
+    const { length } = lines
+    if (lines[length - 1].length === 1) {
+      lines[length - 1] = lines[length - 2].substr(lines[length - 2].length - 1) + lines[length - 1]
+      lines[length - 2] = lines[length - 2].substr(0, lines[length - 2].length - 1)
+    }
+  } else {
+    if (lines[0].length === 1) {
+      lines[0] += lines[1][0]
+      lines[1] = lines[1].substr(1)
+    }
   }
   return lines
 }
