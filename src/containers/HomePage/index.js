@@ -190,7 +190,7 @@ class IndexPage extends PureComponent {
                 <Flex pt="0.5em" pb="1.25em" alignItems="center" borderBottom="1px solid">
                   <Text fontSize="1.5em"><Text.inline letterSpacing="0.15em">違反法條</Text.inline> TOP 5</Text>
                   <Button.lightBg onClick={this.openModal} mx="2em">查看更多</Button.lightBg>
-                  <Modal isOpen={open} onRequestClose={this.CloseModal}>
+                  <Modal isOpen={open} onRequestClose={this.CloseModal} title="違反法條TOP10">
                     <Button.border>所有法條分析</Button.border>
                   </Modal>
                   <Box flex="1" />

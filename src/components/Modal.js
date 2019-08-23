@@ -39,8 +39,8 @@ export default ({ children, border, borderRadius, customStyles, title, ...props 
     style={merge({}, defaultStyles, { content: customStyles})}
     {...props}
   >
-    <Flex justifyContent="space-between" p="2em">
-      <Text>{title}</Text>
+    <Flex justifyContent="space-between" mx="2em" py="1em" borderBottom="1px solid" borderColor="darkBlue">
+      <Text letterSpacing="0.25em" fontSize="1.25em">{title}</Text>
       <Circle width="2em" is={(p) => <Button borderRadius="50%" px="0" py="0" {...p} />} onClick={props.onRequestClose}>
         <IoIosClose size="2em" />
       </Circle>
