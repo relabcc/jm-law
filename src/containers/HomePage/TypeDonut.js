@@ -2,67 +2,13 @@ import React, { Fragment, PureComponent } from 'react';
 import { Group } from '@vx/group';
 import { Pie } from '@vx/shape';
 import { HoverSensor } from 'libreact/lib/HoverSensor';
-import { Animate } from 'react-move'
-import { interpolate } from 'flubber'
 
 import FontSizeContext from 'components/ThemeProvider/FontSizeContext'
 
 import ChartBase from 'components/Charts/ChartBase'
+import PathInterpolation from 'components/Charts/PathInterpolation'
 
 const valueGetter = d => d.issued
-
-class DonutShape extends PureComponent {
-  static getDerivedStateFromProps({ d }, { thisD }) {
-    return {
-      thisD: d,
-      prevD: thisD
-    }
-  }
-
-  state = {
-    prevD: this.props.d,
-    thisD: this.props.d,
-  }
-
-  render() {
-    const { d, ...props } = this.props
-    const { prevD, thisD } = this.state
-
-    if (!prevD) {
-      return (
-        <path
-          d={d}
-          {...props}
-        />
-      )
-    }
-
-    const interpolator = interpolate(prevD, thisD)
-    return (
-      <Animate
-        start={{
-          d: interpolator(1),
-        }}
-        enter={[
-          {
-            timing: { duration: 200 },
-          },
-        ]}
-        update={{
-          d: interpolator,
-          timing: { duration: 200 },
-        }}
-      >
-        {(state) => (
-          <path
-            {...state}
-            {...props}
-          />
-        )}
-      </Animate>
-    );
-  }
-}
 
 class TypeDonut extends PureComponent {
   static contextType = FontSizeContext
@@ -163,7 +109,7 @@ class TypeDonut extends PureComponent {
                         <HoverSensor key={`inner-${arc.data.name}-${i}`}>
                           {({ isHover }) => (
                             <g>
-                              <DonutShape
+                              <PathInterpolation
                                 d={((!activeLegend && isHover) || activeLegend === arc.data.name) && this.outerShapes[i] ? this.outerShapes[i] : pie.path(arc)}
                                 fill={getColorByName[arc.data.name]}
                                 opacity={!activeLegend || arc.data.name === activeLegend ? 1 : 0.3}

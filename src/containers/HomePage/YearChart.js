@@ -6,13 +6,13 @@ import { Grid } from '@vx/grid';
 import { LinePath, Bar } from '@vx/shape';
 import range from 'lodash/range'
 import map from 'lodash/map'
-
-import { Animate } from 'react-move'
+import { NodeGroup } from 'react-move'
 
 import FontSizeContext from 'components/ThemeProvider/FontSizeContext'
 import theme from 'components/ThemeProvider/theme'
 
 import ChartBase from 'components/Charts/ChartBase'
+import TweenShape from 'components/Charts/TweenShape'
 
 const xValue = d => d.month
 const yValue = d => d.issued
@@ -99,46 +99,77 @@ const YearChart = ({
                   />
                   <Group left={xStart}>
                     <LinePath
-                      data={formattedData}
                       x={dd => xScale(xValue(dd))}
                       y={dd => valueYScale(yValue(dd))}
-                      stroke={theme.colors.lightOrange}
-                      strokeWidth="1.5"
-                    />
-                    {formattedData.map(d => {
-                      const xPos = xScale(d.month)
-                      const barHeight = yHeight - percentYScale(d.receivedRate)
-                      const barY = yHeight - barHeight
-                      const dotY = valueYScale(yValue(d))
-                      return (
+                    >
+                      {({ path }) => (
+                        <TweenShape
+                          d={path(formattedData)}
+                          stroke={theme.colors.lightOrange}
+                          strokeWidth="1.5"
+                          fill="transparent"
+                          duration={500}
+                        />
+                      )}
+                    </LinePath>
+                    <NodeGroup
+                      data={formattedData}
+                      keyAccessor={d => d.month}
+                      start={d => ({
+                        xPos: xScale(d.month),
+                        barHeight: 0,
+                        dotY: 0,
+                      })}
+                      enter={d => ({
+                        barHeight: [yHeight - percentYScale(d.receivedRate)],
+                        dotY: [valueYScale(yValue(d))],
+                        timing: { duration: 500 },
+                      })}
+                      update={d => ({
+                        barHeight: [yHeight - percentYScale(d.receivedRate)],
+                        dotY: [valueYScale(yValue(d))],
+                        timing: { duration: 500 },
+                      })}
+                      leave={() => ({
+                        opacity: [0],
+                        timing: { duration: 500 },
+                      })}
+                    >
+                      {nodes => (
                         <Fragment>
-                          <circle
-                            cx={xPos}
-                            cy={dotY}
-                            r={em / 3}
-                            fill={theme.colors.darkOrange}
-                          />
-                          <text
-                            x={xPos}
-                            y={dotY - em}
-                            textAnchor="middle"
-                            fontSize={em}
-                            fill={theme.colors.lightOrange}
-                          >
-                            {yValue(d)}
-                          </text>
-                          <Bar
-                            key={`bar-${d.month}`}
-                            x={xPos - 1.5 * em}
-                            y={barY}
-                            width={2 * em}
-                            height={barHeight}
-                            fill={theme.colors.lightOrange}
-                            opacity={0.3}
-                          />
+                          {nodes.map(({ key, data: d, state: { xPos, barHeight, dotY } }) => {
+                            const barY = yHeight - barHeight;
+                            return (
+                              <Fragment key={key}>
+                                <Bar
+                                  x={xPos - 1.5 * em}
+                                  y={barY}
+                                  width={2 * em}
+                                  height={barHeight}
+                                  fill={theme.colors.lightOrange}
+                                  opacity={0.3}
+                                />
+                                <circle
+                                  cx={xPos}
+                                  cy={dotY}
+                                  r={em / 3}
+                                  fill={theme.colors.darkOrange}
+                                />
+                                <text
+                                  x={xPos}
+                                  y={dotY - em}
+                                  textAnchor="middle"
+                                  fontSize={em}
+                                  fill={theme.colors.lightOrange}
+                                >
+                                  {yValue(d)}
+                                </text>
+                              </Fragment>
+                            )
+                          })}
                         </Fragment>
-                      )
-                    })}
+                      )}
+                    </NodeGroup>
                   </Group>
                 </Group>
                 <Group top={yHeight / 2 - em} left={xEnd + 5 * em}>
