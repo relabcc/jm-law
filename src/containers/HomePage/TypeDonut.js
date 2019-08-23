@@ -6,7 +6,7 @@ import { HoverSensor } from 'libreact/lib/HoverSensor';
 import FontSizeContext from 'components/ThemeProvider/FontSizeContext'
 
 import ChartBase from 'components/Charts/ChartBase'
-import PathInterpolation from 'components/Charts/PathInterpolation'
+import TweenShape from 'components/Charts/TweenShape'
 
 const valueGetter = d => d.issued
 
@@ -61,7 +61,7 @@ class TypeDonut extends PureComponent {
                   </Group>
                 ))}
               </g>
-              <Group top={height / 2} left={width - donutR * 1.1}>
+              <Group top={height / 2} left={width - donutR * 1.7}>
                 <Pie
                   data={data}
                   pieValue={valueGetter}
@@ -109,7 +109,7 @@ class TypeDonut extends PureComponent {
                         <HoverSensor key={`inner-${arc.data.name}-${i}`}>
                           {({ isHover }) => (
                             <g>
-                              <PathInterpolation
+                              <TweenShape
                                 d={((!activeLegend && isHover) || activeLegend === arc.data.name) && this.outerShapes[i] ? this.outerShapes[i] : pie.path(arc)}
                                 fill={getColorByName[arc.data.name]}
                                 opacity={!activeLegend || arc.data.name === activeLegend ? 1 : 0.3}

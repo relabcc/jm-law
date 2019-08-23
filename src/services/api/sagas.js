@@ -1,6 +1,7 @@
 import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { actionTypes } from 'redux-resource';
 import reduce from 'lodash/reduce'
+import isObject from 'lodash/isObject'
 
 import sendRequest from 'utils/request';
 
@@ -19,7 +20,8 @@ function* handleRequest(target, onSuccess, onError) {
 }
 
 function* handleRead({ resourceType, resources, requestKey, requestParams }) {
-  const resourceBase = `${API_BASE}/${resourceType}${requestParams ? reduce(requestParams, (q, value, key) => `${q}${key}=${encodeURIComponent(value)}&`, '?'): ''}`;
+  const qs = isObject(requestParams) ? reduce(requestParams, (q, value, key) => `${q}${key}=${encodeURIComponent(value)}&`, '?') : ''
+  const resourceBase = `${API_BASE}/${resourceType}${qs}`;
   if (resources) {
     yield all(
       resources.map(id =>

@@ -17,7 +17,7 @@ const defaultStyles = {
   },
   content: {
     width: '90%',
-    maxWidth: '50em',
+    maxWidth: '60em',
     top: '50%',
     left: '50%',
     right: 'auto',
@@ -41,7 +41,7 @@ export default ({ children, border, borderRadius, customStyles, title, ...props 
   >
     <Box py="1.5em">
       <Flex justifyContent="space-between" mx="2em" pb="1em" borderBottom="1px solid" borderColor="darkBlue" alignItems="center">
-        <Text letterSpacing="0.25em" fontSize="1.25em">{title}</Text>
+        <Text fontWeight="bold" letterSpacing="0.25em" fontSize="1.25em">{title}</Text>
         <Circle width="2em" is={(p) => <Button borderRadius="50%" px="0" py="0" {...p} />} onClick={props.onRequestClose}>
           <IoIosClose size="2em" />
         </Circle>

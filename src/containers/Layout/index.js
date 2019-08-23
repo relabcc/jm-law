@@ -36,7 +36,7 @@ const Layout = ({ children }) => (
             <meta property="og:description" content={description} />
             <meta property="og:image" content={`${url}/fb.png`} />
           </Helmet>
-          <Box height="100vh">
+          <Box height="100vh" minWidth="800px">
             {children}
           </Box>
         </Fragment>

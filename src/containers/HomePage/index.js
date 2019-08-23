@@ -1,6 +1,8 @@
 import React, { PureComponent, createElement } from 'react'
+import { compose } from 'redux'
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
+import get from 'lodash/get'
 
 import Container from 'components/Container'
 import Box from 'components/Box'
@@ -10,12 +12,12 @@ import Button from 'components/Button'
 import YearButton from 'components/YearButton'
 import Toggler from 'components/Toggler'
 import Dropdown from 'components/Dropdown';
-import Modal from 'components/Modal';
 import ModalButton from 'components/ModalButton';
 
 import theme, { mobileOrDesktop } from 'components/ThemeProvider/theme';
 
 import withData from 'services/api/withData'
+import withDataState from 'services/api/withDataState'
 
 import Layout from '../Layout';
 import BubbleLine from './BubbleLine'
@@ -23,6 +25,7 @@ import TypeDonut from './TypeDonut'
 import PercentBars from './PercentBars'
 import LawTops from './LawTops'
 import YearChart from './YearChart'
+import AvgDays from './AvgDays'
 
 const keys = [
   'canceled',
@@ -33,27 +36,10 @@ const keys = [
   'receivedDollar',
 ]
 
-const years = [
-  106,
-  107,
-  108,
-]
-
-const typeOrders= [
-  '待履行費用案件',
-  '怠金案件',
-  '罰緩案件',
-  '其他案件',
-]
-
-const typeLegends = typeOrders.map((label, i) => ({
-  label,
-  color: theme.colors.spectrum[theme.colors.spectrum.length - 1 - i],
-}))
-
 class IndexPage extends PureComponent {
   static getDerivedStateFromProps(nexProps) {
     const data = nexProps['data/bureaus']
+    const { typeList } = nexProps
     const mappedData = map(data, ({ name, monthData }) => ({
       label: name,
       monthData: monthData.map(m => ({
@@ -64,7 +50,11 @@ class IndexPage extends PureComponent {
         },{})
       }))
     }))
-    return { mappedData }
+    const typeLegends = typeList.map(({ name }, i) => ({
+      label: name,
+      color: theme.colors.spectrum[theme.colors.spectrum.length - 1 - i],
+    }))
+    return { mappedData, typeLegends }
   }
 
   state = {
@@ -72,6 +62,7 @@ class IndexPage extends PureComponent {
     sortOrder: 'asc',
     chartIndex: 0,
     lawType: 0,
+    typeLegends: [],
   }
 
   handleTypeFilter = (activeType) => this.setState({ activeType })
@@ -88,6 +79,7 @@ class IndexPage extends PureComponent {
 
   render() {
     const data = this.props['data/bureaus']
+    const { typeList, yearsList: years } = this.props
     const {
       sortBy,
       sortOrder,
@@ -96,8 +88,8 @@ class IndexPage extends PureComponent {
       mappedData,
       year,
       lawType,
+      typeLegends,
     } = this.state
-    console.log(year)
     const bureauTotal = mappedData.map(({ label, monthData }) => ({
       label,
       ...keys.reduce((allData, key) => {
@@ -139,7 +131,12 @@ class IndexPage extends PureComponent {
             <Flex alignItems="center">
               <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">案件類別</Text>
               <Box width="12em" py="1em">
-                <Dropdown value={activeType} options={typeOrders} onChange={({ label }) => this.handleTypeFilter(label)} />
+                <Dropdown
+                  placeholder="全部"
+                  value={activeType}
+                  options={typeList.map(({ name }) => name)}
+                  onChange={({ value }) => this.handleTypeFilter(value)}
+                />
               </Box>
             </Flex>
             <Flex alignItems="center">
@@ -150,7 +147,6 @@ class IndexPage extends PureComponent {
                 onChange={this.handleYearChange}
               />
             </Flex>
-
             <BubbleLine ratio={1 / 4} data={bureauTotal} sortBy={sortBy} sortOrder={sortOrder} />
           </Container>
         </Box>
@@ -161,10 +157,10 @@ class IndexPage extends PureComponent {
         >
           <Container>
             <Flex borderBottom="1px solid">
-              <Box pl="1em" pr="2em" width={1 / 3} borderRight="1px solid">
+              <Box pl="1em" pr="2em" width={2 / 5} borderRight="1px solid">
                 <Box position="relative">
                   {createElement(chartIndex ? PercentBars : TypeDonut , {
-                    ratio: 3 / 4,
+                    ratio: 0.6,
                     data: types,
                     legends: typeLegends,
                     onLegendClick: this.handleTypeFilter,
@@ -173,9 +169,20 @@ class IndexPage extends PureComponent {
                   <Box position="absolute" top="0" left="0">
                     <Toggler activeIndex={chartIndex} onToggle={this.handleChartToggle} options={['案件數', '收繳率']} />
                   </Box>
+                  <Box position="absolute" right="0" bottom="0">
+                    <ModalButton
+                      is={Button.lightBg}
+                      label="查看更多"
+                      title="案件分類分析"
+                    >
+                      <Box px="25%">
+                        <Box pt="100%" bg="primary" />
+                      </Box>
+                    </ModalButton>
+                  </Box>
                 </Box>
               </Box>
-              <Box pl="2em" pr="1em" width={2 / 3}>
+              <Box pl="2em" pr="1em" width={3 / 5}>
                 <Flex pt="0.5em" pb="1.25em" alignItems="center" borderBottom="1px solid">
                   <Text fontSize="1.5em"><Text.inline letterSpacing="0.15em">違反法條</Text.inline> TOP 5</Text>
                   <ModalButton
@@ -199,9 +206,9 @@ class IndexPage extends PureComponent {
                     </Flex>
                   </ModalButton>
                   <Box flex="1" />
-                  <Text>繳款入市庫平均日數： 5 天</Text>
+                  <AvgDays year={year} />
                 </Flex>
-                <LawTops key={5} year={year} top={5} hasLine color="white" ratio={0.27} />
+                <LawTops key={5} year={year} top={5} hasLine color="white" ratio={0.35} />
               </Box>
             </Flex>
             <Flex px="5%" py="2em" alignItems="center">
@@ -230,4 +237,8 @@ class IndexPage extends PureComponent {
 }
 
 
-export default withData('data/bureaus')(IndexPage)
+export default compose(
+  withDataState('yearsList'),
+  withDataState('typeList'),
+  withData('data/bureaus'),
+)(IndexPage)

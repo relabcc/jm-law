@@ -86,7 +86,7 @@ const Button = ({
 Button.defaultProps = {
   blacklist,
   is: 'button',
-  border: '2px solid',
+  border: '1px solid',
   borderColor: 'darkBlue',
   bg: 'darkBlue',
   backgroundImage: `linear-gradient(to right, ${theme.colors.darkBlue}, ${theme.colors.darkerBlue})`,
@@ -111,7 +111,7 @@ Button.lightBg = props => (
     bg="white"
     color="darkBlue"
     backgroundImage="white"
-    border="2px solid"
+    border="1px solid"
     borderColor="white"
     hoverColor="white"
     hoverBgImg={`linear-gradient(to right, ${theme.colors.darkBlue}, ${theme.colors.darkerBlue})`}
@@ -135,7 +135,7 @@ Button.border = props => (
 
 Button.outline = props => (
   <Button
-    border="2px solid"
+    border="1px solid"
     borderColor="primary"
     bg="transparent"
     color="primary"
@@ -146,7 +146,7 @@ Button.outline = props => (
 
 Button.outline.danger = props => (
   <Button.danger
-    border="2px solid"
+    border="1px solid"
     borderColor="danger"
     bg="transparent"
     color="danger"

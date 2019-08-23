@@ -14,7 +14,7 @@ export default (props) => (
     <Fragment>
       <SizeMe>
         {({ size: { width } }) => {
-          const fontSize = Math.round(width / 94)
+          const fontSize = Math.round(Math.max(width, 800) / 94)
           return (
             <FontSizeContext.Provider value={{ em: fontSize }}>
               <Box fontSize={fontSize} {...props} />

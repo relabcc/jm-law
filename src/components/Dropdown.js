@@ -8,20 +8,6 @@ import Box from './Box'
 
 import withResponsive from '../hoc/withResponsive'
 
-const Wrapper = styled(Box)`
-  position: relative;
-  &::after {
-    ${({ isMobile }) => isMobile && 'content: "";'}
-    display: block;
-    position: absolute;
-    border-style: solid;
-    border-width: 5px 5px 0;
-    border-color: ${themeGet('colors.primary')} transparent transparent;
-    top: 1.4em;
-    right: 0.5em;
-  }
-`
-
 const StyledDropdown = styled(Dropdown)`
   .Dropdown-control {
     border: 1px solid;
@@ -76,15 +62,15 @@ const CustomDropdown = ({
   ...props
 }) => {
   return (
-    <Wrapper isMobile={isMobile} {...props}>
+    <Box {...props}>
       <StyledDropdown
         onChange={onChange}
-        options={options}
+        options={[{ label: '全部', value: '' }].concat(options.map(value => ({ value, label: value })))}
         value={value}
         placeholder={placeholder}
         disabled={disabled}
       />
-    </Wrapper>
+    </Box>
   );
 };
 
