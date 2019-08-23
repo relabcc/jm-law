@@ -1,6 +1,7 @@
 import React, { PureComponent, createElement } from 'react'
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
+import { IoMdArrowDropleft,  IoMdArrowDropright} from "react-icons/io";
 
 import Container from 'components/Container'
 import Box from 'components/Box'
@@ -8,6 +9,8 @@ import Flex from 'components/Flex'
 import Text from 'components/Text'
 import Button from 'components/Button'
 import Toggler from 'components/Toggler'
+import Dropdown from 'components/Dropdown';
+import Modal from 'components/Modal';
 
 import theme, { mobileOrDesktop } from 'components/ThemeProvider/theme';
 
@@ -66,11 +69,17 @@ class IndexPage extends PureComponent {
     sortBy: 'receiveRate',
     sortOrder: 'asc',
     chartIndex: 0,
+    currentYear: 0,
   }
 
   handleTypeFilter = (activeType) => this.setState({ activeType })
 
   handleChartToggle = chartIndex => this.setState({ chartIndex })
+
+  handleNextYear = (currentYear) => this.setState({ currentYear: currentYear - 1  })
+  handleLastYear = (currentYear) => this.setState({ currentYear: currentYear + 1  })
+  openModal = () => this.setState({ open: true })
+  CloseModal = () => this.setState({ open: false })
 
   render() {
     const data = this.props['data/bureaus']
@@ -80,6 +89,8 @@ class IndexPage extends PureComponent {
       sortOrder,
       chartIndex,
       activeType,
+      currentYear,
+      open,
       mappedData
     } = this.state
     const bureauTotal = mappedData.map(({ label, monthData }) => ({
@@ -109,6 +120,38 @@ class IndexPage extends PureComponent {
           py="4em"
           backgroundImage={`linear-gradient(#fff 80%, #e0e0e4 100%)`}
         >
+          <Box mx={mobileOrDesktop('1em', '2em')} my="1em" color="darkBlue">
+            <Flex alignItems="center">
+              <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing={3}>案件類別</Text>
+              <Box width="12em" py="1em">
+                <Dropdown options={typeOrders} />
+              </Box>
+            </Flex>
+            <Flex alignItems="center">
+              <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing={3}>各局處案件量分析</Text>
+              <Button
+                px="0.125em"
+                py="0.125em"
+                borderRadius="0.25em"
+                disabled={currentYear === years.length - 1}
+                onClick={() => this.handleLastYear(currentYear)}
+              >
+                <IoMdArrowDropleft size="1.5em" />
+              </Button>
+              <Box px="1em" py="0.375em" border="1px solid" mx="0.25em">
+                {years[currentYear].label}
+              </Box>
+              <Button
+                px="0.125em"
+                py="0.125em"
+                borderRadius="0.25em"
+                disabled={!Boolean(currentYear)}
+                onClick={() => this.handleNextYear(currentYear)}
+              >
+                <IoMdArrowDropright size="1.5em" />
+              </Button>
+            </Flex>
+          </Box>
           <Container>
             <select onChange={e => updateParams({ year: e.target.value })}>
               {years.map(y => (
@@ -142,7 +185,10 @@ class IndexPage extends PureComponent {
               <Box pl="2em" pr="1em" width={2 / 3}>
                 <Flex pt="0.5em" pb="1.25em" alignItems="center" borderBottom="1px solid">
                   <Text fontSize="1.5em"><Text.inline letterSpacing="0.15em">違反法條</Text.inline> TOP 5</Text>
-                  <Button mx="2em">查看更多</Button>
+                  <Button.lightBg onClick={this.openModal} mx="2em">查看更多</Button.lightBg>
+                  <Modal isOpen={open} onRequestClose={this.CloseModal}>
+                    <Button.border>所有法條分析</Button.border>
+                  </Modal>
                   <Box flex="1" />
                   <Text>繳款入市庫平均日數： 5 天</Text>
                 </Flex>

@@ -7,12 +7,14 @@ import {
   layout,
   border,
   borderRadius,
+  backgroundImage,
   position,
 } from 'styled-system';
 import themeGet from '@styled-system/theme-get';
 import tag from 'clean-tag';
 
 import Box from './Box';
+import theme from './ThemeProvider/theme';
 
 import { customColor } from './utils/getColor';
 import blacklist from './utils/blacklist';
@@ -20,6 +22,7 @@ import blacklist from './utils/blacklist';
 const active = css`
   ${customColor('hoverColor')};
   ${customColor('hoverBg', 'backgroundColor')};
+  ${customColor('hoverBgImg', 'backgroundImage')};
   ${customColor('hoverBorder', 'borderColor')};
 `;
 
@@ -32,6 +35,7 @@ export const buttonStyle = css`
   ${typography}
   ${layout}
   ${position}
+  ${backgroundImage}
   ${space}
   ${color}
   ${border}
@@ -39,8 +43,7 @@ export const buttonStyle = css`
   appearance: none;
   transition: all ${themeGet('duration', 250)}ms;
   cursor: pointer;
-  &:hover,
-  &:focus {
+  &:hover {
     ${props => !props.disabled && active}
     outline: none;
   }
@@ -82,17 +85,19 @@ Button.defaultProps = {
   blacklist,
   is: 'button',
   border: '2px solid',
-  borderColor: 'primary',
-  bg: 'primary',
+  borderColor: 'darkBlue',
+  bg: 'darkBlue',
+  backgroundImage: `linear-gradient(to right, ${theme.colors.darkBlue}, ${theme.colors.darkerBlue})`,
   color: 'white',
-  hoverColor: 'white',
-  hoverBg: 'primaryHover',
-  hoverBorder: 'primaryHover',
+  hoverColor: 'darkBlue',
+  hoverBg: 'white',
+  hoverBgImg: 'none',
+  hoverBorder: 'darkBlue',
   px: '1.25em',
-  py: '0.25em',
+  py: '0.5em',
   fontWeight: 'bold',
   iconSpacing: '0.25em',
-  borderRadius: '1em',
+  borderRadius: '1.25em',
   display: 'inline-block',
   verticalAlign: 'middle',
 };
@@ -115,6 +120,32 @@ Button.secondary = props => (
     borderColor="secondary"
     hoverBg="secondaryHover"
     hoverBorder="secondaryHover"
+    {...props}
+  />
+);
+
+Button.lightBg = props => (
+  <Button
+    bg="white"
+    color="darkBlue"
+    backgroundImage="white"
+    borderColor="white"
+    hoverColor="white"
+    hoverBgImg={`linear-gradient(to right, ${theme.colors.darkBlue}, ${theme.colors.darkerBlue})`}
+    hoverBorder="darkBlue"
+    {...props}
+  />
+);
+
+Button.border = props => (
+  <Button
+    bg="white"
+    color="darkBlue"
+    backgroundImage="white"
+    borderColor="darkBlue"
+    hoverColor="white"
+    hoverBg="none"
+    hoverBgImg={`linear-gradient(to right, ${theme.colors.darkBlue}, ${theme.colors.darkerBlue})`}
     {...props}
   />
 );
