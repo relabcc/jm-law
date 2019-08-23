@@ -4,6 +4,8 @@ import merge from 'lodash/merge'
 import { IoIosClose } from "react-icons/io";
 
 import Box from './Box'
+import Flex from './Flex'
+import Text from './Text'
 import Button from './Button'
 import Circle from './Circle'
 import theme from './ThemeProvider/theme'
@@ -32,18 +34,19 @@ const defaultStyles = {
 
 Modal.setAppElement('#___gatsby')
 
-export default ({ children, border, borderRadius, customStyles, ...props }) => (
+export default ({ children, border, borderRadius, customStyles, title, ...props }) => (
   <Modal
     style={merge({}, defaultStyles, { content: customStyles})}
     {...props}
   >
+    <Flex justifyContent="space-between" p="2em">
+      <Text>{title}</Text>
+      <Circle width="2em" is={(p) => <Button borderRadius="50%" px="0" py="0" {...p} />} onClick={props.onRequestClose}>
+        <IoIosClose size="2em" />
+      </Circle>
+    </Flex>
     <Box p="2em" position="relative">
       {children}
-      <Box width="2em" position="absolute" top="1.25em" right="2em">
-        <Circle is={(p) => <Button borderRadius="50%" px="0" py="0" {...p} />} onClick={props.onRequestClose}>
-          <IoIosClose size="2em" />
-        </Circle>
-      </Box>
     </Box>
   </Modal>
 )

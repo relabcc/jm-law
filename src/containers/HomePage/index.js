@@ -1,13 +1,13 @@
 import React, { PureComponent, createElement } from 'react'
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
-import { IoMdArrowDropleft,  IoMdArrowDropright} from "react-icons/io";
 
 import Container from 'components/Container'
 import Box from 'components/Box'
 import Flex from 'components/Flex'
 import Text from 'components/Text'
 import Button from 'components/Button'
+import YearButton from 'components/YearButton'
 import Toggler from 'components/Toggler'
 import Dropdown from 'components/Dropdown';
 import Modal from 'components/Modal';
@@ -141,34 +141,19 @@ class IndexPage extends PureComponent {
         >
           <Box mx={mobileOrDesktop('1em', '2em')} my="1em" color="darkBlue">
             <Flex alignItems="center">
-              <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing={3}>案件類別</Text>
+              <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">案件類別</Text>
               <Box width="12em" py="1em">
                 <Dropdown options={typeOrders} />
               </Box>
             </Flex>
             <Flex alignItems="center">
-              <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing={3}>各局處案件量分析</Text>
-              <Button
-                px="0.125em"
-                py="0.125em"
-                borderRadius="0.25em"
-                disabled={currentYear === years.length - 1}
-                onClick={() => this.handleLastYear(currentYear)}
-              >
-                <IoMdArrowDropleft size="1.5em" />
-              </Button>
-              <Box px="1em" py="0.375em" border="1px solid" mx="0.25em">
-                {years[currentYear].label}
-              </Box>
-              <Button
-                px="0.125em"
-                py="0.125em"
-                borderRadius="0.25em"
-                disabled={!Boolean(currentYear)}
-                onClick={() => this.handleNextYear(currentYear)}
-              >
-                <IoMdArrowDropright size="1.5em" />
-              </Button>
+              <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">各局處案件量分析</Text>
+              <YearButton
+                currentYear={currentYear}
+                years={years}
+                handleNextYear={() => this.handleNextYear(currentYear)}
+                handleLastYear={() => this.handleLastYear(currentYear)}
+              />
             </Flex>
           </Box>
           <Container>
@@ -214,9 +199,20 @@ class IndexPage extends PureComponent {
                 <LawTop5 year={year} />
               </Box>
             </Flex>
-            <Flex px="5%" py="2em">
+            <Flex px="5%" py="2em" alignItems="center">
               <Box px="2em">
-                <Text fontSize="1.5em" letterSpacing="0.15em">月案件量分析</Text>
+                <YearButton
+                  justifyContent="center"
+                  darkBg
+                  currentYear={currentYear}
+                  years={years}
+                  handleNextYear={() => this.handleNextYear(currentYear)}
+                  handleLastYear={() => this.handleLastYear(currentYear)}
+                />
+                <Box fontSize="1.5em" letterSpacing="0.15em" my="1em" borderBottom="1px solid" pb="0.5rem">月案件量分析</Box>
+                <Box textAlign="center">
+                  <Button.lightBg>看歷年分析</Button.lightBg>
+                </Box>
               </Box>
               <Box flex="1">
                 <YearChart ratio={1 / 5} data={monthData} />

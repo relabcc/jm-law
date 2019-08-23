@@ -9,6 +9,7 @@ import {
   borderRadius,
   backgroundImage,
   position,
+  borderColor,
 } from 'styled-system';
 import themeGet from '@styled-system/theme-get';
 import tag from 'clean-tag';
@@ -39,6 +40,7 @@ export const buttonStyle = css`
   ${space}
   ${color}
   ${border}
+  ${borderColor}
   ${borderRadius}
   appearance: none;
   transition: all ${themeGet('duration', 250)}ms;
@@ -104,35 +106,16 @@ Button.defaultProps = {
 
 Button.displayName = 'Button';
 
-Button.danger = props => (
-  <Button
-    bg="danger"
-    borderColor="danger"
-    hoverBg="dangerHover"
-    hoverBorder="dangerHover"
-    {...props}
-  />
-);
-
-Button.secondary = props => (
-  <Button
-    bg="secondary"
-    borderColor="secondary"
-    hoverBg="secondaryHover"
-    hoverBorder="secondaryHover"
-    {...props}
-  />
-);
-
 Button.lightBg = props => (
   <Button
     bg="white"
     color="darkBlue"
     backgroundImage="white"
+    border="2px solid"
     borderColor="white"
     hoverColor="white"
     hoverBgImg={`linear-gradient(to right, ${theme.colors.darkBlue}, ${theme.colors.darkerBlue})`}
-    hoverBorder="darkBlue"
+    hoverBorder="white"
     {...props}
   />
 );

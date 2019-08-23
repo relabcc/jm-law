@@ -32,6 +32,7 @@ const StyledDropdown = styled(Dropdown)`
     font-family: inherit;
     padding: 0.25em;
     font-size: 1em;
+    cursor: pointer;
   }
   &.is-open {
     .Dropdown-control {
