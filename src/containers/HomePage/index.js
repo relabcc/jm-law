@@ -11,6 +11,7 @@ import YearButton from 'components/YearButton'
 import Toggler from 'components/Toggler'
 import Dropdown from 'components/Dropdown';
 import Modal from 'components/Modal';
+import ModalButton from 'components/ModalButton';
 
 import theme, { mobileOrDesktop } from 'components/ThemeProvider/theme';
 
@@ -20,7 +21,7 @@ import Layout from '../Layout';
 import BubbleLine from './BubbleLine'
 import TypeDonut from './TypeDonut'
 import PercentBars from './PercentBars'
-import LawTop5 from './LawTop5'
+import LawTops from './LawTops'
 import YearChart from './YearChart'
 
 const keys = [
@@ -70,19 +71,20 @@ class IndexPage extends PureComponent {
     sortBy: 'receiveRate',
     sortOrder: 'asc',
     chartIndex: 0,
+    lawType: 0,
   }
 
   handleTypeFilter = (activeType) => this.setState({ activeType })
 
   handleChartToggle = chartIndex => this.setState({ chartIndex })
-  openModal = () => this.setState({ open: true })
-  CloseModal = () => this.setState({ open: false })
 
   handleYearChange = year => {
     const { updateParams } = this.props
     updateParams({ year })
     this.setState({ year })
   }
+
+  setLawType = lawType => this.setState({ lawType })
 
   render() {
     const data = this.props['data/bureaus']
@@ -91,10 +93,11 @@ class IndexPage extends PureComponent {
       sortOrder,
       chartIndex,
       activeType,
-      open,
       mappedData,
       year,
+      lawType,
     } = this.state
+    console.log(year)
     const bureauTotal = mappedData.map(({ label, monthData }) => ({
       label,
       ...keys.reduce((allData, key) => {
@@ -175,14 +178,30 @@ class IndexPage extends PureComponent {
               <Box pl="2em" pr="1em" width={2 / 3}>
                 <Flex pt="0.5em" pb="1.25em" alignItems="center" borderBottom="1px solid">
                   <Text fontSize="1.5em"><Text.inline letterSpacing="0.15em">違反法條</Text.inline> TOP 5</Text>
-                  <Button.lightBg onClick={this.openModal} mx="2em">查看更多</Button.lightBg>
-                  <Modal isOpen={open} onRequestClose={this.CloseModal} title="違反法條TOP10">
-                    <Button.border>所有法條分析</Button.border>
-                  </Modal>
+                  <ModalButton
+                    is={Button.lightBg}
+                    label="查看更多"
+                    title="違反法條TOP10"
+                    mx="2em"
+                  >
+                    <Flex alignItems="center">
+                      <Box mx="2em">
+                        <Box my="1em">
+                          <Button active={lawType === 0} onClick={() => this.setLawType(0)}>所有法條分析</Button>
+                        </Box>
+                        <Box my="1em">
+                          <Button active={lawType === 1} onClick={() => this.setLawType(1)}>公安法條分析</Button>
+                        </Box>
+                      </Box>
+                      <Box flex="1" px="2em">
+                        <LawTops key={10} top={10} year={year} color="text" ratio={0.8} />
+                      </Box>
+                    </Flex>
+                  </ModalButton>
                   <Box flex="1" />
                   <Text>繳款入市庫平均日數： 5 天</Text>
                 </Flex>
-                <LawTop5 year={year} />
+                <LawTops key={5} year={year} top={5} hasLine color="white" ratio={0.27} />
               </Box>
             </Flex>
             <Flex px="5%" py="2em" alignItems="center">

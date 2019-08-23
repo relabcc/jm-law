@@ -38,7 +38,7 @@ export default (key, params) => {
                 type: actionTypes.READ_RESOURCES_PENDING,
                 resourceType: key,
                 resources: listMode ? undefined : resources,
-                requestKey: listMode && 'list',
+                requestKey: listMode && `list${JSON.stringify(params)}`,
                 requestParams,
               });
             }

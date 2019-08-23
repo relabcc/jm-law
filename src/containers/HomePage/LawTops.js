@@ -1,4 +1,4 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, { Fragment, PureComponent, createElement } from 'react';
 import { Group } from '@vx/group';
 import { scaleLinear } from '@vx/scale';
 import { Animate } from 'react-move'
@@ -13,21 +13,22 @@ import withData from 'services/api/withData'
 
 const labelLength = 15
 
-class LawTop5 extends PureComponent {
+class LawTops extends PureComponent {
   componentDidUpdate(prevProps) {
-    const { year, updateParams } = this.props
+    const { year, updateParams, top } = this.props
     if (prevProps.year !== year) {
-      updateParams({ year, top: 5 })
+      updateParams({ year, top })
     }
   }
 
   render() {
+    const { hasLine, color, ratio, top } = this.props;
     const data = this.props['data/bureaus/laws']
-    const sorted = sortBy(data, 'count')
+    const sorted = sortBy(data, 'count').slice(0, top)
     return (
       <FontSizeContext.Consumer>
         {({ em }) => (
-          <ChartBase ratio={0.27}>
+          <ChartBase ratio={ratio}>
             {({ width }) => {
               const yStart = em * 2.5
               const xStart = labelLength * em * 1.1;
@@ -55,7 +56,7 @@ class LawTop5 extends PureComponent {
                           {(state) => (
                             <Group top={i * em * 2.75}>
                               <LineBreakText
-                                fill="white"
+                                fill={color}
                                 fontSize={em}
                                 maxLength={labelLength}
                                 fillFront
@@ -69,22 +70,27 @@ class LawTop5 extends PureComponent {
                                 width={state.width}
                                 height={1.25 * em}
                               />
-                              <text x={xStart + state.width + em * 0.5} y="0.5em">{law.count}</text>
+                              <text
+                                fill={color}
+                                x={xStart + state.width + em * 0.5}
+                                y="0.5em"
+                              >{law.count}</text>
                             </Group>
                           )}
                         </Animate>
-
                       )
                     })}
                   </Group>
-                  <line
-                    x1={xStart}
-                    x2={xStart}
-                    y1={yStart / 2}
-                    y2={yStart / 2 + sorted.length * em * 2.75}
-                    stroke="white"
-                    strokeWidth="1.5"
-                  />
+                  {hasLine && (
+                    <line
+                      x1={xStart}
+                      x2={xStart}
+                      y1={yStart / 2}
+                      y2={yStart / 2 + sorted.length * em * 2.75}
+                      stroke={color}
+                      strokeWidth="1.5"
+                    />
+                  )}
                 </Fragment>
               )
             }}
@@ -95,4 +101,4 @@ class LawTop5 extends PureComponent {
   }
 }
 
-export default withData('data/bureaus/laws', { top: 5 })(LawTop5);
+export default props => createElement(withData('data/bureaus/laws', { top: props.top, year: props.year })(LawTops), props);
