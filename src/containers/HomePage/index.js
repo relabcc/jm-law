@@ -33,9 +33,9 @@ const keys = [
 ]
 
 const years = [
-  { value: 2019, label: 108 },
-  { value: 2018, label: 107 },
-  { value: 2017, label: 106 },
+  106,
+  107,
+  108,
 ]
 
 const typeOrders= [
@@ -70,22 +70,16 @@ class IndexPage extends PureComponent {
     sortBy: 'receiveRate',
     sortOrder: 'asc',
     chartIndex: 0,
-    currentYear: 0,
   }
 
   handleTypeFilter = (activeType) => this.setState({ activeType })
 
   handleChartToggle = chartIndex => this.setState({ chartIndex })
-
-  handleNextYear = (currentYear) => this.setState({ currentYear: currentYear - 1  })
-  handleLastYear = (currentYear) => this.setState({ currentYear: currentYear + 1  })
-
   openModal = () => this.setState({ open: true })
   CloseModal = () => this.setState({ open: false })
 
-  handleYearChange = e => {
+  handleYearChange = year => {
     const { updateParams } = this.props
-    const year = e.target.value
     updateParams({ year })
     this.setState({ year })
   }
@@ -97,7 +91,6 @@ class IndexPage extends PureComponent {
       sortOrder,
       chartIndex,
       activeType,
-      currentYear,
       open,
       mappedData,
       year,
@@ -139,29 +132,22 @@ class IndexPage extends PureComponent {
           py="4em"
           backgroundImage={`linear-gradient(#fff 80%, #e0e0e4 100%)`}
         >
-          <Box mx={mobileOrDesktop('1em', '2em')} my="1em" color="darkBlue">
+          <Container>
             <Flex alignItems="center">
               <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">案件類別</Text>
               <Box width="12em" py="1em">
-                <Dropdown options={typeOrders} />
+                <Dropdown value={activeType} options={typeOrders} onChange={({ label }) => this.handleTypeFilter(label)} />
               </Box>
             </Flex>
             <Flex alignItems="center">
               <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">各局處案件量分析</Text>
               <YearButton
-                currentYear={currentYear}
+                currentYear={year}
                 years={years}
-                handleNextYear={() => this.handleNextYear(currentYear)}
-                handleLastYear={() => this.handleLastYear(currentYear)}
+                onChange={this.handleYearChange}
               />
             </Flex>
-          </Box>
-          <Container>
-            <select onChange={this.handleYearChange}>
-              {years.map(y => (
-                <option key={y.value} value={y.value}>{y.label}</option>
-              ))}
-            </select>
+
             <BubbleLine ratio={1 / 4} data={bureauTotal} sortBy={sortBy} sortOrder={sortOrder} />
           </Container>
         </Box>
@@ -204,10 +190,9 @@ class IndexPage extends PureComponent {
                 <YearButton
                   justifyContent="center"
                   darkBg
-                  currentYear={currentYear}
+                  currentYear={year}
                   years={years}
-                  handleNextYear={() => this.handleNextYear(currentYear)}
-                  handleLastYear={() => this.handleLastYear(currentYear)}
+                  onChange={this.handleYearChange}
                 />
                 <Box fontSize="1.5em" letterSpacing="0.15em" my="1em" borderBottom="1px solid" pb="0.5rem">月案件量分析</Box>
                 <Box textAlign="center">

@@ -1,7 +1,7 @@
 import React from 'react';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import themeGet from '@styled-system/theme-get';
 import Box from './Box'
@@ -33,6 +33,7 @@ const StyledDropdown = styled(Dropdown)`
     padding: 0.25em;
     font-size: 1em;
     cursor: pointer;
+    transition: none;
   }
   &.is-open {
     .Dropdown-control {
@@ -77,9 +78,9 @@ const CustomDropdown = ({
   return (
     <Wrapper isMobile={isMobile} {...props}>
       <StyledDropdown
-        onChange={e => onChange({ target: { name, value: e.value }, persist: () => {} })}
+        onChange={onChange}
         options={options}
-        value={value && Object.assign({}, options[+value], { value })}
+        value={value}
         placeholder={placeholder}
         disabled={disabled}
       />

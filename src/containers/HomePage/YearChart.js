@@ -72,7 +72,7 @@ const YearChart = ({
                     scale={percentYScale}
                     numTicks={3}
                     stroke="white"
-                    strokeWidth="1.5"
+                    strokeWidth={1.5}
                     tickStroke="none"
                     tickLabelProps={() => ({
                       fill: 'white',
@@ -89,7 +89,7 @@ const YearChart = ({
                     scale={xScale}
                     numTicks={12}
                     stroke="white"
-                    strokeWidth="1.5"
+                    strokeWidth={1.5}
                     tickStroke="none"
                     tickFormat={d => `${d}月`}
                     tickLabelProps={() => ({
@@ -126,12 +126,9 @@ const YearChart = ({
                         timing: { duration: 500 },
                       })}
                       update={d => ({
+                        xPos: [xScale(d.month)],
                         barHeight: [yHeight - percentYScale(d.receivedRate)],
                         dotY: [valueYScale(yValue(d))],
-                        timing: { duration: 500 },
-                      })}
-                      leave={() => ({
-                        opacity: [0],
                         timing: { duration: 500 },
                       })}
                     >

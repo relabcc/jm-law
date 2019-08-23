@@ -99,8 +99,11 @@ export default [
   'hoverColor',
   'hoverBg',
   'hoverBorder',
+  'hoverBgImg',
   'zOrder',
   'verticalAlign',
   'whiteSpace',
   'dispatch',
+  'isMobile',
+  'browser',
 ];
