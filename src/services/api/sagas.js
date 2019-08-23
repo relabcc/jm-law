@@ -19,7 +19,7 @@ function* handleRequest(target, onSuccess, onError) {
 }
 
 function* handleRead({ resourceType, resources, requestKey, requestParams }) {
-  const resourceBase = `${API_BASE}/${resourceType}${requestParams ? reduce(requestParams, (q, value, key) => `${q}${key}=${encodeURIComponent(value)}`, '?'): ''}`;
+  const resourceBase = `${API_BASE}/${resourceType}${requestParams ? reduce(requestParams, (q, value, key) => `${q}${key}=${encodeURIComponent(value)}&`, '?'): ''}`;
   if (resources) {
     yield all(
       resources.map(id =>

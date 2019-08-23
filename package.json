@@ -5,8 +5,10 @@
   "author": "Renddi Yeh <renddi@relab.cc>",
   "dependencies": {
     "@styled-system/theme-get": "^5.0.6",
+    "@tweenjs/tween.js": "^17.4.0",
     "@vx/axis": "^0.0.190",
     "@vx/gradient": "^0.0.189",
+    "@vx/grid": "^0.0.190",
     "@vx/scale": "^0.0.190",
     "@vx/shape": "^0.0.190",
     "@vx/text": "^0.0.190",
@@ -47,7 +49,8 @@
     "reselect": "^4.0.0",
     "sanitize.css": "^8.0.0",
     "styled-components": "^4.2.0",
-    "styled-system": "^5.0.6"
+    "styled-system": "^5.0.6",
+    "svg-pathdata": "^5.0.2"
   },
   "keywords": [
     "gatsby",

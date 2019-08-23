@@ -21,6 +21,7 @@ import BubbleLine from './BubbleLine'
 import TypeDonut from './TypeDonut'
 import PercentBars from './PercentBars'
 import LawTop5 from './LawTop5'
+import YearChart from './YearChart'
 
 const keys = [
   'canceled',
@@ -78,12 +79,19 @@ class IndexPage extends PureComponent {
 
   handleNextYear = (currentYear) => this.setState({ currentYear: currentYear - 1  })
   handleLastYear = (currentYear) => this.setState({ currentYear: currentYear + 1  })
+
   openModal = () => this.setState({ open: true })
   CloseModal = () => this.setState({ open: false })
 
+  handleYearChange = e => {
+    const { updateParams } = this.props
+    const year = e.target.value
+    updateParams({ year })
+    this.setState({ year })
+  }
+
   render() {
     const data = this.props['data/bureaus']
-    const { updateParams } = this.props
     const {
       sortBy,
       sortOrder,
@@ -91,12 +99,13 @@ class IndexPage extends PureComponent {
       activeType,
       currentYear,
       open,
-      mappedData
+      mappedData,
+      year,
     } = this.state
     const bureauTotal = mappedData.map(({ label, monthData }) => ({
       label,
       ...keys.reduce((allData, key) => {
-        allData[key] = monthData.reduce((all, { data, types }) => all + (activeType ? types[activeType].data[key] : data[key]), 0)
+        allData[key] = monthData.reduce((all, d) => all + (activeType ? d.types[activeType].data[key] : d.data[key]), 0)
         return allData
       }, {})
     })).map((d) => ({
@@ -114,6 +123,16 @@ class IndexPage extends PureComponent {
       })
       return allTypes
     }, {}))
+    const monthData = mappedData.reduce((md, d) => {
+      d.monthData.forEach((m) => {
+        md[m.month] = md[m.month] || {}
+        keys.forEach((key) => {
+          md[m.month][key] = md[m.month][key] || 0
+          md[m.month][key] += (activeType ? m.types[activeType].data[key] : m.data[key])
+        }, {})
+      })
+      return md
+    }, {})
     return (
       <Layout>
         <Box
@@ -153,7 +172,7 @@ class IndexPage extends PureComponent {
             </Flex>
           </Box>
           <Container>
-            <select onChange={e => updateParams({ year: e.target.value })}>
+            <select onChange={this.handleYearChange}>
               {years.map(y => (
                 <option key={y.value} value={y.value}>{y.label}</option>
               ))}
@@ -192,7 +211,15 @@ class IndexPage extends PureComponent {
                   <Box flex="1" />
                   <Text>繳款入市庫平均日數： 5 天</Text>
                 </Flex>
-                <LawTop5 />
+                <LawTop5 year={year} />
+              </Box>
+            </Flex>
+            <Flex px="5%" py="2em">
+              <Box px="2em">
+                <Text fontSize="1.5em" letterSpacing="0.15em">月案件量分析</Text>
+              </Box>
+              <Box flex="1">
+                <YearChart ratio={1 / 5} data={monthData} />
               </Box>
             </Flex>
           </Container>

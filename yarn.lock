@@ -1025,6 +1025,11 @@
   dependencies:
     "@styled-system/core" "^5.0.12"
 
+"@tweenjs/tween.js@^17.4.0":
+  version "17.4.0"
+  resolved "https://registry.yarnpkg.com/@tweenjs/tween.js/-/tween.js-17.4.0.tgz#2e9ab3f2111906b30dfe1ef3259a9781dd211d35"
+  integrity sha512-J3fzl1F6wvh8KXVVcIuHN12xi1ZDcPA/0Vix+ZcJYwZWVHUwfIqfvzYXXEw7ybeev6477KCTt9fKydU+ajUqcg==
+
 "@types/babel__core@^7.1.2":
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.2.tgz#608c74f55928033fce18b99b213c16be4b3d114f"
@@ -1178,6 +1183,17 @@
   dependencies:
     classnames "^2.2.5"
     prop-types "^15.5.7"
+
+"@vx/grid@^0.0.190":
+  version "0.0.190"
+  resolved "https://registry.yarnpkg.com/@vx/grid/-/grid-0.0.190.tgz#3524ed2d69f77945c09c7e8ae9e6a8d11916cf6d"
+  integrity sha512-qhfRlfxTTwd/43oYEInp9YnPP2kkbUcsBjeaOrJ1pn29/k0pGBiuaJz7gvX844WrgbE0k9cqjb4mIKC7bvt16g==
+  dependencies:
+    "@vx/group" "0.0.190"
+    "@vx/point" "0.0.189"
+    "@vx/shape" "0.0.190"
+    classnames "^2.2.5"
+    prop-types "^15.6.2"
 
 "@vx/group@0.0.190":
   version "0.0.190"
@@ -11280,6 +11296,11 @@ svg-path-properties@^0.2.1:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/svg-path-properties/-/svg-path-properties-0.2.2.tgz#b073d81be7292eae0e233ab8a83f58dc27113296"
   integrity sha1-sHPYG+cpLq4OIzq4qD9Y3CcRMpY=
+
+svg-pathdata@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/svg-pathdata/-/svg-pathdata-5.0.2.tgz#e667b94a6071b60c5b123df04f9d6c9fe2f4850e"
+  integrity sha512-tmfwioGZZaSMZnAGCFiWd30O2sVbA5/wVP/CS8Pcf9s1ptd6J26bZUFwkIRZy+GYmD+uCECdiAP7bPpLszj+1w==
 
 svgo@^1.0.0:
   version "1.2.2"
