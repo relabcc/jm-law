@@ -1,11 +1,30 @@
 import React, { PureComponent, createElement } from 'react';
 import { compose } from 'redux'
+import reduce from 'lodash/reduce'
+import forEach from 'lodash/forEach'
+import groupBy from 'lodash/groupBy'
 
 import Box from 'components/Box'
 import Flex from 'components/Flex'
 import Toggler from 'components/Toggler'
 
 import withDataState from 'services/api/withDataState'
+
+import IssuedChart from './IssuedChart'
+
+import { getMonthData } from '../dataHandler'
+
+const parseData = (d, initial) => {
+  const parsed = reduce(d, (va, { month, ...vv }) => {
+    Object.keys(vv).forEach(k => {
+      va[k] = va[k] || 0
+      va[k] += vv[k]
+    })
+    return va
+  }, initial)
+  parsed.receivedRate = parsed.received / parsed.issued
+  return parsed
+}
 
 class YearByYear extends PureComponent {
   static getDerivedStateFromProps(nextProps) {
@@ -28,10 +47,32 @@ class YearByYear extends PureComponent {
 
   render() {
     const { data, chartType, timeType } = this.state
-    console.log(data)
+    const formattedData = reduce(data, (fd, d, year) => {
+      let md = getMonthData(d.data)
+      if (timeType) {
+        md = groupBy(md, (dd) => Math.floor((dd.month - 1) / 3))
+        forEach(md, (v, i) => {
+          fd.push(parseData(v, {
+            year,
+            quarter: +i + 1,
+            index: (year - this.props.year + 2) * 4 + i * 1,
+          }))
+        })
+      } else {
+        fd.push(parseData(md, {
+          year,
+          index: year - this.props.year + 2,
+        }))
+      }
+      return fd
+    }, [])
+    console.log(formattedData)
     return (
       <Box position="relative" mx="4em">
-        <Box pt="66%" border="1px solid"></Box>
+        {chartType ? (
+          <Box pt="66%" border="1px solid"></Box>
+        ) : <IssuedChart key={`t-${timeType}`} data={formattedData} ratio={0.66} />}
+
         <Flex position="absolute" width={1} top="0">
           <Box>
             <Toggler
@@ -42,7 +83,7 @@ class YearByYear extends PureComponent {
               onToggle={this.handleToggle('chartType')}
             />
           </Box>
-          <Box ml="2em">
+          <Box ml="1em">
             <Toggler
               color="darkBlue"
               bg="rgba(0,0,0,0.2)"

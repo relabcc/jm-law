@@ -21,7 +21,6 @@ function* handleRequest(target, onSuccess, onError) {
 }
 
 function* handleManualRead({ payload: { key, params } }) {
-  console.log(key, params)
   const qs = isObject(params) ? reduce(params, (q, value, key) => `${q}${key}=${encodeURIComponent(value)}&`, '?') : ''
   const resourceBase = `${API_BASE}/${key}${qs}`;
   yield call(
