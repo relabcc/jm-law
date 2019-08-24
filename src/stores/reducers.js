@@ -8,6 +8,7 @@ import zip from 'lodash/zip';
 import { createResponsiveStateReducer } from 'redux-responsive';
 
 import { breakpoints } from '../components/ThemeProvider/theme';
+import api from '../services/api/reducer'
 
 const names = [
   'xxs',
@@ -24,6 +25,7 @@ const names = [
 export default function createReducer(injectedReducers) {
   return combineReducers({
     browser: createResponsiveStateReducer(fromPairs(zip(names, breakpoints.map((bp) => parseInt(bp, 10) - 1)))),
+    api,
     ...injectedReducers,
   });
 }

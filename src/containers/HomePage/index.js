@@ -41,7 +41,6 @@ class IndexPage extends PureComponent {
   static getDerivedStateFromProps(nexProps) {
     const data = nexProps['data/bureaus']
     const { typeList } = nexProps
-    console.log(data)
     const mappedData = map(data, ({ name, monthData }) => ({
       label: name,
       monthData: monthData.map(m => ({

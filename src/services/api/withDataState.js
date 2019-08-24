@@ -1,17 +1,16 @@
 import React, { PureComponent, createElement } from 'react';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { actionTypes, requestStatuses, resourceReducer } from 'redux-resource';
-import get from 'lodash/get';
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import size from 'lodash/size';
 import md5 from 'blueimp-md5'
 
 import Text from '../../components/Text';
-import request from '../../utils/request';
-import { API_BASE } from './config';
+import { getData } from './reducer'
+
+import { STATUS_LOADED, STATUS_LOADING, STATUS_ERROR } from './constants'
 
 export default (key) => {
-  const SIG = `_LAW.${md5(key)}`
+  const SIG = `_LAW.state.${md5(key)}`
 
   return SubComp => {
     if (!key) return () => null;
@@ -24,22 +23,26 @@ export default (key) => {
         setTimeout(this.request);
       }
 
-      request = () => {
-        request(`${API_BASE}/${key}`).then(this.handleRes)
+      request = (skip) => {
+        if (!this.checkIsPending()) {
+          if (skip || !this.checkIsDone()) {
+            this.props.getData({ key })
+          }
+        }
       };
 
-      handleRes = data => {
-        this.setState({ data })
-      }
+      checkIsPending = () => this.props.status === STATUS_LOADING
+
+      checkIsDone = () => this.props.status === STATUS_LOADED || this.props.status === STATUS_ERROR
 
       render() {
-        const { data } = this.state
+        const { data, status, ...props } = this.props
         let content = <Text textAlign="center" my="2em">Loading...</Text>;
         if (size(data)) {
           content = createElement(SubComp, {
-            ...this.props,
+            ...props,
             [key]: data,
-            // resync: this.resync,
+            resync: () => this.request(true),
             // isLoading: this.checkIsPending(),
           });
         }
@@ -47,6 +50,14 @@ export default (key) => {
       }
     }
 
-    return WithData
+    const mapStateToProps = state => ({
+      data: state.getIn(['api', key, 'data']),
+      status: state.getIn(['api', key, 'status']),
+    })
+
+    const mapDispatchToProps = dispatch => bindActionCreators({
+      getData,
+    }, dispatch)
+    return connect(mapStateToProps, mapDispatchToProps)(WithData)
   };
 }

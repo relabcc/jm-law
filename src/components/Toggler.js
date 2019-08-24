@@ -4,22 +4,22 @@ import Measure from 'react-measure'
 import FontSizeContext from './ThemeProvider/FontSizeContext'
 import Box from './Box'
 
-const Toggler = ({ options, activeIndex, onToggle }) => {
+const Toggler = ({ options, activeIndex, onToggle, color, bg }) => {
   const poses = options.map(() => useState({}))
   return (
     <FontSizeContext.Consumer>
       {({ em }) => (
-        <Box borderRadius="1.5em" bg="rgba(255,255,255,0.2)" px="0.5em">
+        <Box borderRadius="1.5em" bg={bg} px="0.5em">
           <Box position="relative">
             <Box
               position="absolute"
-              left={poses[activeIndex][0].left - poses[0][0].left - em * 0.5}
+              left={poses[activeIndex][0].left - poses[0][0].left - em * 0.65}
               top="50%"
               bottom="0"
-              width={poses[activeIndex][0].width + em}
+              width={poses[activeIndex][0].width + 1.3 * em}
               transition="all 0.25s"
             >
-              <Box py="1.25em" bg="primary" transform="translateY(-50%)" borderRadius="1.25em" />
+              <Box py="1.25em" bg={color} transform="translateY(-50%)" borderRadius="1.25em" />
             </Box>
             <Box position="relative">
               {options.map((label, i) => (
@@ -40,7 +40,8 @@ const Toggler = ({ options, activeIndex, onToggle }) => {
 };
 
 Toggler.defaultProps = {
-  activeIndex: 1,
+  color: 'primary',
+  bg: 'rgba(255,255,255,0.2)',
   onToggle: () => {},
 }
 

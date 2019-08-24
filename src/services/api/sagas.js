@@ -6,6 +6,7 @@ import isObject from 'lodash/isObject'
 import sendRequest from 'utils/request';
 
 import { API_BASE } from './config';
+import { GET_DATA, receivedDataSuccess, receivedDataError } from './reducer';
 
 const processData = data => data
 
@@ -17,6 +18,22 @@ function* handleRequest(target, onSuccess, onError) {
     console.error(error)
     yield put(onError(error));
   }
+}
+
+function* handleManualRead({ payload: { key, params } }) {
+  console.log(key, params)
+  const qs = isObject(params) ? reduce(params, (q, value, key) => `${q}${key}=${encodeURIComponent(value)}&`, '?') : ''
+  const resourceBase = `${API_BASE}/${key}${qs}`;
+  yield call(
+    handleRequest,
+    resourceBase,
+    (data) => receivedDataSuccess({
+      key,
+      data,
+    }),
+    // onError
+    () => receivedDataError({ key }),
+  );
 }
 
 function* handleRead({ resourceType, resources, requestKey, requestParams }) {
@@ -65,5 +82,8 @@ function* handleRead({ resourceType, resources, requestKey, requestParams }) {
 }
 
 export default function* apiSagas() {
-  yield takeEvery(actionTypes.READ_RESOURCES_PENDING, handleRead);
+  yield all([
+    takeEvery(actionTypes.READ_RESOURCES_PENDING, handleRead),
+    takeEvery(GET_DATA, handleManualRead),
+  ]);
 }
