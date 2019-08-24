@@ -16,8 +16,7 @@ const defaultStyles = {
     backgroundColor: 'rgba(0,0,0,0.7)'
   },
   content: {
-    width: '90%',
-    maxWidth: '60em',
+    width: '66%',
     top: '50%',
     left: '50%',
     right: 'auto',

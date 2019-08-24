@@ -77,10 +77,10 @@ class TypeDonut extends PureComponent {
       getColorByName,
       getIndexByName,
     } = this.state;
+    const { em } = this.context
     return (
       <ChartBase {...props}>
         {({ width, height }) => {
-          const { em } = this.context
           const donutR = height * 0.45 - (showLabel ? 8 * em : 2 * em);
           const legendBottom = height - 4 * em
           return (

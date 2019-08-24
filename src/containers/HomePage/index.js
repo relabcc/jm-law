@@ -2,6 +2,7 @@ import React, { PureComponent, createElement } from 'react'
 import { compose } from 'redux'
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
+import last from 'lodash/last'
 
 import Container from 'components/Container'
 import Box from 'components/Box'
@@ -25,6 +26,7 @@ import PercentBars from './PercentBars'
 import LawTops from './LawTops'
 import YearChart from './YearChart'
 import AvgDays from './AvgDays'
+import YearByYear from './YearByYear'
 
 const keys = [
   'canceled',
@@ -39,6 +41,7 @@ class IndexPage extends PureComponent {
   static getDerivedStateFromProps(nexProps) {
     const data = nexProps['data/bureaus']
     const { typeList } = nexProps
+    console.log(data)
     const mappedData = map(data, ({ name, monthData }) => ({
       label: name,
       monthData: monthData.map(m => ({
@@ -62,6 +65,7 @@ class IndexPage extends PureComponent {
     chartIndex: 0,
     lawType: 0,
     typeLegends: [],
+    year: last(this.props.yearsList),
   }
 
   handleTypeFilter = (activeType) => this.setState({ activeType })
@@ -178,7 +182,7 @@ class IndexPage extends PureComponent {
                       label="查看更多"
                       title="案件分類分析"
                     >
-                      <Box px="20%">
+                      <Box px="15%">
                         <TypeDonut
                           ratio={1}
                           valueGetter={d => d.issued}
@@ -232,7 +236,13 @@ class IndexPage extends PureComponent {
                 />
                 <Box fontSize="1.5em" letterSpacing="0.15em" my="1em" borderBottom="1px solid" pb="0.5rem">月案件量分析</Box>
                 <Box textAlign="center">
-                  <Button.lightBg>看歷年分析</Button.lightBg>
+                    <ModalButton
+                      is={Button.lightBg}
+                      label="查看更多"
+                      title={`${year - 2}-${year}案件量分析`}
+                    >
+                      <YearByYear year={year} />
+                    </ModalButton>
                 </Box>
               </Box>
               <Box flex="1">
