@@ -2,7 +2,6 @@ import React, { PureComponent, createElement } from 'react'
 import { compose } from 'redux'
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
-import get from 'lodash/get'
 
 import Container from 'components/Container'
 import Box from 'components/Box'
@@ -159,13 +158,17 @@ class IndexPage extends PureComponent {
             <Flex borderBottom="1px solid">
               <Box pl="1em" pr="2em" width={2 / 5} borderRight="1px solid">
                 <Box position="relative">
-                  {createElement(chartIndex ? PercentBars : TypeDonut , {
+                  {createElement(chartIndex ? PercentBars : TypeDonut , Object.assign({
                     ratio: 0.6,
                     data: types,
                     legends: typeLegends,
                     onLegendClick: this.handleTypeFilter,
                     activeLegend: activeType,
-                  })}
+                  }, chartIndex ? {} : {
+                    valueGetter: d => d.issued,
+                    outerCircle: true,
+                    showLegend: true,
+                  }))}
                   <Box position="absolute" top="0" left="0">
                     <Toggler activeIndex={chartIndex} onToggle={this.handleChartToggle} options={['案件數', '收繳率']} />
                   </Box>
@@ -175,8 +178,15 @@ class IndexPage extends PureComponent {
                       label="查看更多"
                       title="案件分類分析"
                     >
-                      <Box px="25%">
-                        <Box pt="100%" bg="primary" />
+                      <Box px="20%">
+                        <TypeDonut
+                          ratio={1}
+                          valueGetter={d => d.issued}
+                          data={types}
+                          showPercentage
+                          legends={typeLegends}
+                          showLabel
+                        />
                       </Box>
                     </ModalButton>
                   </Box>
