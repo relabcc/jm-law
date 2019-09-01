@@ -145,22 +145,24 @@ class IndexPage extends PureComponent {
                     <Toggler activeIndex={chartIndex} onToggle={this.handleChartToggle} options={['案件數', '收繳率']} />
                   </Box>
                   <Box position="absolute" right="0" bottom="0">
-                    <ModalButton
-                      is={Button.lightBg}
-                      label="查看更多"
-                      title="案件分類分析"
-                    >
-                      <Box px="15%">
-                        <TypeDonut
-                          ratio={1}
-                          valueGetter={d => d.issued}
-                          data={types}
-                          showPercentage
-                          legends={typeLegends}
-                          showLabel
-                        />
-                      </Box>
-                    </ModalButton>
+                    {!chartIndex && (
+                      <ModalButton
+                        is={Button.lightBg}
+                        label="查看更多"
+                        title="案件分類分析"
+                      >
+                        <Box px="15%">
+                          <TypeDonut
+                            ratio={1}
+                            valueGetter={d => d.issued}
+                            data={types}
+                            showPercentage
+                            legends={typeLegends}
+                            showLabel
+                          />
+                        </Box>
+                      </ModalButton>
+                    )}
                   </Box>
                 </Box>
               </Box>

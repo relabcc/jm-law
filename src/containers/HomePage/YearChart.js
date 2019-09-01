@@ -150,7 +150,7 @@ const YearChart = ({
                                   cx={xPos}
                                   cy={dotY}
                                   r={em / 3}
-                                  fill={theme.colors.darkOrange}
+                                  fill={theme.colors.spectrum[3]}
                                 />
                                 <text
                                   x={xPos}

@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import { Group } from '@vx/group';
-import { scaleBand, scaleLinear } from '@vx/scale';
+import { scalePoint, scaleLinear } from '@vx/scale';
 import { AxisLeft, AxisBottom } from '@vx/axis';
 import { Grid } from '@vx/grid';
-import { LinePath } from '@vx/shape';
+import { AreaClosed } from '@vx/shape';
 import range from 'lodash/range'
 import { NodeGroup } from 'react-move'
 
@@ -15,6 +15,7 @@ import TweenShape from 'components/Charts/TweenShape'
 
 const xValue = d => d.index
 const yValue = d => d.issued
+const yCancealedValue = d => d.canceled
 
 const getZeros = n => {
   if (n < 10) return 0
@@ -40,9 +41,10 @@ const IssuedChart = ({
             const yHeight = yEnd - yStart
             const xStart = em * 3
             const xEnd = width - em
-            const xScale = scaleBand({
+            const xScale = scalePoint({
               range: [0, xEnd - xStart],
               domain: range(0, data.length),
+              // padding: 0.2,
             })
             const yMax = Math.max(...data.map(yValue))
             const z = getZeros(yMax)
@@ -53,6 +55,35 @@ const IssuedChart = ({
             return (
               <Group>
                 <Group top={yStart} left={xStart}>
+                  <AreaClosed
+                    x={dd => xScale(xValue(dd))}
+                    y={dd => yScale(yValue(dd))}
+                    yScale={yScale}
+                  >
+                    {({ path }) => (
+                      <TweenShape
+                        d={path(data)}
+                        stroke={theme.colors.lightOrange}
+                        fill={theme.colors.lightOrange}
+                        opacity={0.7}
+                        duration={500}
+                      />
+                    )}
+                  </AreaClosed>
+                  <AreaClosed
+                    x={dd => xScale(xValue(dd))}
+                    y={dd => yScale(yCancealedValue(dd))}
+                    yScale={yScale}
+                  >
+                    {({ path }) => (
+                      <TweenShape
+                        d={path(data)}
+                        stroke={theme.colors.orange}
+                        fill={theme.colors.orange}
+                        duration={500}
+                      />
+                    )}
+                  </AreaClosed>
                   <Grid
                     top={0}
                     left={0}
@@ -95,58 +126,51 @@ const IssuedChart = ({
                     tickLabelProps={() => ({
                       fill: 'black',
                       fontSize: em * 0.8,
+                      textAnchor: 'middle',
                     })}
                   />
-                  <Group left={xStart}>
-                    <LinePath
-                      x={dd => xScale(xValue(dd))}
-                      y={dd => yScale(yValue(dd))}
-                    >
-                      {({ path }) => (
-                        <TweenShape
-                          d={path(data)}
-                          stroke={theme.colors.lightOrange}
-                          strokeWidth="1.5"
-                          fill="transparent"
-                          duration={500}
-                        />
-                      )}
-                    </LinePath>
-                    <NodeGroup
-                      data={data}
-                      keyAccessor={xValue}
-                      start={d => ({
-                        xPos: xScale(xValue(d)),
-                        dotY: yScale(yValue(d)),
-                      })}
-                      enter={d => ({
-                        dotY: [yScale(yValue(d))],
-                        timing: { duration: 500 },
-                      })}
-                      update={d => ({
-                        xPos: [xScale(xValue(d))],
-                        dotY: [yScale(yValue(d))],
-                        timing: { duration: 500 },
-                      })}
-                    >
-                      {nodes => (
-                        <Fragment>
-                          {nodes.map(({ key, data: d, state: { xPos, dotY } }) => {
-                            return (
-                              <Fragment key={key}>
-                                <circle
-                                  cx={xPos}
-                                  cy={dotY}
-                                  r={em / 3}
-                                  fill={theme.colors.darkOrange}
-                                />
-                              </Fragment>
-                            )
-                          })}
-                        </Fragment>
-                      )}
-                    </NodeGroup>
-                  </Group>
+                  <NodeGroup
+                    data={data}
+                    keyAccessor={xValue}
+                    start={d => ({
+                      xPos: xScale(xValue(d)),
+                      dotY: yScale(yValue(d)),
+                      dotCanceledY: yScale(yCancealedValue(d)),
+                    })}
+                    enter={d => ({
+                      dotY: [yScale(yValue(d))],
+                      timing: { duration: 500 },
+                    })}
+                    update={d => ({
+                      xPos: [xScale(xValue(d))],
+                      dotY: [yScale(yValue(d))],
+                      dotCanceledY: [yScale(yCancealedValue(d))],
+                      timing: { duration: 500 },
+                    })}
+                  >
+                    {nodes => (
+                      <Fragment>
+                        {nodes.map(({ key, data: d, state: { xPos, dotY, dotCanceledY } }) => {
+                          return (
+                            <Fragment key={key}>
+                              <circle
+                                cx={xPos}
+                                cy={dotY}
+                                r={em / 3}
+                                fill={theme.colors.spectrum[3]}
+                              />
+                              <circle
+                                cx={xPos}
+                                cy={dotCanceledY}
+                                r={em / 3}
+                                fill={theme.colors.spectrum[3]}
+                              />
+                            </Fragment>
+                          )
+                        })}
+                      </Fragment>
+                    )}
+                  </NodeGroup>
                 </Group>
                 <Group top={1.75 * em} left={xEnd - 16 * em}>
                   <Group>
@@ -157,7 +181,7 @@ const IssuedChart = ({
                       width={3 * em}
                       height={em}
                       fill={theme.colors.lightOrange}
-                      opacity={0.3}
+                      opacity={0.7}
                     />
                   </Group>
                   <Group left={8 * em}>
@@ -167,8 +191,7 @@ const IssuedChart = ({
                       y={-1 * em}
                       width={3 * em}
                       height={em}
-                      fill={theme.colors.lightOrange}
-                      opacity={0.3}
+                      fill={theme.colors.orange}
                     />
                   </Group>
                 </Group>

@@ -47,6 +47,7 @@ class YearByYear extends PureComponent {
 
   render() {
     const { data, chartType, timeType } = this.state
+    const { year } = this.props
     const formattedData = reduce(data, (fd, d, year) => {
       let md = getMonthData(d.data)
       if (timeType) {
@@ -66,12 +67,25 @@ class YearByYear extends PureComponent {
       }
       return fd
     }, [])
-    console.log(formattedData)
+    const dataLength = formattedData.length
     return (
       <Box position="relative" mx="4em">
         {chartType ? (
           <Box pt="66%" border="1px solid"></Box>
-        ) : <IssuedChart key={`t-${timeType}`} data={formattedData} ratio={0.66} />}
+        ) : (
+          <IssuedChart
+            key={`t-${timeType}`}
+            data={formattedData}
+            ratio={0.66}
+            xTickFormat={d => {
+              if (timeType) {
+                const y = Math.floor(d / 4)
+                return year - (dataLength / 4 - y) + 1 + 'Q' + (d % 4 + 1)
+              }
+              return year - (dataLength - d) + 1
+            }}
+          />)
+        }
 
         <Flex position="absolute" width={1} top="0">
           <Box>
