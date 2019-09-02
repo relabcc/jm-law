@@ -15,7 +15,7 @@ import ModalButton from 'components/ModalButton';
 
 import theme, { mobileOrDesktop } from 'components/ThemeProvider/theme';
 
-import withData from 'services/api/withData'
+import withBureauData from 'services/api/withBureauData'
 import withDataState from 'services/api/withDataState'
 
 import Layout from '../Layout';
@@ -240,5 +240,5 @@ class IndexPage extends PureComponent {
 export default compose(
   withDataState('yearsList'),
   withDataState('typeList'),
-  withData('data/bureaus'),
+  withBureauData,
 )(IndexPage)

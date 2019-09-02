@@ -9,7 +9,7 @@ import theme from 'components/ThemeProvider/theme'
 
 import ChartBase from 'components/Charts/ChartBase'
 import LineBreakText from 'components/Charts/LineBreakText'
-import withData from 'services/api/withData'
+import withLawData from 'services/api/withLawData'
 
 const labelLength = 15
 
@@ -101,4 +101,4 @@ class LawTops extends PureComponent {
   }
 }
 
-export default props => createElement(withData('data/bureaus/laws', { top: props.top, year: props.year })(LawTops), props);
+export default props => createElement(withLawData({ top: props.top, year: props.year })(LawTops), props);
