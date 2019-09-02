@@ -36,6 +36,10 @@ const orange = spectrum[2]
 const darkOrange = spectrum[4]
 const lightOrange = spectrum[1]
 const darkRed = spectrum[5]
+const oranges = spectrum.reduce((o, c, i) => {
+  o[`orange${i + 1}`] = c;
+  return o
+}, {});
 const primary = orange;
 
 export default {
@@ -56,6 +60,7 @@ export default {
     primary,
     primaryHover: darkOrange,
     spectrum,
+    ...oranges,
     fade: {
       white: generateFade(255, 255, 255),
       black: generateFade(0, 0, 0),

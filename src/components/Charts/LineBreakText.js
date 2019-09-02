@@ -47,6 +47,7 @@ const LineBreakText = ({
   fillFront,
   bg,
   em,
+  style,
   ...props
 }) => {
   if (typeof children !== 'string') {
@@ -55,6 +56,7 @@ const LineBreakText = ({
         x={x}
         y={y}
         fontSize={fontSize}
+        style={style}
         {...props}
       >
         {children}
@@ -69,6 +71,7 @@ const LineBreakText = ({
       x={x}
       y={yPos[i]}
       fontSize={fontSize}
+        style={style}
       {...props}
     >
       {c}
@@ -86,6 +89,7 @@ const LineBreakText = ({
           x={x - w / 2}
           y={yStart - 1.25 * em}
           fill={bg}
+          style={style}
         />
         {texts}
       </g>
