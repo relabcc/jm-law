@@ -29,24 +29,25 @@ class BubbleLine extends PureComponent {
 
   wrapper = createRef()
 
-  handleTooltip = ({ event, xScale, xStart, data }) => {
+  handleTooltip = ({ event, xScale, data }) => {
     const { x } = localPoint(event);
     const index = Math.round(xScale.invert(x))
-    if (index < data.length) {
-      this.setState({ index })
+    const d = data[index]
+    if (d) {
+      this.setState({ activeId: d.id })
     } else {
-      this.setState({ index: -1 })
+      this.setState({ activeId: null })
     }
   }
 
   handleClick = () => {
-    this.setState(({ index, lock }) => {
-      if (lock > -1) {
-        this.setState({ lock: -1, index: -1 })
-      } else {
-        this.setState({ lock: index })
-      }
-    })
+    const { activeId } = this.state
+    const { lockId, onLock } = this.props
+    if (lockId) {
+      this.setState({ activeId: null }, () => onLock(null))
+    } else {
+      onLock(activeId)
+    }
   }
 
   render() {
@@ -54,11 +55,15 @@ class BubbleLine extends PureComponent {
       data,
       sortBy,
       sortOrder,
+      onLock,
+      lockId,
       ...props
     } = this.props
-    const { index, lock } = this.state;
+    const { activeId } = this.state;
+    console.log(activeId, lockId)
     if (!data || !data.length) return null
     // console.log(data)
+    const sortedData = loSortBy(data, sortBy)
     return (
       <FontSizeContext.Consumer>
         {({ em }) => (
@@ -137,7 +142,7 @@ class BubbleLine extends PureComponent {
                       opacity: 1,
                     }}
                     update={{
-                      opacity: [index > -1 || lock > -1 ? 0.1 : 1],
+                      opacity: [(activeId || lockId) ? 0.1 : 1],
                       timing: { duration: 250 }
                     }}
                   >
@@ -181,33 +186,30 @@ class BubbleLine extends PureComponent {
                       this.handleTooltip({
                         event,
                         xScale,
-                        xStart,
-                        data,
+                        data: sortedData,
                       })
                     }
                     onTouchMove={event =>
                       this.handleTooltip({
                         event,
                         xScale,
-                        xStart,
-                        data,
+                        data: sortedData,
                       })
                     }
                     onMouseMove={event =>
                       this.handleTooltip({
                         event,
                         xScale,
-                        xStart,
-                        data,
+                        data: sortedData,
                       })
                     }
-                    onMouseLeave={() => this.setState({ index: -1 })}
+                    onMouseLeave={() => this.setState({ activeId: null })}
                     onClick={this.handleClick}
                   />
                   <g ref={this.wrapper}>
                     <NodeGroup
                       // must make react-move think data had been updated, so we inject width and height here
-                      data={loSortBy(data.map(d => ({ ...d, width, height })), sortBy)}
+                      data={sortedData.map(d => ({ ...d, width, height }))}
                       keyAccessor={d => d.label}
                       start={(d, i) => ({
                         cx: xScale(i),
@@ -223,20 +225,25 @@ class BubbleLine extends PureComponent {
                       update={(d, i) => {
                         let active = true
                         let centerActive
-                        if (lock > -1) {
-                          active = lock === i
-                          centerActive = lock === i
-                        } else if (index > -1) {
-                          active = index === i
+                        if (lockId) {
+                          active = lockId === d.id
+                          centerActive = lockId === d.id
+                        } else if (activeId) {
+                          active = activeId === d.id
                         }
-                        return {
-                          cx: [xScale(i)],
-                          r: [rScale(d.issued)],
-                          opacity: [active ? 0.5 : 0.1],
-                          otherOpacity: [active ? 1 : 0.1],
-                          centerR: [centerActive ? em : 0],
-                          timing: { duration: 250 },
-                        }
+                        return [
+                          {
+                            cx: [xScale(i)],
+                            r: [rScale(d.issued)],
+                            timing: { duration: 500 },
+                          },
+                          {
+                            opacity: [active ? 0.5 : 0.1],
+                            otherOpacity: [active ? 1 : 0.1],
+                            centerR: [centerActive ? em : 0],
+                            timing: { duration: 250 },
+                          },
+                        ]
                       }}
                       leave={() => ({
                         opacity: [0],

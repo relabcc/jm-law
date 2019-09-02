@@ -37,8 +37,9 @@ class IndexPage extends PureComponent {
   static getDerivedStateFromProps(nexProps) {
     const data = nexProps['data/bureaus']
     const { typeList } = nexProps
-    const mappedData = map(data, ({ name, monthData }) => ({
+    const mappedData = map(data, ({ id, name, monthData }) => ({
       label: name,
+      id,
       monthData: monthData.map(m => ({
         ...m,
         types: m.types.reduce((t, td) => {
@@ -75,6 +76,8 @@ class IndexPage extends PureComponent {
 
   setLawType = lawType => this.setState({ lawType })
 
+  setLock = lockId => this.setState({ lockId })
+
   render() {
     const data = this.props['data/bureaus']
     const { typeList, yearsList: years } = this.props
@@ -87,11 +90,12 @@ class IndexPage extends PureComponent {
       year,
       lawType,
       typeLegends,
+      lockId,
     } = this.state
 
     const bureauTotal = getBureauTotal(mappedData, activeType)
-    const monthData = getMonthData(mappedData, activeType)
-    const types = getTypes(data)
+    const monthData = getMonthData(mappedData, activeType, lockId)
+    const types = getTypes(data, lockId)
     return (
       <Layout>
         <Box
@@ -118,7 +122,14 @@ class IndexPage extends PureComponent {
                 onChange={this.handleYearChange}
               />
             </Flex>
-            <BubbleLine ratio={1 / 4} data={bureauTotal} sortBy={sortBy} sortOrder={sortOrder} />
+            <BubbleLine
+              ratio={1 / 4}
+              data={bureauTotal}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              lockId={lockId}
+              onLock={this.setLock}
+            />
           </Container>
         </Box>
         <Box
@@ -184,14 +195,14 @@ class IndexPage extends PureComponent {
                         </Box>
                       </Box>
                       <Box flex="1" px="2em">
-                        <LawTops key={10} top={10} year={year} color="text" ratio={0.8} />
+                        <LawTops key={10} top={10} year={year} color="text" ratio={0.8} lockId={lockId} />
                       </Box>
                     </Flex>
                   </ModalButton>
                   <Box flex="1" />
                   <AvgDays year={year} />
                 </Flex>
-                <LawTops key={5} year={year} top={5} hasLine color="white" ratio={0.35} />
+                <LawTops key={5} year={year} top={5} hasLine color="white" ratio={0.35} lockId={lockId} />
               </Box>
             </Flex>
             <Flex px="5%" py="2em" alignItems="center">
