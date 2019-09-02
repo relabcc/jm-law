@@ -11,6 +11,7 @@ import Toggler from 'components/Toggler'
 import withDataState from 'services/api/withDataState'
 
 import IssuedChart from './IssuedChart'
+import ReceivedChart from './ReceivedChart'
 
 import { getMonthData } from '../dataHandler'
 
@@ -70,23 +71,18 @@ class YearByYear extends PureComponent {
     const dataLength = formattedData.length
     return (
       <Box position="relative" mx="4em">
-        {chartType ? (
-          <Box pt="66%" border="1px solid"></Box>
-        ) : (
-          <IssuedChart
-            key={`t-${timeType}`}
-            data={formattedData}
-            ratio={0.66}
-            xTickFormat={d => {
-              if (timeType) {
-                const y = Math.floor(d / 4)
-                return year - (dataLength / 4 - y) + 1 + 'Q' + (d % 4 + 1)
-              }
-              return year - (dataLength - d) + 1
-            }}
-          />)
-        }
-
+        {createElement(chartType ? ReceivedChart : IssuedChart, {
+          key: `t-${timeType}`,
+          data: formattedData,
+          ratio: 0.66,
+          xTickFormat: d => {
+            if (timeType) {
+              const y = Math.floor(d / 4)
+              return year - (dataLength / 4 - y) + 1 + 'Q' + (d % 4 + 1)
+            }
+            return year - (dataLength - d) + 1
+          },
+        })}
         <Flex position="absolute" width={1} top="0">
           <Box>
             <Toggler
