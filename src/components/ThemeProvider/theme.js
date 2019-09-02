@@ -67,4 +67,11 @@ export default {
   headerHeight: '5em',
   mobileOrDesktop,
   zOrder: range(4).map((i) => 10 ** i),
+  gradients: {
+    none: {},
+    darkBlue: {
+      backgroundImage: `linear-gradient(to right, ${darkBlue}, ${darkerBlue})`,
+      color: white,
+    },
+  }
 };

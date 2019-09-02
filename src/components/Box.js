@@ -14,6 +14,7 @@ import {
   opacity,
   style,
   backgroundImage,
+  variant,
 } from 'styled-system';
 
 import blacklist from './utils/blacklist';
@@ -32,6 +33,7 @@ const Box = styled(tag)`
   ${borderRadius}
   ${opacity}
   ${backgroundImage}
+  ${variant({ scale: 'gradients', prop: 'gradient' })}
   ${injectProps('whiteSpace')}
   ${injectProps('overflow')}
   ${injectProps('transform')}

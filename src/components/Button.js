@@ -10,6 +10,7 @@ import {
   backgroundImage,
   position,
   borderColor,
+  variant,
 } from 'styled-system';
 import themeGet from '@styled-system/theme-get';
 import tag from 'clean-tag';
@@ -37,6 +38,7 @@ export const buttonStyle = css`
   ${layout}
   ${position}
   ${backgroundImage}
+  ${variant({ scale: 'gradients', prop: 'gradient' })}
   ${space}
   ${color}
   ${border}
@@ -89,7 +91,7 @@ Button.defaultProps = {
   border: '1px solid',
   borderColor: 'darkBlue',
   bg: 'darkBlue',
-  backgroundImage: `linear-gradient(to right, ${theme.colors.darkBlue}, ${theme.colors.darkerBlue})`,
+  gradient: 'darkBlue',
   color: 'white',
   hoverColor: 'darkBlue',
   hoverBg: 'white',
@@ -110,11 +112,11 @@ Button.lightBg = props => (
   <Button
     bg="white"
     color="darkBlue"
-    backgroundImage="white"
+    gradient="none"
     border="1px solid"
     borderColor="white"
     hoverColor="white"
-    hoverBgImg={`linear-gradient(to right, ${theme.colors.darkBlue}, ${theme.colors.darkerBlue})`}
+    hoverBgImg={theme.gradients.darkBlue.backgroundImage}
     hoverBorder="white"
     {...props}
   />
@@ -124,17 +126,18 @@ Button.border = props => (
   <Button
     bg="white"
     color="darkBlue"
-    backgroundImage="white"
+    gradient="none"
     borderColor="darkBlue"
     hoverColor="white"
     hoverBg="none"
-    hoverBgImg={`linear-gradient(to right, ${theme.colors.darkBlue}, ${theme.colors.darkerBlue})`}
+    hoverBgImg={theme.gradients.darkBlue.backgroundImage}
     {...props}
   />
 );
 
 Button.outline = props => (
   <Button
+    gradient="none"
     border="1px solid"
     borderColor="primary"
     bg="transparent"
@@ -144,19 +147,9 @@ Button.outline = props => (
   />
 );
 
-Button.outline.danger = props => (
-  <Button.danger
-    border="1px solid"
-    borderColor="danger"
-    bg="transparent"
-    color="danger"
-    hoverColor="white"
-    {...props}
-  />
-);
-
 Button.transparent = props => (
   <Button
+    gradient="none"
     border="1px solid transparent"
     bg="transparent"
     color="text"

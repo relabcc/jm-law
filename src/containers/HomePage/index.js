@@ -123,8 +123,7 @@ class IndexPage extends PureComponent {
         </Box>
         <Box
           py={mobileOrDesktop(0, '2em')}
-          color="white"
-          backgroundImage={`linear-gradient(to right, ${theme.colors.darkBlue}, ${theme.colors.darkerBlue})`}
+          gradient="darkBlue"
         >
           <Container>
             <Flex borderBottom="1px solid">

@@ -106,4 +106,5 @@ export default [
   'dispatch',
   'isMobile',
   'browser',
+  'gradient',
 ];
