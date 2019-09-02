@@ -40,6 +40,8 @@ const YearChart = ({
             const xScale = scaleBand({
               range: [0, xEnd - xStart],
               domain: range(1, 13),
+              paddingInner: 0.3,
+              paddingOuter: 0.3,
             })
             const percentYScale = scaleLinear({
               range: [yHeight, 0],
@@ -49,6 +51,7 @@ const YearChart = ({
               range: [yHeight, 0],
               domain: [0, Math.ceil(Math.max(...formattedData.map(yValue)) / 100) * 100],
             });
+            const barWidth = xScale.bandwidth()
             return (
               <Group top={yStart}>
                 <Group left={xStart}>
@@ -95,11 +98,12 @@ const YearChart = ({
                     tickLabelProps={() => ({
                       fill: 'white',
                       fontSize: em * 0.8,
+                      textAnchor: 'middle',
                     })}
                   />
                   <Group left={xStart}>
                     <LinePath
-                      x={dd => xScale(xValue(dd))}
+                      x={dd => xScale(xValue(dd)) - barWidth / 2}
                       y={dd => valueYScale(yValue(dd))}
                     >
                       {({ path }) => (
@@ -114,11 +118,11 @@ const YearChart = ({
                     </LinePath>
                     <NodeGroup
                       data={formattedData}
-                      keyAccessor={d => d.month}
+                      keyAccessor={xValue}
                       start={d => ({
-                        xPos: xScale(d.month),
+                        xPos: xScale(xValue(d)),
                         barHeight: 0,
-                        dotY: 0,
+                        dotY: yHeight,
                       })}
                       enter={d => ({
                         barHeight: [yHeight - percentYScale(d.receivedRate)],
@@ -126,7 +130,7 @@ const YearChart = ({
                         timing: { duration: 500 },
                       })}
                       update={d => ({
-                        xPos: [xScale(d.month)],
+                        xPos: [xScale(xValue(d))],
                         barHeight: [yHeight - percentYScale(d.receivedRate)],
                         dotY: [valueYScale(yValue(d))],
                         timing: { duration: 500 },
@@ -136,24 +140,25 @@ const YearChart = ({
                         <Fragment>
                           {nodes.map(({ key, data: d, state: { xPos, barHeight, dotY } }) => {
                             const barY = yHeight - barHeight;
+                            const dotX = xPos - barWidth / 2
                             return (
                               <Fragment key={key}>
                                 <Bar
-                                  x={xPos - 1.5 * em}
+                                  x={xPos - barWidth}
                                   y={barY}
-                                  width={2 * em}
+                                  width={barWidth}
                                   height={barHeight}
                                   fill={theme.colors.lightOrange}
                                   opacity={0.3}
                                 />
                                 <circle
-                                  cx={xPos}
+                                  cx={dotX}
                                   cy={dotY}
                                   r={em / 3}
                                   fill={theme.colors.spectrum[3]}
                                 />
                                 <text
-                                  x={xPos}
+                                  x={dotX}
                                   y={dotY - em}
                                   textAnchor="middle"
                                   fontSize={em}

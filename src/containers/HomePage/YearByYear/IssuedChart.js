@@ -69,6 +69,7 @@ class IssuedChart extends PureComponent {
     const {
       data,
       xTickFormat,
+      showTooltop,
       hideTooltip,
       tooltipData,
       tooltipTop,
