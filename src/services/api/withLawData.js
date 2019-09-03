@@ -3,7 +3,7 @@ import withData from './withData';
 
 export default (params, lockId) => (SubComp) => {
   let key = 'data/bureaus'
-  if (typeof window !== 'undefined' && window.__ID !== '000000000') {
+  if (typeof window !== 'undefined' && window.__ID !== '00000000') {
     key = `${key}/${window.__ID}`
   }
   if (lockId) {

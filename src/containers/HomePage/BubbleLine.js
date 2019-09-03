@@ -356,7 +356,11 @@ class BubbleLine extends PureComponent {
                                           r={centerR}
                                           fill="url('#radial-trans')"
                                           style={canGoDown ? { cursor: 'pointer' } : {}}
-                                          onClick={() => window.open(`?bureauId=${d.id}`)}
+                                          onClick={() => {
+                                            if (canGoDown) {
+                                              window.open(`?bureauId=${d.id}`)
+                                            }
+                                          }}
                                         />
                                         {canGoDown && isHover && createPortal((
                                           <Group top={rLabelHeight + rMax} left={cx + 2 * em}>
