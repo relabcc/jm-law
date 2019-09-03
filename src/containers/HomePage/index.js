@@ -3,20 +3,20 @@ import { compose } from 'redux'
 import map from 'lodash/map'
 import last from 'lodash/last'
 
-import Container from 'components/Container'
-import Box from 'components/Box'
-import Flex from 'components/Flex'
-import Text from 'components/Text'
-import Button from 'components/Button'
-import YearButton from 'components/YearButton'
-import Toggler from 'components/Toggler'
-import Dropdown from 'components/Dropdown';
-import ModalButton from 'components/ModalButton';
+import Container from '../../components/Container'
+import Box from '../../components/Box'
+import Flex from '../../components/Flex'
+import Text from '../../components/Text'
+import Button from '../../components/Button'
+import YearButton from '../../components/YearButton'
+import Toggler from '../../components/Toggler'
+import Dropdown from '../../components/Dropdown';
+import ModalButton from '../../components/ModalButton';
 
-import theme, { mobileOrDesktop } from 'components/ThemeProvider/theme';
+import theme, { mobileOrDesktop } from '../../components/ThemeProvider/theme';
 
-import withBureauData from 'services/api/withBureauData'
-import withDataState from 'services/api/withDataState'
+import withBureauData from '../../services/api/withBureauData'
+import withDataState from '../../services/api/withDataState'
 
 import Layout from '../Layout';
 import BubbleLine from './BubbleLine'

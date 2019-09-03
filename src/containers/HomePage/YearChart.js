@@ -8,11 +8,11 @@ import range from 'lodash/range'
 import map from 'lodash/map'
 import { NodeGroup } from 'react-move'
 
-import FontSizeContext from 'components/ThemeProvider/FontSizeContext'
-import theme from 'components/ThemeProvider/theme'
+import FontSizeContext from '../../components/ThemeProvider/FontSizeContext'
+import theme from '../../components/ThemeProvider/theme'
 
-import ChartBase from 'components/Charts/ChartBase'
-import TweenShape from 'components/Charts/TweenShape'
+import ChartBase from '../../components/Charts/ChartBase'
+import TweenShape from '../../components/Charts/TweenShape'
 
 const xValue = d => d.month
 const yValue = d => d.issued

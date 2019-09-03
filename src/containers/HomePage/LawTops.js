@@ -4,12 +4,12 @@ import { scaleLinear } from '@vx/scale';
 import { Animate } from 'react-move'
 import sortBy from 'lodash/sortBy'
 
-import FontSizeContext from 'components/ThemeProvider/FontSizeContext'
-import theme from 'components/ThemeProvider/theme'
+import FontSizeContext from '../../components/ThemeProvider/FontSizeContext'
+import theme from '../../components/ThemeProvider/theme'
 
-import ChartBase from 'components/Charts/ChartBase'
-import LineBreakText from 'components/Charts/LineBreakText'
-import withLawData from 'services/api/withLawData'
+import ChartBase from '../../components/Charts/ChartBase'
+import LineBreakText from '../../components/Charts/LineBreakText'
+import withLawData from '../../services/api/withLawData'
 
 const labelLength = 15
 

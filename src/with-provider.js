@@ -2,10 +2,18 @@ import React, { Component } from 'react'
 import { Provider } from 'react-redux';
 import { calculateResponsiveState } from 'redux-responsive'
 
-import ThemeProvider from './src/components/ThemeProvider';
-import creatStore from './src/stores/createStore';
+import ThemeProvider from './components/ThemeProvider';
+import creatStore from './stores/createStore';
 
 const store = creatStore();
+
+window.__ID = '00000000'
+if (window.location.search) {
+  const res = /bureauId=([^&]+)/g.exec(window.location.search)
+  if (res && res[1]) {
+    window.__ID = decodeURIComponent(res[1])
+  }
+}
 
 class InitialDispatch extends Component {
   componentDidMount() {
@@ -19,10 +27,10 @@ class InitialDispatch extends Component {
   }
 }
 
-export default ({ element }) => (
+export default ({ children }) => (
   <Provider store={store}>
     <InitialDispatch>
-      <ThemeProvider>{element}</ThemeProvider>
+      <ThemeProvider>{children}</ThemeProvider>
     </InitialDispatch>
   </Provider>
 )

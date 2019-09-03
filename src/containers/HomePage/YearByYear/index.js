@@ -4,11 +4,11 @@ import reduce from 'lodash/reduce'
 import forEach from 'lodash/forEach'
 import groupBy from 'lodash/groupBy'
 
-import Box from 'components/Box'
-import Flex from 'components/Flex'
-import Toggler from 'components/Toggler'
+import Box from '../../../components/Box'
+import Flex from '../../../components/Flex'
+import Toggler from '../../../components/Toggler'
 
-import withDataState from 'services/api/withDataState'
+import withDataState from '../../../services/api/withDataState'
 
 import IssuedChart from './IssuedChart'
 import ReceivedChart from './ReceivedChart'

@@ -9,7 +9,7 @@ import GlobalStyles from './global-styles';
 import theme from './theme';
 import Box from '../Box';
 
-export default (props) => (
+export default ({ children }) => (
   <ThemeProvider theme={theme}>
     <Fragment>
       <SizeMe>
@@ -17,7 +17,9 @@ export default (props) => (
           const fontSize = Math.round(Math.max(width, 800) / 94)
           return (
             <FontSizeContext.Provider value={{ em: fontSize }}>
-              <Box fontSize={fontSize} {...props} />
+              <Box fontSize={fontSize}>
+                {children}
+              </Box>
             </FontSizeContext.Provider>
           )
         }}

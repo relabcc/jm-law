@@ -1,8 +1,8 @@
 import React, { PureComponent, createElement } from 'react';
 import get from 'lodash/get'
 
-import Text from 'components/Text'
-import withData from 'services/api/withData'
+import Text from '../../components/Text'
+import withData from '../../services/api/withData'
 
 class AvgDays extends PureComponent {
   componentDidUpdate(prevProps, prevState) {

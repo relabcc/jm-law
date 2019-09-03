@@ -11,14 +11,14 @@ import range from 'lodash/range'
 import { NodeGroup } from 'react-move'
 import styled from 'styled-components';
 
-import FontSizeContext from 'components/ThemeProvider/FontSizeContext'
-import theme from 'components/ThemeProvider/theme'
+import FontSizeContext from '../../../components/ThemeProvider/FontSizeContext'
+import theme from '../../../components/ThemeProvider/theme'
 
-import Text from 'components/Text'
-import Box from 'components/Box'
+import Text from '../../../components/Text'
+import Box from '../../../components/Box'
 
-import ChartBase from 'components/Charts/ChartBase'
-import TweenShape from 'components/Charts/TweenShape'
+import ChartBase from '../../../components/Charts/ChartBase'
+import TweenShape from '../../../components/Charts/TweenShape'
 
 const TooltipBox = styled(Box)`
   &::after {

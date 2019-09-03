@@ -2,7 +2,7 @@ import React from 'react';
 import { format } from 'd3-format'
 import get from 'lodash/get'
 
-import theme from 'components/ThemeProvider/theme'
+import theme from '../../components/ThemeProvider/theme'
 
 const num = format(',')
 

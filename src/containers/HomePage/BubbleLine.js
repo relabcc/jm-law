@@ -10,10 +10,10 @@ import { localPoint } from '@vx/event';
 import { Group } from '@vx/group';
 import { HoverSensor } from 'libreact/lib/HoverSensor';
 
-import ChartBase from 'components/Charts/ChartBase'
-import LineBreakText from 'components/Charts/LineBreakText'
-import theme from 'components/ThemeProvider/theme'
-import FontSizeContext from 'components/ThemeProvider/FontSizeContext'
+import ChartBase from '../../components/Charts/ChartBase'
+import LineBreakText from '../../components/Charts/LineBreakText'
+import theme from '../../components/ThemeProvider/theme'
+import FontSizeContext from '../../components/ThemeProvider/FontSizeContext'
 
 import InfoSection from './InfoSection'
 

@@ -31,7 +31,7 @@ const defaultStyles = {
   }
 };
 
-Modal.setAppElement('#___gatsby')
+Modal.setAppElement('#root')
 
 export default ({ children, border, borderRadius, customStyles, title, ...props }) => (
   <Modal

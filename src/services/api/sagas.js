@@ -3,7 +3,7 @@ import { actionTypes } from 'redux-resource';
 import reduce from 'lodash/reduce'
 import isObject from 'lodash/isObject'
 
-import sendRequest from 'utils/request';
+import sendRequest from '../../utils/request';
 
 import { API_BASE } from './config';
 import { GET_DATA, receivedDataSuccess, receivedDataError } from './reducer';

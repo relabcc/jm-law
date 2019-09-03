@@ -9,11 +9,11 @@ import reduce from 'lodash/reduce'
 import range from 'lodash/range'
 import mapValues from 'lodash/mapValues'
 
-import FontSizeContext from 'components/ThemeProvider/FontSizeContext'
-import theme from 'components/ThemeProvider/theme'
+import FontSizeContext from '../../components/ThemeProvider/FontSizeContext'
+import theme from '../../components/ThemeProvider/theme'
 
-import ChartBase from 'components/Charts/ChartBase'
-import TweenShape from 'components/Charts/TweenShape'
+import ChartBase from '../../components/Charts/ChartBase'
+import TweenShape from '../../components/Charts/TweenShape'
 
 const p = format('.0%')
 

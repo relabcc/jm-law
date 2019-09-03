@@ -5,10 +5,10 @@ import range from 'lodash/range'
 import { NodeGroup } from 'react-move'
 import { format } from 'd3-format'
 
-import FontSizeContext from 'components/ThemeProvider/FontSizeContext'
-import theme from 'components/ThemeProvider/theme'
+import FontSizeContext from '../../../components/ThemeProvider/FontSizeContext'
+import theme from '../../../components/ThemeProvider/theme'
 
-import ChartBase from 'components/Charts/ChartBase'
+import ChartBase from '../../../components/Charts/ChartBase'
 
 const xValue = d => d.index
 const yValue = d => d.receivedRate

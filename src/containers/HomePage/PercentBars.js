@@ -4,9 +4,9 @@ import { scaleLinear } from '@vx/scale';
 import { Animate } from 'react-move'
 import { format } from 'd3-format'
 
-import FontSizeContext from 'components/ThemeProvider/FontSizeContext'
+import FontSizeContext from '../../components/ThemeProvider/FontSizeContext'
 
-import ChartBase from 'components/Charts/ChartBase'
+import ChartBase from '../../components/Charts/ChartBase'
 
 const pd = format('.0%')
 
