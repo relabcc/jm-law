@@ -1,8 +1,14 @@
+import { createElement } from 'react'
 import withData from './withData';
 
-export default (params) => (SubComp) => {
-  if (window.__ID !== '000000000') {
-    return withData('data/bureaus/laws', params)(SubComp,)
+export default (params, lockId) => (SubComp) => {
+  let key = 'data/bureaus'
+  if (typeof window !== 'undefined' && window.__ID !== '000000000') {
+    key = `${key}/${window.__ID}`
   }
-  return withData(`data/bureaus/${window.__ID}/laws`, params)(SubComp)
+  if (lockId) {
+    key = `${key}/${lockId}`
+  }
+  key = `${key}/laws`
+  return withData(key, params)(props => createElement(SubComp, { ...props, data: props[key] }))
 }

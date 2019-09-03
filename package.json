@@ -1,5 +1,5 @@
 {
-  "name": "styled-gatsby-starter",
+  "name": "jm-law",
   "description": "Gatsby starter with styled-system",
   "version": "1.0.8",
   "author": "Renddi Yeh <renddi@relab.cc>",
@@ -69,7 +69,7 @@
     "preserve": "npm run build",
     "serve": "gatsby serve",
     "predeploy": "npm run build -- --prefix-paths",
-    "deploy": "gh-pages -d public",
+    "deploy": "gh-pages -d public -r https://github.com/relabcc/jm-law.git",
     "format": "prettier --write '**/*.js'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

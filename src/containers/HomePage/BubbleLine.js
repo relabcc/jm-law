@@ -24,7 +24,18 @@ const emPercent = n => (
   </Fragment>
 )
 
+const canGoDown = typeof window !== 'undefined' && window.__ID === '00000000'
+
 class BubbleLine extends PureComponent {
+  static getDerivedStateFromProps({ data }) {
+    return {
+      namedData: data.reduce((nd, d) => {
+        nd[d.id] = d
+        return nd
+      }, {})
+    }
+  }
+
   state = {}
 
   wrapper = createRef()
@@ -59,10 +70,8 @@ class BubbleLine extends PureComponent {
       lockId,
       ...props
     } = this.props
-    const { activeId } = this.state;
-    console.log(activeId, lockId)
+    const { activeId, namedData } = this.state;
     if (!data || !data.length) return null
-    // console.log(data)
     const sortedData = loSortBy(data, sortBy)
     return (
       <FontSizeContext.Consumer>
@@ -323,7 +332,7 @@ class BubbleLine extends PureComponent {
                               </g>
                             );
                           })}
-                          {nodes.map(({ key, state: { cx, otherOpacity, centerR } }) => {
+                          {nodes.map(({ key, data: d, state: { cx, otherOpacity, centerR } }) => {
                             return (
                               <g key={key}>
                                 <Circle
@@ -346,10 +355,10 @@ class BubbleLine extends PureComponent {
                                           cy={cy}
                                           r={centerR}
                                           fill="url('#radial-trans')"
-                                          style={{ cursor: 'pointer' }}
-                                          onClick={() => window.open('#')}
+                                          style={canGoDown ? { cursor: 'pointer' } : {}}
+                                          onClick={() => window.open(`?bureauId=${d.id}`)}
                                         />
-                                        {isHover && createPortal((
+                                        {canGoDown && isHover && createPortal((
                                           <Group top={rLabelHeight + rMax} left={cx + 2 * em}>
                                             <polygon
                                               points={[
@@ -392,12 +401,12 @@ class BubbleLine extends PureComponent {
                     y={rLabelHeight + 2 * em}
                     em={em}
                     main={{
-                      value: data.reduce((sum, d) => sum + d.issued, 0),
+                      value: lockId ? namedData[lockId].issued : data.reduce((sum, d) => sum + d.issued, 0),
                       label: '已開案量',
                       unit: '件',
                     }}
                     sub={{
-                      value: data.reduce((sum, d) => sum + d.issuedDollar, 0),
+                      value: lockId ? namedData[lockId].issuedDollar : data.reduce((sum, d) => sum + d.issuedDollar, 0),
                       label: '案件金額',
                       unit: '元',
                     }}
@@ -407,12 +416,12 @@ class BubbleLine extends PureComponent {
                     y={rLabelHeight + 9.5 * em}
                     em={em}
                     main={{
-                      value: data.reduce((sum, d) => sum + d.received, 0),
+                      value: lockId ? namedData[lockId].received : data.reduce((sum, d) => sum + d.received, 0),
                       label: '收繳案件',
                       unit: '件',
                     }}
                     sub={{
-                      value: data.reduce((sum, d) => sum + d.receivedDollar, 0),
+                      value: lockId ? namedData[lockId].receivedDollar : data.reduce((sum, d) => sum + d.receivedDollar, 0),
                       label: '收繳金額',
                       unit: '元',
                     }}
@@ -422,7 +431,7 @@ class BubbleLine extends PureComponent {
                     y={rLabelHeight + 18 * em}
                     em={em}
                     main={{
-                      value: data.reduce((sum, d) => sum + d.canceled, 0),
+                      value: lockId ? namedData[lockId].canceled : data.reduce((sum, d) => sum + d.canceled, 0),
                       label: '撤銷案件量',
                       unit: '件',
                     }}

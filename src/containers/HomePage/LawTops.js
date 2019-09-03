@@ -22,8 +22,7 @@ class LawTops extends PureComponent {
   }
 
   render() {
-    const { hasLine, color, ratio, top } = this.props;
-    const data = this.props['data/bureaus/laws']
+    const { hasLine, color, ratio, top, data } = this.props;
     const sorted = sortBy(data, 'count').slice(0, top)
     return (
       <FontSizeContext.Consumer>
@@ -101,4 +100,4 @@ class LawTops extends PureComponent {
   }
 }
 
-export default props => createElement(withLawData({ top: props.top, year: props.year })(LawTops), props);
+export default props => createElement(withLawData({ top: props.top, year: props.year }, props.lockId)(LawTops), props);

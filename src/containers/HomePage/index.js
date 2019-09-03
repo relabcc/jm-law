@@ -35,8 +35,7 @@ import {
 
 class IndexPage extends PureComponent {
   static getDerivedStateFromProps(nexProps) {
-    const data = nexProps['data/bureaus']
-    const { typeList } = nexProps
+    const { typeList, data } = nexProps
     const mappedData = map(data, ({ id, name, monthData }) => ({
       label: name,
       id,
@@ -79,8 +78,7 @@ class IndexPage extends PureComponent {
   setLock = lockId => this.setState({ lockId })
 
   render() {
-    const data = this.props['data/bureaus']
-    const { typeList, yearsList: years } = this.props
+    const { data, typeList, yearsList: years } = this.props
     const {
       sortBy,
       sortOrder,

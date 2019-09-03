@@ -1,8 +1,10 @@
+import { createElement } from 'react'
 import withData from './withData';
 
 export default (SubComp) => {
-  if (window.__ID !== '000000000') {
-    return withData('data/bureaus')(SubComp)
+  let key = 'data/bureaus'
+  if (typeof window !== 'undefined' && window.__ID !== '00000000') {
+    key = `${key}/${window.__ID}`
   }
-  return withData(`data/bureaus/${window.__ID}`)(SubComp)
+  return withData(key)(props => createElement(SubComp, { ...props, data: props[key] }))
 }
