@@ -26,6 +26,7 @@ import LawTops from './LawTops'
 import YearChart from './YearChart'
 import AvgDays from './AvgDays'
 import YearByYear from './YearByYear'
+import LastUpdated from './LastUpdated'
 
 import {
   getBureauTotal,
@@ -63,7 +64,7 @@ class IndexPage extends PureComponent {
     year: last(this.props.yearsList),
   }
 
-  handleTypeFilter = (activeType) => this.setState({ activeType })
+  handleTypeFilter = activeType => this.setState({ activeType })
 
   handleChartToggle = chartIndex => this.setState({ chartIndex })
 
@@ -76,6 +77,13 @@ class IndexPage extends PureComponent {
   setLawType = lawType => this.setState({ lawType })
 
   setLock = lockId => this.setState({ lockId })
+
+  handleReset = () => this.setState({
+    lockId: null,
+    chartIndex: 0,
+    lawType: 0,
+    activeType: null,
+  })
 
   render() {
     const { data, typeList, yearsList: years } = this.props
@@ -111,6 +119,8 @@ class IndexPage extends PureComponent {
                   onChange={({ value }) => this.handleTypeFilter(value)}
                 />
               </Box>
+              <Box flex="1" />
+              <LastUpdated />
             </Flex>
             <Flex alignItems="center">
               <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">各局處案件量分析</Text>
@@ -120,6 +130,9 @@ class IndexPage extends PureComponent {
                 onChange={this.handleYearChange}
               />
             </Flex>
+            <Box textAlign="right" my="1em">
+              <Button onClick={this.handleReset}>切回預設</Button>
+            </Box>
             <BubbleLine
               ratio={1 / 4}
               data={bureauTotal}
