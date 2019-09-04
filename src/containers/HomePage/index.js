@@ -12,6 +12,7 @@ import YearButton from '../../components/YearButton'
 import Toggler from '../../components/Toggler'
 import Dropdown from '../../components/Dropdown';
 import ModalButton from '../../components/ModalButton';
+import PatternBg from '../../components/PatternBg';
 
 import theme, { mobileOrDesktop } from '../../components/ThemeProvider/theme';
 
@@ -104,44 +105,43 @@ class IndexPage extends PureComponent {
     const types = getTypes(data, lockId)
     return (
       <Layout>
-        <Box
-          py="4em"
-          backgroundImage={`linear-gradient(#fff 80%, #e0e0e4 100%)`}
-        >
-          <Container>
-            <Flex alignItems="center">
-              <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">案件類別</Text>
-              <Box width="12em" py="1em">
-                <Dropdown
-                  placeholder="全部"
-                  value={activeType}
-                  options={typeList.map(({ name }) => name)}
-                  onChange={({ value }) => this.handleTypeFilter(value)}
+        <Box backgroundImage="linear-gradient(#fff 80%, #e0e0e4 100%)">
+          <PatternBg py="4em">
+            <Container>
+              <Flex alignItems="center">
+                <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">案件類別</Text>
+                <Box width="12em" py="1em">
+                  <Dropdown
+                    placeholder="全部"
+                    value={activeType}
+                    options={typeList.map(({ name }) => name)}
+                    onChange={({ value }) => this.handleTypeFilter(value)}
+                  />
+                </Box>
+                <Box flex="1" />
+                <LastUpdated />
+              </Flex>
+              <Flex alignItems="center">
+                <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">各局處案件量分析</Text>
+                <YearButton
+                  currentYear={year}
+                  years={years}
+                  onChange={this.handleYearChange}
                 />
+              </Flex>
+              <Box textAlign="right" my="1em">
+                <Button onClick={this.handleReset}>切回預設</Button>
               </Box>
-              <Box flex="1" />
-              <LastUpdated />
-            </Flex>
-            <Flex alignItems="center">
-              <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">各局處案件量分析</Text>
-              <YearButton
-                currentYear={year}
-                years={years}
-                onChange={this.handleYearChange}
+              <BubbleLine
+                ratio={1 / 4}
+                data={bureauTotal}
+                sortBy={sortBy}
+                sortOrder={sortOrder}
+                lockId={lockId}
+                onLock={this.setLock}
               />
-            </Flex>
-            <Box textAlign="right" my="1em">
-              <Button onClick={this.handleReset}>切回預設</Button>
-            </Box>
-            <BubbleLine
-              ratio={1 / 4}
-              data={bureauTotal}
-              sortBy={sortBy}
-              sortOrder={sortOrder}
-              lockId={lockId}
-              onLock={this.setLock}
-            />
-          </Container>
+            </Container>
+          </PatternBg>
         </Box>
         <Box
           py={mobileOrDesktop(0, '2em')}

@@ -16,6 +16,8 @@ class YearButton extends PureComponent {
     }
   }
 
+  state = {}
+
   handleNextYear = () => {
     const { activeYear } = this.state
     const newYear = activeYear + 1

@@ -1452,6 +1452,14 @@
     classnames "^2.2.5"
     prop-types "^15.6.2"
 
+"@vx/pattern@^0.0.189":
+  version "0.0.189"
+  resolved "https://registry.yarnpkg.com/@vx/pattern/-/pattern-0.0.189.tgz#df5dd227b22ce1625402d1a7d77e79f829fe07bc"
+  integrity sha512-yI1xHdxQ2V0DxqjfNUjvq3RdTryCwbmQy5jDgIwgawF8jNXKr9oheVbGNAXfXtOqmPtGMkwABaQqqi2Xtg2QCQ==
+  dependencies:
+    classnames "^2.2.5"
+    prop-types "^15.5.10"
+
 "@vx/point@0.0.189":
   version "0.0.189"
   resolved "https://registry.yarnpkg.com/@vx/point/-/point-0.0.189.tgz#2a52824dd3e7a1e74188c2ee9407aeee2a2a7a10"

@@ -14,6 +14,9 @@ import {
   opacity,
   style,
   backgroundImage,
+  backgroundSize,
+  backgroundPosition,
+  backgroundRepeat,
   variant,
 } from 'styled-system';
 
@@ -33,6 +36,9 @@ const Box = styled(tag)`
   ${borderRadius}
   ${opacity}
   ${backgroundImage}
+  ${backgroundSize}
+  ${backgroundRepeat}
+  ${backgroundPosition}
   ${variant({ scale: 'gradients', prop: 'gradient' })}
   ${injectProps('whiteSpace')}
   ${injectProps('overflow')}
