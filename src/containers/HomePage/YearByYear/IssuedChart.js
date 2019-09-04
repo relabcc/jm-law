@@ -319,8 +319,9 @@ class IssuedChart extends PureComponent {
                           gradient="darkBlue"
                           borderRadius="0.5em"
                           zIndex={10}
+                          fontSize="0.8em"
                         >
-                          <Text>案件量 {yValue(tooltipData)}</Text>
+                          <Text mb="0.25em">案件量 {yValue(tooltipData)}</Text>
                           <Text>撤銷數 {yCancealedValue(tooltipData)}</Text>
                         </TooltipBox>
                       ), this.wrapper.current)}

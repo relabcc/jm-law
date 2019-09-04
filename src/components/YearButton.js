@@ -10,10 +10,8 @@ class YearButton extends PureComponent {
     onChange: () => {},
   }
 
-  constructor(props) {
-    super(props);
-    const { currentYear, years } = props;
-    this.state = {
+  static getDerivedStateFromProps({ currentYear, years }, prevState) {
+    return {
       activeYear: typeof currentYear === 'undefined' ? years.length - 1 : years.findIndex(y => y === currentYear),
     }
   }

@@ -303,6 +303,7 @@ class BubbleLine extends PureComponent {
                                   bg="white"
                                   opacity={otherOpacity}
                                   style={{ pointerEvents: 'none' }}
+                                  verticalCenter={false}
                                 >
                                   {d.label}
                                 </LineBreakText>

@@ -206,7 +206,7 @@ class IndexPage extends PureComponent {
                         </Box>
                       </Box>
                       <Box flex="1" px="2em">
-                        <LawTops key={10} top={10} year={year} color="text" ratio={0.8} lockId={lockId} />
+                        <LawTops key={10} top={10} year={year} color="text" ratio={0.64} lockId={lockId} />
                       </Box>
                     </Flex>
                   </ModalButton>
@@ -227,13 +227,13 @@ class IndexPage extends PureComponent {
                 />
                 <Box fontSize="1.5em" letterSpacing="0.15em" my="1em" borderBottom="1px solid" pb="0.5rem">月案件量分析</Box>
                 <Box textAlign="center">
-                    <ModalButton
-                      is={Button.lightBg}
-                      label="查看更多"
-                      title={`${year - 2}-${year}案件量分析`}
-                    >
-                      <YearByYear year={year} />
-                    </ModalButton>
+                  <ModalButton
+                    is={Button.lightBg}
+                    label="看歷年分析"
+                    title={`${year - 2}-${year}案件量分析`}
+                  >
+                    <YearByYear year={year} />
+                  </ModalButton>
                 </Box>
               </Box>
               <Box flex="1">

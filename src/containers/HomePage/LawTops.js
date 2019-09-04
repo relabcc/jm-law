@@ -59,6 +59,9 @@ class LawTops extends PureComponent {
                                 fontSize={em}
                                 maxLength={labelLength}
                                 fillFront
+                                textAnchor="end"
+                                x={xStart - em}
+                                y={0.5 * em}
                               >
                                 {law.name}
                               </LineBreakText>
