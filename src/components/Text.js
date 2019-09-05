@@ -22,6 +22,7 @@ const Text = styled(tag)`
   ${color}
   ${position}
   ${injectProps('textTransform')}
+  ${injectProps('whiteSpace')}
 `;
 
 Text.defaultProps = {
