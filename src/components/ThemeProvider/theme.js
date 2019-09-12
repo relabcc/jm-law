@@ -24,6 +24,8 @@ const spectrum = [
 
 const darkBlue = '#2d3555'
 const darkerBlue = '#171835'
+const textBlue = '#1E213E'
+const textYellow = '#F2B817'
 const dropdownBg = '#E7EAF6'
 
 const white = '#fff';
@@ -48,8 +50,10 @@ export default {
     black,
     gray,
     dropdownBg,
+    textYellow,
     lightGray,
     darkGray,
+    textBlue,
     darkBlue,
     darkerBlue,
     orange,
