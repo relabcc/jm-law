@@ -148,21 +148,21 @@ const YearChart = ({
                                   y={barY}
                                   width={barWidth}
                                   height={barHeight}
-                                  fill={theme.colors.lightOrange}
-                                  opacity={0.3}
+                                  fill={theme.colors.orange}
+                                  opacity={0.5}
                                 />
                                 <circle
                                   cx={dotX}
                                   cy={dotY}
                                   r={em / 3}
-                                  fill={theme.colors.spectrum[3]}
+                                  fill={theme.colors.orange5}
                                 />
                                 <text
                                   x={dotX}
                                   y={dotY - em}
                                   textAnchor="middle"
                                   fontSize={em}
-                                  fill={theme.colors.lightOrange}
+                                  fill={theme.colors.orange}
                                 >
                                   {yValue(d)}
                                 </text>
@@ -193,8 +193,8 @@ const YearChart = ({
                       y={-1 * em}
                       width={3 * em}
                       height={em}
-                      fill={theme.colors.lightOrange}
-                      opacity={0.3}
+                      fill={theme.colors.orange}
+                      opacity={0.5}
                     />
                   </Group>
                 </Group>

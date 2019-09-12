@@ -1,11 +1,14 @@
 import React, { Fragment, PureComponent, createElement } from 'react';
 import { Group } from '@vx/group';
 import { scaleLinear } from '@vx/scale';
+import { LinearGradient } from '@vx/gradient';
+import { RectClipPath } from '@vx/clip-path'
 import { Animate } from 'react-move'
 import sortBy from 'lodash/sortBy'
+import shortid from 'shortid';
 
 import FontSizeContext from '../../components/ThemeProvider/FontSizeContext'
-import theme from '../../components/ThemeProvider/theme'
+// import theme from '../../components/ThemeProvider/theme'
 
 import ChartBase from '../../components/Charts/ChartBase'
 import LineBreakText from '../../components/Charts/LineBreakText'
@@ -14,6 +17,11 @@ import withLawData from '../../services/api/withLawData'
 const labelLength = 15
 
 class LawTops extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.SIG = shortid.generate()
+  }
+
   componentDidUpdate(prevProps) {
     const { year, updateParams, top } = this.props
     if (prevProps.year !== year) {
@@ -31,12 +39,14 @@ class LawTops extends PureComponent {
             {({ width }) => {
               const yStart = em * 2.5
               const xStart = labelLength * em * 1.1;
+              const xEnd = width - 3 * em - xStart
               const xScale = scaleLinear({
-                range: [0, width - 3 * em - xStart],
+                range: [0, xEnd],
                 domain: [0, Math.max(...sorted.map(d => d.count))],
               });
               return (
                 <Fragment>
+                  <LinearGradient from="#ffab2a" to="#ff712a" vertical={false} id={`bar-ramp-${this.SIG}`} />
                   <Group top={yStart}>
                     {Array.from(sorted).reverse().map((law, i) => {
                       return (
@@ -65,11 +75,19 @@ class LawTops extends PureComponent {
                               >
                                 {law.name}
                               </LineBreakText>
-                              <rect
-                                fill={theme.colors.primary}
+                              <RectClipPath
+                                id={`bar-${this.SIG}-${i}`}
                                 x={xStart}
                                 y="-0.5em"
                                 width={state.width}
+                                height={1.25 * em}
+                              />
+                              <rect
+                                fill={`url(#bar-ramp-${this.SIG})`}
+                                clip-path={`url(#bar-${this.SIG}-${i})`}
+                                x={xStart}
+                                y="-0.5em"
+                                width={xEnd}
                                 height={1.25 * em}
                               />
                               <text

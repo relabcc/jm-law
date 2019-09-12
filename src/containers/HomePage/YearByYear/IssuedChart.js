@@ -214,13 +214,13 @@ class IssuedChart extends PureComponent {
                                       cx={xPos}
                                       cy={dotY}
                                       r={em / 4}
-                                      fill={theme.colors.spectrum[3]}
+                                      fill={theme.colors.orange5}
                                     />
                                     <circle
                                       cx={xPos}
                                       cy={dotCanceledY}
                                       r={em / 4}
-                                      fill={theme.colors.spectrum[3]}
+                                      fill={theme.colors.orange5}
                                     />
                                   </Fragment>
                                 )

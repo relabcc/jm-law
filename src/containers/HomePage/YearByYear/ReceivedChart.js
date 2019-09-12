@@ -6,7 +6,6 @@ import { NodeGroup } from 'react-move'
 import { format } from 'd3-format'
 
 import FontSizeContext from '../../../components/ThemeProvider/FontSizeContext'
-import theme from '../../../components/ThemeProvider/theme'
 
 import ChartBase from '../../../components/Charts/ChartBase'
 
@@ -16,6 +15,7 @@ const pd = format('.0%')
 
 const ReceivedChart = ({
   data,
+  getFill,
   xTickFormat,
   ...props
 }) => {
@@ -72,14 +72,14 @@ const ReceivedChart = ({
                                 height={yHeight}
                               />
                               <rect
-                                fill={theme.colors.lightOrange}
+                                fill={getFill(d.index)}
                                 x={xPos}
                                 y={yHeight - y}
                                 width={barWidth}
                                 height={y}
                               />
                               <text
-                                fontSize={1.25 * em}
+                                fontSize={em}
                                 x={xPos + barWidth / 2}
                                 y={yHeight - y - em}
                                 textAnchor="middle"

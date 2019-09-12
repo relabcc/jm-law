@@ -14,12 +14,12 @@ const generateFade = (r, g, b) => range(10, 100, 10)
 const font = 'Comfortaa, Arial, "PingFang TC", "HeiTi TC", "Microsoft JhengHei", sans-serif';
 
 const spectrum = [
-  '#9e7961',
-  '#f2bc4a',
-  '#ec921e',
-  '#ec6432',
-  '#d53d1f',
-  '#af1b08',
+  '#d3b998',
+  '#a57c56',
+  '#e8c52e',
+  '#ffa329',
+  '#f2690c',
+  '#d32e02',
 ]
 
 const darkBlue = '#2d3555'
@@ -34,15 +34,15 @@ const text = '#040000';
 const gray = '#7d7e80'
 const lightGray = '#c9caca'
 const darkGray = '#4c4948'
-const orange = spectrum[2]
+const orange = spectrum[3]
 const darkOrange = spectrum[4]
-const lightOrange = spectrum[1]
+const lightOrange = spectrum[2]
 const darkRed = spectrum[5]
 const oranges = spectrum.reduce((o, c, i) => {
   o[`orange${i + 1}`] = c;
   return o
 }, {});
-const primary = orange;
+const primary = darkOrange;
 
 export default {
   colors: {

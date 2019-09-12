@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react';
+import React, { PureComponent, createRef } from 'react';
 import TWEEN from '@tweenjs/tween.js';
 import { SVGPathData, encodeSVGPath } from 'svg-pathdata';
 import pickBy from 'lodash/pickBy';
@@ -11,7 +11,7 @@ function animate() {
 	TWEEN.update();
 }
 
-class TweenShape extends Component {
+class TweenShape extends PureComponent {
   static defaultProps = {
     duration: 500,
   }
@@ -24,9 +24,9 @@ class TweenShape extends Component {
     animate();
   }
 
-  shouldComponentUpdate({ d }) {
-    if (d !== this.props.d) this.updatePath(d);
-    return false;
+  componentDidUpdate(prevProps) {
+    const { d } = this.props;
+    if (d !== prevProps.d) this.updatePath(d);
   }
 
   componentWillUnmount() {

@@ -14,6 +14,7 @@ import IssuedChart from './IssuedChart'
 import ReceivedChart from './ReceivedChart'
 
 import { getMonthData } from '../dataHandler'
+import theme from '../../../components/ThemeProvider/theme';
 
 const parseData = (d, initial) => {
   const parsed = reduce(d, (va, { month, ...vv }) => {
@@ -26,6 +27,12 @@ const parseData = (d, initial) => {
   parsed.receivedRate = parsed.received / parsed.issued
   return parsed
 }
+
+const colors = [
+  theme.colors.orange3,
+  theme.colors.orange5,
+  theme.colors.orange4,
+];
 
 class YearByYear extends PureComponent {
   static getDerivedStateFromProps(nextProps) {
@@ -75,10 +82,17 @@ class YearByYear extends PureComponent {
           key: `t-${timeType}`,
           data: formattedData,
           ratio: 0.66,
+          getFill: i => {
+            let c = i
+            if (timeType) {
+              c = Math.floor(i / 4)
+            }
+            return colors[c]
+          },
           xTickFormat: d => {
             if (timeType) {
               const y = Math.floor(d / 4)
-              return year - (dataLength / 4 - y) + 1 + 'Q' + (d % 4 + 1)
+              return year - (dataLength / 4 - y) + 1 + '第' + (d % 4 + 1) + '季'
             }
             return year - (dataLength - d) + 1
           },

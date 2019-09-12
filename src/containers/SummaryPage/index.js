@@ -7,12 +7,9 @@ import Text from '../../components/Text'
 import PatternBg from '../../components/PatternBg';
 import LineBg from '../../components/LineBg';
 
-import theme, { mobileOrDesktop } from '../../components/ThemeProvider/theme';
-
 import withDataState from '../../services/api/withDataState'
 
 import Layout from '../Layout';
-
 
 class SummaryPage extends PureComponent {
   state = {}

@@ -186,7 +186,7 @@ class TypeDonut extends PureComponent {
                                 <TweenShape
                                   d={((!activeLegend && isHover) || activeLegend === arc.data.name) && this.outerShapes[i] ? this.outerShapes[i] : pie.path(arc)}
                                   fill={getColorByName[arc.data.name]}
-                                  opacity={!activeLegend || arc.data.name === activeLegend ? 1 : 0.3}
+                                  opacity={(!activeLegend || arc.data.name === activeLegend) ? 1 : 0.3}
                                   onClick={() => onLegendClick(arc.data.name === activeLegend ? null : arc.data.name)}
                                   duration={200}
                                 />
@@ -197,6 +197,7 @@ class TypeDonut extends PureComponent {
                                     y={centroidY}
                                     dy=".33em"
                                     fontSize={em}
+                                    fontWeight="bold"
                                     textAnchor="middle"
                                   >
                                     {showPercentage ? p(value / totalVaue) : value}

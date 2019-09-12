@@ -25,7 +25,7 @@ import TypeDonut from './TypeDonut'
 import PercentBars from './PercentBars'
 import LawTops from './LawTops'
 import YearChart from './YearChart'
-import AvgDays from './AvgDays'
+// import AvgDays from './AvgDays'
 import YearByYear from './YearByYear'
 import LastUpdated from './LastUpdated'
 
@@ -106,7 +106,7 @@ class IndexPage extends PureComponent {
     return (
       <Layout>
         <Box backgroundImage="linear-gradient(#fff 80%, #e0e0e4 100%)">
-          <PatternBg py="4em">
+          <PatternBg pt="2em" pb="3em">
             <Container>
               <Flex alignItems="center">
                 <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">案件類別</Text>
@@ -172,9 +172,9 @@ class IndexPage extends PureComponent {
                         label="查看更多"
                         title="案件分類分析"
                       >
-                        <Box px="15%">
+                        <Box px="10%">
                           <TypeDonut
-                            ratio={1}
+                            ratio={0.7}
                             valueGetter={d => d.issued}
                             data={types}
                             showPercentage
@@ -206,12 +206,12 @@ class IndexPage extends PureComponent {
                         </Box>
                       </Box>
                       <Box flex="1" px="2em">
-                        <LawTops key={10} top={10} year={year} color="text" ratio={0.64} lockId={lockId} />
+                        <LawTops key={10} top={10} year={year} color="text" ratio={0.7} lockId={lockId} />
                       </Box>
                     </Flex>
                   </ModalButton>
-                  <Box flex="1" />
-                  <AvgDays year={year} />
+                  {/* <Box flex="1" /> */}
+                  {/* <AvgDays year={year} /> */}
                 </Flex>
                 <LawTops key={5} year={year} top={5} hasLine color="white" ratio={0.35} lockId={lockId} />
               </Box>

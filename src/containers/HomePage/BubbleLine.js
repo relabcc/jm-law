@@ -36,7 +36,9 @@ class BubbleLine extends PureComponent {
     }
   }
 
-  state = {}
+  state = {
+    labelStart: 0,
+  }
 
   wrapper = createRef()
 
@@ -61,6 +63,10 @@ class BubbleLine extends PureComponent {
     }
   }
 
+  handleInfoWidthChange = (newStart) => {
+    this.setState(({ labelStart }) => ({ labelStart: labelStart > 0 ? Math.min(labelStart, newStart) : newStart }))
+  }
+
   render() {
     const {
       data,
@@ -70,7 +76,7 @@ class BubbleLine extends PureComponent {
       lockId,
       ...props
     } = this.props
-    const { activeId, namedData } = this.state;
+    const { activeId, namedData, labelStart } = this.state;
     if (!data || !data.length) return null
     const sortedData = loSortBy(data, sortBy)
     return (
@@ -102,8 +108,9 @@ class BubbleLine extends PureComponent {
               return (
                 <Fragment>
                   <LinearGradient from={theme.colors.darkBlue} to={theme.colors.darkerBlue} vertical={false} id="dark" />
-                  <LinearGradient from={theme.colors.orange6} to={theme.colors.orange2} vertical={false} id="rate" />
-                  <RadialGradient from={theme.colors.orange4} to={theme.colors.orange4} toOpacity={0} id="radial-trans" />
+                  <LinearGradient from={theme.colors.orange6} to={theme.colors.orange3} vertical={false} id="rate" />
+                  <RadialGradient from={theme.colors.orange3} to={theme.colors.orange4} fromOffset="30%" id="radial-fill" />
+                  <RadialGradient from={theme.colors.orange5} to={theme.colors.orange5} toOpacity={0} id="radial-trans" />
                   <g>
                     <rect
                       width={leftLabelWidth}
@@ -268,9 +275,12 @@ class BubbleLine extends PureComponent {
                                   cx={cx}
                                   cy={rLabelHeight + rMax}
                                   r={r}
-                                  fill={theme.colors.orange2}
+                                  fill="url('#radial-fill')"
                                   opacity={opacity}
-                                  style={{ pointerEvents: 'none' }}
+                                  style={{
+                                    pointerEvents: 'none',
+                                    mixBlendMode: 'multiply',
+                                  }}
                                 />
                                 <text
                                   fill={theme.colors.darkGray}
@@ -354,8 +364,16 @@ class BubbleLine extends PureComponent {
                                         <Circle
                                           cx={cx}
                                           cy={cy}
+                                          r={centerR * 0.6}
+                                          fill={theme.colors.orange5}
+                                        />
+                                        <Circle
+                                          cx={cx}
+                                          cy={cy}
                                           r={centerR}
-                                          fill="url('#radial-trans')"
+                                          fill="transparent"
+                                          strokeWidth="2"
+                                          stroke={theme.colors.orange5}
                                           style={canGoDown ? { cursor: 'pointer' } : {}}
                                           onClick={() => {
                                             if (canGoDown) {
@@ -371,15 +389,15 @@ class BubbleLine extends PureComponent {
                                                 [0.1 * em, -0.5 * em],
                                                 [0.1 * em, 0.5 * em]
                                               ].map(p => p.join()).join(' ')}
-                                              fill={theme.colors.orange3}
+                                              fill={theme.colors.orange5}
                                             />
                                             <rect
                                               x={0}
                                               y={-boxHeight / 2}
                                               width={boxWidth}
                                               height={boxHeight}
-                                              fill={theme.colors.orange3}
-                                              rx={0.75 * em}
+                                              fill={theme.colors.orange5}
+                                              rx={0.5 * em}
                                             />
                                             <text
                                               fontSize={em}
@@ -402,6 +420,8 @@ class BubbleLine extends PureComponent {
                     </NodeGroup>
                   </g>
                   <InfoSection
+                    labelStart={labelStart}
+                    onWidthChange={this.handleInfoWidthChange}
                     xEnd={width}
                     y={rLabelHeight + 2 * em}
                     em={em}
@@ -417,6 +437,8 @@ class BubbleLine extends PureComponent {
                     }}
                   />
                   <InfoSection
+                    labelStart={labelStart}
+                    onWidthChange={this.handleInfoWidthChange}
                     xEnd={width}
                     y={rLabelHeight + 9.5 * em}
                     em={em}
@@ -432,12 +454,14 @@ class BubbleLine extends PureComponent {
                     }}
                   />
                   <InfoSection
+                    labelStart={labelStart}
+                    onWidthChange={this.handleInfoWidthChange}
                     xEnd={width}
                     y={rLabelHeight + 18 * em}
                     em={em}
                     main={{
                       value: lockId ? namedData[lockId].canceled : data.reduce((sum, d) => sum + d.canceled, 0),
-                      label: '撤銷案件量',
+                      label: '撤銷案件',
                       unit: '件',
                     }}
                   />

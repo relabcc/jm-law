@@ -7,24 +7,23 @@ import FontSizeContext from './FontSizeContext'
 import GlobalStyles from './global-styles';
 
 import theme from './theme';
-import Box from '../Box';
 
 export default ({ children }) => (
   <ThemeProvider theme={theme}>
-    <Fragment>
-      <SizeMe>
-        {({ size: { width } }) => {
-          const fontSize = Math.round(Math.max(width, 800) / 94)
-          return (
+    <SizeMe>
+      {({ size: { width } }) => {
+        const fontSize = Math.round(Math.max(width, 800) / 94)
+        return (
+          <div>
             <FontSizeContext.Provider value={{ em: fontSize }}>
-              <Box fontSize={fontSize}>
+              <Fragment>
+                <GlobalStyles fontSize={fontSize} />
                 {children}
-              </Box>
+              </Fragment>
             </FontSizeContext.Provider>
-          )
-        }}
-      </SizeMe>
-      <GlobalStyles />
-    </Fragment>
+          </div>
+        )
+      }}
+    </SizeMe>
   </ThemeProvider>
 );
