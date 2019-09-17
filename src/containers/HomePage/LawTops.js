@@ -84,7 +84,7 @@ class LawTops extends PureComponent {
                               />
                               <rect
                                 fill={`url(#bar-ramp-${this.SIG})`}
-                                clip-path={`url(#bar-${this.SIG}-${i})`}
+                                clipPath={`url(#bar-${this.SIG}-${i})`}
                                 x={xStart}
                                 y="-0.5em"
                                 width={xEnd}
@@ -121,4 +121,4 @@ class LawTops extends PureComponent {
   }
 }
 
-export default props => createElement(withLawData({ top: props.top, year: props.year }, props.lockId)(LawTops), props);
+export default ({ publicOnly, ...props }) => createElement(withLawData({ top: props.top, year: props.year, publicOnly }, props.lockId)(LawTops), props);
