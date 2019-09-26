@@ -21,17 +21,19 @@ const YearChart = ({
   data,
   ...props
 }) => {
-  const formattedData = map(data, (d, month) => ({
-    month,
-    ...d,
-    receivedRate: d.received / d.issued,
-  }))
 
   return (
     <FontSizeContext.Consumer>
       {({ em }) => (
         <ChartBase {...props}>
           {({ width, height }) => {
+
+            const formattedData = map(data, (d, month) => ({
+              month,
+              ...d,
+              receivedRate: d.received / d.issued,
+              width,
+            }))
             const yStart = 2 * em
             const yEnd = height - 2 * em
             const yHeight = yEnd - yStart

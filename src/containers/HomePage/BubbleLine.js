@@ -19,7 +19,7 @@ import InfoSection from './InfoSection'
 
 const emPercent = n => (
   <Fragment>
-    {Math.round(n * 100)}
+    {isNaN(n) ? '-' : Math.round(n * 100)}
     <tspan fontSize="0.7em">%</tspan>
   </Fragment>
 )
