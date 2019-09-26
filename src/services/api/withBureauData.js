@@ -7,5 +7,5 @@ export default (SubComp) => {
   if (typeof window !== 'undefined' && window.__ID !== '00000000') {
     key = `${key}/${window.__ID}`
   }
-  return withData(key)(props => createElement(SubComp, { ...props, data: props[key] }))
+  return withData(key, { year: new Date().getFullYear() - 1911 })(props => createElement(SubComp, { ...props, data: props[key] }))
 }

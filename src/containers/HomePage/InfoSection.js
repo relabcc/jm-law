@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { format } from 'd3-format'
 import get from 'lodash/get'
 
@@ -6,7 +6,7 @@ import theme from '../../components/ThemeProvider/theme'
 
 const num = format(',')
 
-class InfoSection extends PureComponent {
+class InfoSection extends Component {
   static getDerivedStateFromProps({
     sub,
     main,
@@ -20,11 +20,12 @@ class InfoSection extends PureComponent {
     const subValueStart = xEnd - (get(sub, ['unit', 'length'], -0.25) + 0.25) * em
     const subValueWidth = get(sub, 'value', '').toString().length * 0.75 * em
     const subLabelStart = subValueStart - subValueWidth
+    const newLabelStart = Math.min(mainLabelStart, subLabelStart)
     return {
       mainValueStart,
       mainLabelStart,
       subValueStart,
-      labelStart: labelStart || Math.min(mainLabelStart, subLabelStart),
+      labelStart: newLabelStart !== labelStart ? newLabelStart : labelStart,
     }
   }
 
