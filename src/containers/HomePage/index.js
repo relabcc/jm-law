@@ -33,22 +33,13 @@ import {
   getBureauTotal,
   getMonthData,
   getTypes,
+  mapData,
 } from './dataHandler'
 
 class IndexPage extends PureComponent {
   static getDerivedStateFromProps(nexProps) {
     const { typeList, data } = nexProps
-    const mappedData = map(data, ({ id, name, monthData }) => ({
-      label: name,
-      id,
-      monthData: monthData.map(m => ({
-        ...m,
-        types: m.types.reduce((t, td) => {
-          t[td.name] = td
-          return t
-        },{})
-      }))
-    }))
+    const mappedData = mapData(data)
     const typeLegends = typeList.map(({ name }, i) => ({
       label: name,
       color: theme.colors.spectrum[theme.colors.spectrum.length - 1 - i],
@@ -232,7 +223,7 @@ class IndexPage extends PureComponent {
                     label="看歷年分析"
                     title={`${year - 2}-${year}案件量分析`}
                   >
-                    <YearByYear year={year} />
+                    <YearByYear year={year} activeType={activeType} lockId={lockId} />
                   </ModalButton>
                 </Box>
               </Box>

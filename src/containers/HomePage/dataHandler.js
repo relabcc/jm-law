@@ -1,3 +1,4 @@
+import map from 'lodash/map'
 import reduce from 'lodash/reduce'
 
 const keys = [
@@ -47,3 +48,15 @@ export const getMonthData = (data, activeType, lockId) => data.reduce((md, d) =>
   }
   return md
 }, {})
+
+export const mapData = data => map(data, ({ id, name, monthData }) => ({
+  label: name,
+  id,
+  monthData: monthData.map(m => ({
+    ...m,
+    types: m.types.reduce((t, td) => {
+      t[td.name] = td
+      return t
+    },{})
+  }))
+}))

@@ -13,7 +13,7 @@ import withDataState from '../../../services/api/withDataState'
 import IssuedChart from './IssuedChart'
 import ReceivedChart from './ReceivedChart'
 
-import { getMonthData } from '../dataHandler'
+import { mapData, getMonthData } from '../dataHandler'
 import theme from '../../../components/ThemeProvider/theme';
 
 const parseData = (d, initial) => {
@@ -55,9 +55,9 @@ class YearByYear extends PureComponent {
 
   render() {
     const { data, chartType, timeType } = this.state
-    const { year } = this.props
+    const { year, activeType, lockId } = this.props
     const formattedData = reduce(data, (fd, d, year) => {
-      let md = getMonthData(d.data)
+      let md = getMonthData(mapData(d.data), activeType, lockId)
       if (timeType) {
         md = groupBy(md, (dd) => Math.floor((dd.month - 1) / 3))
         forEach(md, (v, i) => {

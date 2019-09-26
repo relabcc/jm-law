@@ -57,7 +57,8 @@ class BubbleLine extends PureComponent {
     const { activeId } = this.state
     const { lockId, onLock } = this.props
     if (lockId) {
-      this.setState({ activeId: null }, () => onLock(null))
+      onLock(null)
+      // this.setState({ activeId: null }, () => onLock(null))
     } else {
       onLock(activeId)
     }
@@ -377,7 +378,7 @@ class BubbleLine extends PureComponent {
                                           style={canGoDown ? { cursor: 'pointer' } : {}}
                                           onClick={() => {
                                             if (canGoDown) {
-                                              window.open(`?bureauId=${d.id}`)
+                                              window.open(`?bureauId=${encodeURIComponent(d.id)}`)
                                             }
                                           }}
                                         />
