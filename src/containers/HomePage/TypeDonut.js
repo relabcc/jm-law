@@ -199,6 +199,7 @@ class TypeDonut extends PureComponent {
                                     fontSize={em}
                                     fontWeight="bold"
                                     textAnchor="middle"
+                                    style={{ pointerEvents: 'none' }}
                                   >
                                     {showPercentage ? p(value / totalVaue) : value}
                                   </text>

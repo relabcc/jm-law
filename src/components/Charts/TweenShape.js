@@ -61,7 +61,12 @@ class TweenShape extends PureComponent {
 
   doUpdatePath = () => {
     if (this.pathRef.current) {
-      this.pathRef.current.setAttribute('d', encodeSVGPath(this.prevParsed));
+      try {
+        const encoded = encodeSVGPath(this.prevParsed)
+        this.pathRef.current.setAttribute('d', encoded);
+      } catch {
+
+      }
     }
     this.tick.fill(null);
   }
@@ -69,7 +74,7 @@ class TweenShape extends PureComponent {
   render() {
     const { duration, ...props } = this.props
     return (
-      <path ref={this.pathRef} {...props} />
+      <path ref={this.pathRef} style={props.onClick ? { cursor: 'pointer' } : {}} {...props} />
     );
   }
 }

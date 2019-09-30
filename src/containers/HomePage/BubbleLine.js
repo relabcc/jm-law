@@ -286,7 +286,7 @@ class BubbleLine extends PureComponent {
                                 <text
                                   fill={theme.colors.darkGray}
                                   x={cx}
-                                  y={rLabelHeight + rMax - r - 0.5 * em}
+                                  y={rLabelHeight + rMax - Math.max(r, 0.15 * rMax) - 0.5 * em}
                                   textAnchor="middle"
                                   fontSize={em}
                                   opacity={otherOpacity}

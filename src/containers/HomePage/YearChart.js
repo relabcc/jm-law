@@ -127,13 +127,13 @@ const YearChart = ({
                         dotY: yHeight,
                       })}
                       enter={d => ({
-                        barHeight: [yHeight - percentYScale(d.receivedRate)],
+                        barHeight: [yHeight - (percentYScale(d.receivedRate) || yHeight)],
                         dotY: [valueYScale(yValue(d))],
                         timing: { duration: 500 },
                       })}
                       update={d => ({
                         xPos: [xScale(xValue(d))],
-                        barHeight: [yHeight - percentYScale(d.receivedRate)],
+                        barHeight: [yHeight - (percentYScale(d.receivedRate) || yHeight)],
                         dotY: [valueYScale(yValue(d))],
                         timing: { duration: 500 },
                       })}

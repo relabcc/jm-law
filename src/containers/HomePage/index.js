@@ -1,6 +1,5 @@
 import React, { PureComponent, createElement } from 'react'
 import { compose } from 'redux'
-import map from 'lodash/map'
 import last from 'lodash/last'
 
 import Container from '../../components/Container'
