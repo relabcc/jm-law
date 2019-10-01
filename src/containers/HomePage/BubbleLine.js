@@ -24,7 +24,7 @@ const emPercent = n => (
   </Fragment>
 )
 
-const canGoDown = typeof window !== 'undefined' && window.__ID === '00000000'
+const canGoDown = typeof window !== 'undefined' && window.__BUREAU_ID === '00000000'
 
 class BubbleLine extends PureComponent {
   static getDerivedStateFromProps({ data }) {
@@ -378,7 +378,7 @@ class BubbleLine extends PureComponent {
                                           style={canGoDown ? { cursor: 'pointer' } : {}}
                                           onClick={() => {
                                             if (canGoDown) {
-                                              window.open(`?bureauId=${encodeURIComponent(d.id)}`)
+                                              window.location.search = `?bureauId=${encodeURIComponent(d.id)}`
                                             }
                                           }}
                                         />
