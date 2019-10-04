@@ -10,5 +10,9 @@ export default ({ publicOnly, ...params }, lockId) => (SubComp) => {
     key = `${key}/${lockId}`
   }
   key = `${key}/laws`
-  return withData(key, Object.assign(publicOnly ? { publicOnly } : {}, params))(props => createElement(SubComp, { ...props, data: props[key] }))
+  return withData(
+    key,
+    Object.assign(publicOnly ? { publicOnly } : {}, params),
+    publicOnly ? d => ({ ...d, isPublic: true }) : undefined,
+  )(props => createElement(SubComp, { ...props, publicOnly, data: props[key] }))
 }

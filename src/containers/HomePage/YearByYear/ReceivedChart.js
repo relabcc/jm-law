@@ -4,6 +4,7 @@ import { scaleBand, scaleLinear } from '@vx/scale';
 import range from 'lodash/range'
 import { NodeGroup } from 'react-move'
 import { format } from 'd3-format'
+import { max } from 'd3-array'
 
 import FontSizeContext from '../../../components/ThemeProvider/FontSizeContext'
 
@@ -27,6 +28,7 @@ const ReceivedChart = ({
             const yStart = 6 * em
             const yEnd = height - 2 * em
             const yHeight = yEnd - yStart
+
             const xStart = em * 3
             const xEnd = width - em
             const xScale = scaleBand({
@@ -36,7 +38,7 @@ const ReceivedChart = ({
             })
             const yScale = scaleLinear({
               range: [0, yHeight],
-              domain: [0, 1],
+              domain: [0, Math.ceil(max(data, yValue))],
             });
             return (
               <Group>

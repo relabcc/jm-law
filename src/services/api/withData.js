@@ -11,7 +11,7 @@ import md5 from 'blueimp-md5'
 import Text from '../../components/Text';
 import injectReducer from '../../utils/injectReducer';
 
-export default (key, params) => {
+export default (key, params, transformer) => {
   const ids = (isArray(params) || isNumber(params)) ? params : '';
   const listMode = !ids;
   const resources = isArray(ids) ? ids : [ids];
@@ -40,6 +40,7 @@ export default (key, params) => {
                 resources: listMode ? undefined : resources,
                 requestKey: listMode && `list${JSON.stringify(params)}`,
                 requestParams,
+                transformer,
               });
             }
           }

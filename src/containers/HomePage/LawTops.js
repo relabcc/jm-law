@@ -14,7 +14,7 @@ import ChartBase from '../../components/Charts/ChartBase'
 import LineBreakText from '../../components/Charts/LineBreakText'
 import withLawData from '../../services/api/withLawData'
 
-const labelLength = 15
+const labelLength = 18
 
 class LawTops extends PureComponent {
   constructor(props) {
@@ -30,8 +30,10 @@ class LawTops extends PureComponent {
   }
 
   render() {
-    const { hasLine, color, ratio, top, data } = this.props;
-    const sorted = sortBy(data, 'count').slice(0, top)
+    const { hasLine, color, ratio, top, data, publicOnly } = this.props;
+    let sorted = sortBy(data, 'count').reverse()
+    if (publicOnly) sorted = sorted.filter(d => d.isPublic)
+    sorted = sorted.slice(0, top)
     return (
       <FontSizeContext.Consumer>
         {({ em }) => (
@@ -48,7 +50,7 @@ class LawTops extends PureComponent {
                 <Fragment>
                   <LinearGradient from="#ffab2a" to="#ff712a" vertical={false} id={`bar-ramp-${this.SIG}`} />
                   <Group top={yStart}>
-                    {Array.from(sorted).reverse().map((law, i) => {
+                    {sorted.map((law, i) => {
                       return (
                         <Animate
                           start={{ width: 0 }}
@@ -63,7 +65,7 @@ class LawTops extends PureComponent {
                           key={law.id}
                         >
                           {(state) => (
-                            <Group top={i * em * 2.75}>
+                            <Group top={i * em * 3}>
                               <LineBreakText
                                 fill={color}
                                 fontSize={em}
@@ -72,8 +74,9 @@ class LawTops extends PureComponent {
                                 textAnchor="end"
                                 x={xStart - em}
                                 y={0.5 * em}
+                                title={law.name}
                               >
-                                {law.name}
+                                {law.name.length > labelLength * 2 ? law.name.substring(0, labelLength * 2 - 3).concat('...') : law.name}
                               </LineBreakText>
                               <RectClipPath
                                 id={`bar-${this.SIG}-${i}`}
@@ -106,7 +109,7 @@ class LawTops extends PureComponent {
                       x1={xStart}
                       x2={xStart}
                       y1={yStart / 2}
-                      y2={yStart / 2 + sorted.length * em * 2.75}
+                      y2={yStart / 2 + sorted.length * em * 3}
                       stroke={color}
                       strokeWidth="1.5"
                     />

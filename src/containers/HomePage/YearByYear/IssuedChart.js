@@ -69,12 +69,15 @@ class IssuedChart extends PureComponent {
     const {
       data,
       xTickFormat,
-      showTooltop,
+      tooltipOpen,
+      updateTooltip,
+      showTooltip,
       hideTooltip,
       tooltipData,
       tooltipTop,
       tooltipLeft,
       events,
+      getFill,
       ...props
     } = this.props
     return (

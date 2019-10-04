@@ -3,6 +3,7 @@ import { Group } from '@vx/group';
 import { scaleLinear } from '@vx/scale';
 import { Animate } from 'react-move'
 import { format } from 'd3-format'
+import { max } from 'd3-array'
 
 import FontSizeContext from '../../components/ThemeProvider/FontSizeContext'
 
@@ -18,10 +19,12 @@ const PercentBars = ({
   ...props
 }) => {
   const dataByKey = data.reduce((dk, d) => {
-    dk[d.name] = d.received / d.issued;
+    dk[d.name] = d.issued ? d.received / d.issued : 0;
     return dk
   }, {})
+
   const legendsLength = Math.max(...legends.map(l => l.label.length))
+  const maxRate = Math.ceil(max(legends, ({ label }) => dataByKey[label]))
   return (
     <FontSizeContext.Consumer>
       {({ em }) => (
@@ -30,7 +33,7 @@ const PercentBars = ({
             const yStart = 6 * em
             const xScale = scaleLinear({
               range: [0, width - 3 * em - legendsLength * em * 1.25],
-              domain: [0, 1],
+              domain: [0, maxRate],
             });
             return (
               <Group top={yStart}>
@@ -53,7 +56,7 @@ const PercentBars = ({
                       <rect
                         x={legendsLength * em * 1.25}
                         y={-1.25 * em}
-                        width={xScale(1)}
+                        width={xScale(maxRate)}
                         height={1.5 * em}
                         fill="white"
                         opacity="0.15"
