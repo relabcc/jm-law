@@ -10,7 +10,6 @@ import {
   display,
 } from 'styled-system';
 import tag from 'clean-tag';
-import { Link as GatsbyLink } from 'gatsby';
 
 import blacklist from './utils/blacklist';
 import { customColor } from './utils/getColor';
@@ -36,21 +35,14 @@ const NomalLink = styled(tag)`
   ${linkStyle}
 `;
 
-const GatsbyStyledLink = styled(GatsbyLink)`
-  ${linkStyle}
-`;
 
-const Link = ({ to, button, blacklist, ...props }) => {
-  if (to) {
-    return (
-      <GatsbyStyledLink to={to} {...props} />
-    );
-  }
+const Link = ({ blacklist, ...props }) => {
   return (
     <NomalLink
       is="a"
       target="_blank"
       blacklist={blacklist}
+      color="text"
       { ...props }
     />
   );
@@ -60,7 +52,6 @@ Link.displayName = 'Link';
 
 Link.defaultProps = {
   blacklist,
-  fontWeight: 'bold',
 };
 
 export default Link;

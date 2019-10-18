@@ -2,6 +2,7 @@ import React from 'react'
 
 import Container from '../../components/Container'
 import Box from '../../components/Box'
+import Link from '../../components/Link'
 import Flex from '../../components/Flex'
 import Text from '../../components/Text'
 import PatternBg from '../../components/PatternBg';
@@ -14,7 +15,7 @@ import Layout from '../Layout';
 
 const Module = ({ color, value, label, unit, datas, ...props}) => (
   <Flex flexWrap="wrap" px="4em" {...props}>
-    {datas.map(({value, label, unit}, index) => (
+    {datas.map(({ value, label, unit, url }, index) => (
       <Box pr="1em" width={1 / 3} key={index}>
         <Box bg="#f4f4f4" my="1em" borderRadius="5em" py="1.5em">
           <Flex alignItems="center" px="2em">
@@ -23,7 +24,7 @@ const Module = ({ color, value, label, unit, datas, ...props}) => (
               <Text.inline pl="0.25em">{unit}</Text.inline>
             </Box>
             <Box flex="1" pl="1em" py="0.5em">
-              {label}
+              {url ? <Link href={url}>{label}</Link> : label}
             </Box>
           </Flex>
         </Box>
