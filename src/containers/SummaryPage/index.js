@@ -58,4 +58,4 @@ class SummaryPage extends PureComponent {
 }
 
 
-export default withDataState('summary')(SummaryPage)
+export default withDataState('summary', window.__DEPARTMENT_ID && { departmentId: window.__DEPARTMENT_ID })(SummaryPage)

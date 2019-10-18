@@ -9,8 +9,8 @@ import { getData } from './reducer'
 
 import { STATUS_LOADED, STATUS_LOADING, STATUS_ERROR } from './constants'
 
-export default (key) => {
-  const SIG = `_LAW.state.${md5(key)}`
+export default (key, params) => {
+  const SIG = `_LAW.state.${md5(key + params ? JSON.stringify(params) : '')}`
 
   return SubComp => {
     if (!key) return () => null;
@@ -26,7 +26,7 @@ export default (key) => {
       request = (skip) => {
         if (!this.checkIsPending()) {
           if (skip || !this.checkIsDone()) {
-            this.props.getData({ key })
+            this.props.getData({ key, params })
           }
         }
       };

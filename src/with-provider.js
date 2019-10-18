@@ -7,6 +7,7 @@ import creatStore from './stores/createStore';
 
 const store = creatStore();
 
+// window.__DEPARTMENT_ID = '1631100000000'
 window.__BUREAU_ID = window.__BUREAU_ID || '00000000'
 if (window.location.search) {
   const res = /bureauId=([^&]+)/g.exec(window.location.search)
