@@ -10,6 +10,7 @@ const keys = [
   'issuedDollar',
   'received',
   'receivedDollar',
+  'executed',
 ]
 
 const transformData = data => mapValues(data, d => ({

@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { Animate, NodeGroup } from 'react-move'
 import loSortBy from 'lodash/sortBy'
 import { max } from 'd3-array'
+import { format } from 'd3-format'
 import { Bar, Circle } from '@vx/shape';
 import { scaleLinear, scalePower } from '@vx/scale';
 import { LinearGradient, RadialGradient } from '@vx/gradient';
@@ -17,9 +18,9 @@ import FontSizeContext from '../../components/ThemeProvider/FontSizeContext'
 
 import InfoSection from './InfoSection'
 
-const emPercent = n => (
+const emPercent = (n, p = 0) => (
   <Fragment>
-    {isNaN(n) ? '-' : Math.round(n * 100)}
+    {isNaN(n) ? '-' : format(`.${p}f`)(n * 100)}
     <tspan fontSize="0.7em">%</tspan>
   </Fragment>
 )
@@ -86,14 +87,14 @@ class BubbleLine extends PureComponent {
           <ChartBase {...props}>
             {({ width, height }) => {
               const rLabelHeight = 2 * em
-              const rMax = height * 0.22
+              const rMax = height * 0.2
               const leftLabelWidth = width * 0.075
-              const rightInfoWidth = width * 0.18
+              const rightInfoWidth = width * 0.15
               const xStart = leftLabelWidth + rMax
               const xEnd = width - rMax - rightInfoWidth
               const lableY = rLabelHeight + rMax * 2 + em * 3.5
               const rateY = lableY + em * 3
-              const dollarRateY = rateY + em * 2.5
+              const executedRateY = rateY + em * 2.5
 
               const xScale = scaleLinear({
                 domain: [0, data.length - 1],
@@ -122,7 +123,7 @@ class BubbleLine extends PureComponent {
                       fill="url('#dark')"
                       rx={em}
                     />
-                    {[lableY, rateY - 2 * em / 3, dollarRateY - 2 * em / 3].map((y, i) => (
+                    {[lableY, rateY - 2 * em / 3, executedRateY - 2 * em / 3].map((y, i) => (
                       <line
                         key={i}
                         x1={em}
@@ -138,7 +139,7 @@ class BubbleLine extends PureComponent {
                       { label: '已開案件量', y: rLabelHeight + rMax - em / 2 },
                       { label: '局處', y: lableY + em },
                       { label: '收繳率', y: rateY + em / 3 },
-                      { label: '執行率', y: dollarRateY + em / 3 },
+                      { label: '執行率', y: executedRateY + em / 3 },
                     ].map(({ label, y }, i) => (
                       <LineBreakText
                         key={i}
@@ -189,7 +190,7 @@ class BubbleLine extends PureComponent {
                   height={2 * em}
                   fill="url('#rate')"
                   x={xStart - rMax / 2}
-                  y={dollarRateY - em}
+                  y={executedRateY - em}
                   rx={em}
                 /> */}
                   <Bar
@@ -328,18 +329,18 @@ class BubbleLine extends PureComponent {
                                   opacity={otherOpacity}
                                   style={{ pointerEvents: 'none' }}
                                 >
-                                  {emPercent(d.receiveRate)}
+                                  {emPercent(d.receiveRate, activeId === d.id ? '2' : '0')}
                                 </text>
                                 <text
                                   x={cx}
-                                  y={dollarRateY + em / 3}
+                                  y={executedRateY + em / 3}
                                   textAnchor="middle"
                                   fontWeight="bold"
                                   fontSize={em}
                                   opacity={otherOpacity}
                                   style={{ pointerEvents: 'none' }}
                                 >
-                                  {emPercent(d.receiveDollarRate)}
+                                  {emPercent(d.executedRate, activeId === d.id ? '2' : '0')}
                                 </text>
                               </g>
                             );

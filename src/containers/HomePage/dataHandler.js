@@ -8,6 +8,7 @@ const keys = [
   'issuedDollar',
   'received',
   'receivedDollar',
+  'executed',
 ]
 
 export const getBureauTotal = (data, activeType) => data.map(({ label, id, monthData }) => ({
@@ -20,7 +21,7 @@ export const getBureauTotal = (data, activeType) => data.map(({ label, id, month
 })).map((d) => ({
   ...d,
   receiveRate: d.received / d.issued,
-  receiveDollarRate: d.receivedDollar / d.issuedDollar,
+  executedRate: d.executed / d.issued,
 }))
 
 export const getTypes = (data, lockId) => Object.values(reduce(data, (allTypes, { monthData, id }) => {
