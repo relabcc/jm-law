@@ -45,7 +45,7 @@ export default ({ children, border, borderRadius, customStyles, title, ...props 
           <IoIosClose size="2em" />
         </Circle>
       </Flex>
-      <Box m="2em" position="relative">
+      <Box m="1.5em" position="relative">
         {children}
       </Box>
     </Box>

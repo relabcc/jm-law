@@ -192,11 +192,11 @@ class IndexPage extends PureComponent {
                           <Button active={publicOnly === 0} onClick={() => this.setPublicOnly(0)}>所有法條分析</Button>
                         </Box>
                         <Box my="1em">
-                          <Button active={publicOnly === 1} onClick={() => this.setPublicOnly(1)}>公安法條分析</Button>
+                          <Button active={publicOnly === true} onClick={() => this.setPublicOnly(true)}>公安法條分析</Button>
                         </Box>
                       </Box>
                       <Box flex="1" px="2em">
-                        <LawTops key={10} top={10} year={year} color="text" ratio={0.7} publicOnly={publicOnly} lockId={lockId} />
+                        <LawTops key={10} top={10} year={year} color="text" ratio={0.77} publicOnly={publicOnly} lockId={lockId} />
                       </Box>
                     </Flex>
                   </ModalButton>

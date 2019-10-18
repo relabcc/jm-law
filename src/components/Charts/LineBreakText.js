@@ -48,6 +48,7 @@ const LineBreakText = ({
   bg,
   style,
   verticalCenter,
+  title,
   ...props
 }) => {
   if (typeof children !== 'string') {
@@ -77,7 +78,7 @@ const LineBreakText = ({
     >
       {c}
     </text>
-  ))
+  )).concat(title && <title key="title">{title}</title>)
   return bg ? (() => {
     const w = maxLength * fontSize
     const yStart = Math.min(...yPos)

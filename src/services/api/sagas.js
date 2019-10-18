@@ -8,8 +8,6 @@ import sendRequest from '../../utils/request';
 import { API_BASE } from './config';
 import { GET_DATA, receivedDataSuccess, receivedDataError } from './reducer';
 
-const processData = data => data
-
 function* handleRequest(target, onSuccess, onError) {
   try {
     const res = yield call(sendRequest, target);
@@ -35,7 +33,7 @@ function* handleManualRead({ payload: { key, params } }) {
   );
 }
 
-function* handleRead({ resourceType, resources, requestKey, requestParams }) {
+function* handleRead({ resourceType, resources, requestKey, requestParams, transformer }) {
   const qs = isObject(requestParams) ? reduce(requestParams, (q, value, key) => `${q}${key}=${encodeURIComponent(value)}&`, '?') : ''
   const resourceBase = `${API_BASE}/${resourceType}${qs}`;
   if (resources) {
@@ -49,7 +47,7 @@ function* handleRead({ resourceType, resources, requestKey, requestParams }) {
           data => ({
             type: actionTypes.READ_RESOURCES_SUCCEEDED,
             resourceType,
-            resources: [processData(data)],
+            resources: [transformer ? transformer(data) : data],
           }),
           // onError
           () => ({
@@ -67,7 +65,7 @@ function* handleRead({ resourceType, resources, requestKey, requestParams }) {
       ({ data }) => ({
         type: actionTypes.READ_RESOURCES_SUCCEEDED,
         resourceType,
-        resources: data.map(processData),
+        resources: transformer ? data.map(transformer) : data,
         requestKey,
       }),
       // onError
