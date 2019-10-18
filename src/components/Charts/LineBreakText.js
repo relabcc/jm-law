@@ -49,6 +49,7 @@ const LineBreakText = ({
   style,
   verticalCenter,
   title,
+  maxLines,
   ...props
 }) => {
   if (typeof children !== 'string') {
@@ -64,8 +65,14 @@ const LineBreakText = ({
       </text>
     );
   }
-  const lines = backwardAutoLineBreak(children, maxLength, fillFront)
-  const lineCount = lines.length
+  let perLine = maxLength
+  let lines = backwardAutoLineBreak(children, perLine, fillFront)
+  let lineCount = lines.length
+  while (lineCount > maxLines) {
+    perLine += 1
+    lines = backwardAutoLineBreak(children, perLine, fillFront)
+    lineCount = lines.length
+  }
   const yPos = lines.map((c, i) => y + (verticalCenter && lineCount > 1 ? (0.5 * fontSize * (lineBefore ? 1 : -1)) : 0) + lineHeight * fontSize * (lineBefore ? i - lineCount + 1 : i));
   const texts = lines.map((c, i) => (
     <text
@@ -103,6 +110,7 @@ LineBreakText.defaultProps = {
   lineHeight: 1.3,
   y: 0,
   verticalCenter: true,
+  maxLines: 3,
 }
 
 export default LineBreakText;

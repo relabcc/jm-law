@@ -13,7 +13,7 @@ import FontSizeContext from '../../components/ThemeProvider/FontSizeContext'
 import theme from '../../components/ThemeProvider/theme'
 
 import ChartBase from '../../components/Charts/ChartBase'
-import TweenShape from '../../components/Charts/TweenShape'
+import TweenShape from '../../components/Charts/PathInterpolation'
 
 const p = format('.0%')
 
@@ -151,9 +151,10 @@ class TypeDonut extends PureComponent {
                     if (showLabel) {
                       const sides = groupBy(pie.arcs.map((arc, i) => calcSide(pie.path.centroid(arc), i)), 'side')
                       const sideGroups = reduce(sides, (so, s, i) => {
-                        let ss = so[i] ? s.concat(so[i]) : s
-                        if (s.length > labelLength) {
-                          const sorted = s.sort((a, b) => b.distanceX - a.distanceX)
+                        const filteredS = s.filter(sd => pie.arcs[sd.index].value)
+                        let ss = so[i] ? filteredS.concat(so[i]) : filteredS
+                        if (filteredS.length > labelLength) {
+                          const sorted = filteredS.sort((a, b) => b.distanceX - a.distanceX)
                           ss = sorted.slice(0, labelLength)
                           const otherI = i * -1
                           so[otherI] = (so[otherI] || []).concat(sorted.slice(labelLength))
@@ -175,8 +176,8 @@ class TypeDonut extends PureComponent {
                     }
                     return pie.arcs.map((arc, i) => {
                       const [centroidX, centroidY] = pie.path.centroid(arc);
-                      const { startAngle, endAngle } = arc;
-                      const hasSpaceForLabel = endAngle - startAngle >= 0.1;
+                      // const { startAngle, endAngle } = arc;
+                      // const hasSpaceForLabel = endAngle - startAngle >= 0.1;
                       const value = valueGetter(arc.data)
                       return (
                         <Fragment key={`inner-${arc.data.name}-${i}`}>
@@ -188,9 +189,9 @@ class TypeDonut extends PureComponent {
                                   fill={getColorByName[arc.data.name]}
                                   opacity={(!activeLegend || arc.data.name === activeLegend) ? 1 : 0.3}
                                   onClick={() => onLegendClick(arc.data.name === activeLegend ? null : arc.data.name)}
-                                  duration={200}
+                                  duration={150}
                                 />
-                                {hasSpaceForLabel && (
+                                {arc.value && (
                                   <text
                                     fill="white"
                                     x={centroidX}
@@ -204,12 +205,13 @@ class TypeDonut extends PureComponent {
                                     {showPercentage ? p(value / totalVaue) : value}
                                   </text>
                                 )}
-
                               </g>
                             )}
                           </HoverSensor>
+
                           {showLabel && (() => {
                             const side = sideOrders[i]
+                            if (!side) return null
                             const scale = scaleLabelY[side.side]
                             const sign = side.side
                             const left = (donutR + 8 * em)* sign

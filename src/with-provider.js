@@ -13,6 +13,7 @@ if (window.location.search) {
   const res = /bureauId=([^&]+)/g.exec(window.location.search)
   if (res && res[1]) {
     window.__BUREAU_ID = decodeURIComponent(res[1])
+    window.__CAN_BACK = true
   }
 }
 

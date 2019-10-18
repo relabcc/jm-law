@@ -2,19 +2,13 @@ import React, { PureComponent, createRef } from 'react';
 import TWEEN from '@tweenjs/tween.js';
 import { SVGPathData, encodeSVGPath } from 'svg-pathdata';
 import pickBy from 'lodash/pickBy';
-import size from 'lodash/size';
+import isNumber from 'lodash/isNumber';
 import merge from 'lodash/merge';
+import mapValues from 'lodash/mapValues';
 
 function animate() {
 	requestAnimationFrame(animate);
 	TWEEN.update();
-}
-
-const blacklist = {
-  type: true,
-  relative: true,
-  lArcFlag: true,
-  sweepFlag: true,
 }
 
 class TweenShape extends PureComponent {
@@ -27,7 +21,6 @@ class TweenShape extends PureComponent {
     const { d } = props;
     this.prevParsed = new SVGPathData(d).toAbs().commands;
     this.tick = [];
-    this.tickShape = [];
     animate();
   }
 
@@ -48,22 +41,13 @@ class TweenShape extends PureComponent {
     this.parsed = new SVGPathData(d).toAbs().commands;
     this.tweens = this.parsed.map((to, index) => {
       const from = this.prevParsed[index];
-      const fromValues = pickBy(from, (v, k) => !blacklist[k]);
-      const toValues = pickBy(to, (v, k) => !blacklist[k]);
-      if (size(toValues)) {
-        this.tickShape[index] = false;
-        const tween = new TWEEN.Tween(fromValues)
-          .to(toValues, this.props.duration)
-          .easing(TWEEN.Easing.Quadratic.InOut)
-          .onUpdate(this.handleUpdate(index))
-        tween.start();
-        return tween;
-      }
-      this.tick[index] = true;
-      this.tickShape[index] = true;
-      return {
-        stop: () => {},
-      };
+      const toValues = pickBy(to, isNumber);
+      const tween = new TWEEN.Tween(from || mapValues(toValues, (v, k) => k === 'type' ? v : 0))
+        .to(toValues, this.props.duration)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(this.handleUpdate(index))
+      tween.start();
+      return tween;
     });
   }
 
@@ -84,7 +68,7 @@ class TweenShape extends PureComponent {
 
       }
     }
-    this.tick = Array.from(this.tickShape)
+    this.tick.fill(null);
   }
 
   render() {

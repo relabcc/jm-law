@@ -49,10 +49,11 @@ const YearChart = ({
               range: [yHeight, 0],
               domain: [0, 1.3],
             });
-            const valueYScale = scaleLinear({
+            const valueYMax = Math.ceil(Math.max(...formattedData.map(yValue)) / 100) * 100
+            const valueYScale = valueYMax ? scaleLinear({
               range: [yHeight, 0],
-              domain: [0, Math.ceil(Math.max(...formattedData.map(yValue)) / 100) * 100],
-            });
+              domain: [0, valueYMax],
+            }) : () => yHeight;
             const barWidth = xScale.bandwidth()
             return (
               <Group top={yStart}>

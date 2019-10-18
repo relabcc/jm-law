@@ -35,6 +35,8 @@ import {
   mapData,
 } from './dataHandler'
 
+const isTopBureau = window.__BUREAU_ID === '00000000'
+
 class IndexPage extends PureComponent {
   static getDerivedStateFromProps(nexProps) {
     const { typeList, data } = nexProps
@@ -112,7 +114,7 @@ class IndexPage extends PureComponent {
                 <LastUpdated />
               </Flex>
               <Flex alignItems="center">
-                <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">各局處案件量分析</Text>
+                <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">各{isTopBureau ? '局處' : '科室'}案件量分析</Text>
                 <YearButton
                   currentYear={year}
                   years={years}
@@ -120,6 +122,7 @@ class IndexPage extends PureComponent {
                 />
               </Flex>
               <Box textAlign="right" my="1em">
+                {window.__CAN_BACK && <Button onClick={() => window.history.back()} mr="1em">返回全局處</Button>}
                 <Button onClick={this.handleReset}>切回預設</Button>
               </Box>
               <BubbleLine
@@ -139,10 +142,10 @@ class IndexPage extends PureComponent {
         >
           <Container>
             <Flex borderBottom="1px solid">
-              <Box pl="1em" pr="2em" width={2 / 5} borderRight="1px solid">
+              <Box pl="1em" pr="2em" pb="1em" width={2 / 5} borderRight="1px solid">
                 <Box position="relative">
                   {createElement(chartIndex ? PercentBars : TypeDonut , Object.assign({
-                    ratio: 0.6,
+                    ratio: 0.66,
                     data: types,
                     legends: typeLegends,
                     onLegendClick: this.handleTypeFilter,

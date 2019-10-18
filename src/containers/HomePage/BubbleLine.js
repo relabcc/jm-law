@@ -25,7 +25,7 @@ const emPercent = (n, p = 0) => (
   </Fragment>
 )
 
-const canGoDown = typeof window !== 'undefined' && window.__BUREAU_ID === '00000000'
+const isTopBureau = window.__BUREAU_ID === '00000000'
 
 class BubbleLine extends PureComponent {
   static getDerivedStateFromProps({ data }) {
@@ -100,12 +100,12 @@ class BubbleLine extends PureComponent {
                 domain: [0, data.length - 1],
                 range: [xStart, xEnd]
               })
-
-              const rScale = scalePower({
-                domain: [0, max(data, d => d.issued)],
+              const valueMax = max(data, d => d.issued)
+              const rScale = valueMax ? scalePower({
+                domain: [0, valueMax],
                 range: [0, rMax],
                 exponent: 0.5,
-              });
+              }) : () => 0;
 
               return (
                 <Fragment>
@@ -137,7 +137,7 @@ class BubbleLine extends PureComponent {
                     ))}
                     {[
                       { label: '已開案件量', y: rLabelHeight + rMax - em / 2 },
-                      { label: '局處', y: lableY + em },
+                      { label: isTopBureau ? '局處' : '科室', y: lableY + em },
                       { label: '收繳率', y: rateY + em / 3 },
                       { label: '執行率', y: executedRateY + em / 3 },
                     ].map(({ label, y }, i) => (
@@ -178,10 +178,10 @@ class BubbleLine extends PureComponent {
                     )}
                   </Animate>
                   <rect
-                    width={xEnd - xStart + rMax}
+                    width={xEnd - xStart + rMax + em / 2}
                     height={2 * em}
                     fill="url('#rate')"
-                    x={xStart - rMax / 2}
+                    x={xStart - rMax / 2 - em / 2}
                     y={rateY - em}
                     rx={em}
                   />
@@ -376,14 +376,14 @@ class BubbleLine extends PureComponent {
                                           fill="transparent"
                                           strokeWidth="2"
                                           stroke={theme.colors.orange5}
-                                          style={canGoDown ? { cursor: 'pointer' } : {}}
+                                          style={isTopBureau ? { cursor: 'pointer' } : {}}
                                           onClick={() => {
-                                            if (canGoDown) {
+                                            if (isTopBureau) {
                                               window.location.search = `?bureauId=${encodeURIComponent(d.id)}`
                                             }
                                           }}
                                         />
-                                        {canGoDown && isHover && createPortal((
+                                        {isTopBureau && isHover && createPortal((
                                           <Group top={rLabelHeight + rMax} left={cx + 2 * em}>
                                             <polygon
                                               points={[
