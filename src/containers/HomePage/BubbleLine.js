@@ -83,7 +83,6 @@ class BubbleLine extends PureComponent {
     const { activeId, namedData, labelStart } = this.state;
     if (!data || !data.length) return null
     const sortedData = loSortBy(data, sortBy)
-    console.log(sortedData)
     return (
       <FontSizeContext.Consumer>
         {({ em }) => (

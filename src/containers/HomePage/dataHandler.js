@@ -1,5 +1,6 @@
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
+import last from 'lodash/last'
 
 const keys = [
   'canceled',
@@ -8,7 +9,6 @@ const keys = [
   'issuedDollar',
   'received',
   'receivedDollar',
-  'executed',
 ]
 
 export const getBureauTotal = (data, activeType) => data.map(({ label, id, monthData }) => ({
@@ -16,6 +16,7 @@ export const getBureauTotal = (data, activeType) => data.map(({ label, id, month
   id,
   ...keys.reduce((allData, key) => {
     allData[key] = monthData.reduce((all, d) => all + (activeType ? d.types[activeType].data[key] : d.data[key]), 0)
+    allData.executed = last(monthData).data.executed
     return allData
   }, {})
 })).map((d) => ({
