@@ -4,6 +4,7 @@ import { Pie } from '@vx/shape';
 import { scaleBand } from '@vx/scale';
 import { HoverSensor } from 'libreact/lib/HoverSensor';
 import { format } from 'd3-format'
+import { pie } from 'd3-shape'
 import groupBy from 'lodash/groupBy'
 import reduce from 'lodash/reduce'
 import range from 'lodash/range'
@@ -34,6 +35,7 @@ class TypeDonut extends PureComponent {
   }
 
   static getDerivedStateFromProps({ data, legends, valueGetter }) {
+    const spaceForLabels = pie().value(valueGetter)(data).map(({ startAngle, endAngle }) => endAngle - startAngle >= 0.1)
     return {
       totalVaue: data.reduce((sum, d) => sum + valueGetter(d), 0),
       dataLength: data.length,
@@ -46,6 +48,8 @@ class TypeDonut extends PureComponent {
         cn[l.label] = i
         return cn
       }, {}),
+      spaceForLabels,
+      notEnoughSpace: !spaceForLabels.every(Boolean),
     }
   }
 
@@ -76,12 +80,15 @@ class TypeDonut extends PureComponent {
       labelLength,
       getColorByName,
       getIndexByName,
+      spaceForLabels,
+      notEnoughSpace,
     } = this.state;
     const { em } = this.context
+    const stroke = showLabel ? 'black' : 'white'
     return (
       <ChartBase {...props}>
         {({ width, height }) => {
-          const donutR = height * 0.45 - (showLabel ? 8 * em : 2 * em);
+          const donutR = height * 0.45 - (showLabel ? 8 * em : (notEnoughSpace ? 4 * em : 2 * em));
           const legendBottom = height - 4 * em
           return (
             <Fragment>
@@ -90,14 +97,14 @@ class TypeDonut extends PureComponent {
                   {legends.map((legend, i) => (
                     <Group
                       key={i}
-                      left={em}
+                      left={notEnoughSpace ? 0 : em}
                       top={legendBottom - (dataLength - 1 - i) * em * 1.75}
                       onClick={() => onLegendClick(legend.label === activeLegend ? null : legend.label)}
                       opacity={!activeLegend || legend.label === activeLegend ? 1 : 0.3}
                       style={{ cursor: 'pointer' }}
                     >
                       <circle cx={em / 2} cy={-em * 0.3} r={em / 2} fill={legend.color} />
-                      <text x={1.75 * em} fill="white" fontSize={em}>{legend.label}</text>
+                      <text x={(notEnoughSpace ? 1.5 : 1.75) * em} fill="white" fontSize={em}>{legend.label}</text>
                     </Group>
                   ))}
                 </g>
@@ -148,7 +155,7 @@ class TypeDonut extends PureComponent {
                   {pie => {
                     let sideOrders
                     let scaleLabelY
-                    if (showLabel) {
+                    if (showLabel || notEnoughSpace) {
                       const sides = groupBy(pie.arcs.map((arc, i) => calcSide(pie.path.centroid(arc), i)), 'side')
                       const sideGroups = reduce(sides, (so, s, i) => {
                         const filteredS = s.filter(sd => pie.arcs[sd.index].value)
@@ -176,9 +183,8 @@ class TypeDonut extends PureComponent {
                     }
                     return pie.arcs.map((arc, i) => {
                       const [centroidX, centroidY] = pie.path.centroid(arc);
-                      // const { startAngle, endAngle } = arc;
-                      // const hasSpaceForLabel = endAngle - startAngle >= 0.1;
                       const value = valueGetter(arc.data)
+                      const opacity = (!activeLegend || arc.data.name === activeLegend) ? 1 : 0.3
                       return (
                         <Fragment key={`inner-${arc.data.name}-${i}`}>
                           <HoverSensor>
@@ -187,11 +193,11 @@ class TypeDonut extends PureComponent {
                                 <TweenShape
                                   d={((!activeLegend && isHover) || activeLegend === arc.data.name) && this.outerShapes[i] ? this.outerShapes[i] : pie.path(arc)}
                                   fill={getColorByName[arc.data.name]}
-                                  opacity={(!activeLegend || arc.data.name === activeLegend) ? 1 : 0.3}
+                                  opacity={opacity}
                                   onClick={() => onLegendClick(arc.data.name === activeLegend ? null : arc.data.name)}
                                   duration={150}
                                 />
-                                {arc.value && (
+                                {arc.value && spaceForLabels[i] && (
                                   <text
                                     fill="white"
                                     x={centroidX}
@@ -200,6 +206,7 @@ class TypeDonut extends PureComponent {
                                     fontSize={em}
                                     fontWeight="bold"
                                     textAnchor="middle"
+                                    opacity={opacity}
                                     style={{ pointerEvents: 'none' }}
                                   >
                                     {showPercentage ? p(value / totalVaue) : value}
@@ -209,14 +216,14 @@ class TypeDonut extends PureComponent {
                             )}
                           </HoverSensor>
 
-                          {showLabel && (() => {
+                          {(showLabel || !spaceForLabels[i]) && (() => {
                             const side = sideOrders[i]
                             if (!side) return null
                             const scale = scaleLabelY[side.side]
                             const sign = side.side
-                            const left = (donutR + 8 * em)* sign
+                            const left = (donutR + (showLabel ? 8 * em : 4.5 * em)) * sign
                             const top = scale(side.index) + scale.bandwidth() / 2 - em / 2
-                            const centX = centroidX - left + 2 * em * sign
+                            const centX = centroidX - left + (spaceForLabels[i] ? 2 * em * sign : 0)
                             const centY = centroidY - top
                             const breakX = centX + Math.abs(centY) * sign
                             return (
@@ -224,32 +231,33 @@ class TypeDonut extends PureComponent {
                                 <Group
                                   left={left}
                                   top={top}
+                                  opacity={opacity}
                                 >
                                   <line
                                     x1={0}
                                     x2={breakX}
                                     y1={0}
                                     y2={0}
-                                    stroke="black"
+                                    stroke={stroke}
                                   />
                                   <line
                                     x1={centX}
                                     y1={centY}
                                     x2={breakX}
                                     y2={0}
-                                    stroke="black"
+                                    stroke={stroke}
                                   />
                                   <text
                                     y={1.5 * em}
                                     textAnchor={sign > 0 ? 'end' : 'start'}
-                                    fontSize={em}
+                                    fontSize={(showLabel ? 1 : 0.9) * em}
                                     fontWeight="bold"
                                   >{arc.data.name}</text>
                                   <text
                                     y={-0.75 * em}
                                     textAnchor={sign > 0 ? 'end' : 'start'}
-                                    fontSize={1.5 * em}
-                                    fill={theme.colors.primary}
+                                    fontSize={(showLabel ? 1.5 : 1) * em}
+                                    fill={showLabel ? theme.colors.primary : getColorByName[arc.data.name]}
                                     fontWeight="bold"
                                   >{valueGetter(arc.data)}</text>
                                 </Group>
