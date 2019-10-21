@@ -18,10 +18,12 @@ import FontSizeContext from '../../components/ThemeProvider/FontSizeContext'
 
 import InfoSection from './InfoSection'
 
-const emPercent = (n, p = 0) => (
+const f = format('.2f')
+
+const emPercent = n => (
   <Fragment>
-    {isNaN(n) ? '-' : format(`.${p}f`)(n * 100)}
-    <tspan fontSize="0.7em">%</tspan>
+    {isNaN(n) ? '-' : f(n * 100)}
+    <tspan fontSize="0.6em">%</tspan>
   </Fragment>
 )
 
@@ -81,6 +83,7 @@ class BubbleLine extends PureComponent {
     const { activeId, namedData, labelStart } = this.state;
     if (!data || !data.length) return null
     const sortedData = loSortBy(data, sortBy)
+    console.log(sortedData)
     return (
       <FontSizeContext.Consumer>
         {({ em }) => (
@@ -324,23 +327,23 @@ class BubbleLine extends PureComponent {
                                   y={rateY + em / 3}
                                   textAnchor="middle"
                                   fontWeight="bold"
-                                  fontSize={em}
+                                  fontSize={0.9 * em}
                                   fill="white"
                                   opacity={otherOpacity}
                                   style={{ pointerEvents: 'none' }}
                                 >
-                                  {emPercent(d.receiveRate, activeId === d.id ? '2' : '0')}
+                                  {emPercent(d.receiveRate)}
                                 </text>
                                 <text
                                   x={cx}
                                   y={executedRateY + em / 3}
                                   textAnchor="middle"
                                   fontWeight="bold"
-                                  fontSize={em}
+                                  fontSize={0.9 * em}
                                   opacity={otherOpacity}
                                   style={{ pointerEvents: 'none' }}
                                 >
-                                  {emPercent(d.executedRate, activeId === d.id ? '2' : '0')}
+                                  {emPercent(d.executedRate)}
                                 </text>
                               </g>
                             );

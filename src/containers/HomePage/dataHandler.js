@@ -20,7 +20,7 @@ export const getBureauTotal = (data, activeType) => data.map(({ label, id, month
   }, {})
 })).map((d) => ({
   ...d,
-  receiveRate: d.received / d.issued,
+  receiveRate: d.receivedDollar / d.issuedDollar,
   executedRate: d.executed / d.issued,
 }))
 

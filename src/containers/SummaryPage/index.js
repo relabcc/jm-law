@@ -17,14 +17,14 @@ const Module = ({ color, value, label, unit, datas, ...props}) => (
   <Flex flexWrap="wrap" px="4em" {...props}>
     {datas.map(({ value, label, unit, url }, index) => (
       <Box pr="1em" width={1 / 3} key={index}>
-        <Box bg="#f4f4f4" my="1em" borderRadius="5em" py="1.5em">
+        <Box is={url && (p => <Link href={url} display="block" {...p} />)} bg="#f4f4f4" my="1em" borderRadius="5em" py="1.5em">
           <Flex alignItems="center" px="2em">
             <Box width="7.5em" textAlign="right" borderRight="2px solid" pr="1em" py="0.5em">
               <Text.inline fontSize="2em" color={color}>{value}</Text.inline>
               <Text.inline pl="0.25em">{unit}</Text.inline>
             </Box>
             <Box flex="1" pl="1em" py="0.5em">
-              {url ? <Link href={url}>{label}</Link> : label}
+              {label}
             </Box>
           </Flex>
         </Box>
