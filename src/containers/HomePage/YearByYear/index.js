@@ -24,7 +24,7 @@ const parseData = (d, initial) => {
     })
     return va
   }, initial)
-  parsed.receivedRate = parsed.received / parsed.issued
+  parsed.receivedRate = parsed.issuedDollar ? parsed.receivedDollar / parsed.issuedDollar : 0
   return parsed
 }
 

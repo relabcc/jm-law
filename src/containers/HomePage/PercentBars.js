@@ -19,7 +19,8 @@ const PercentBars = ({
   ...props
 }) => {
   const dataByKey = data.reduce((dk, d) => {
-    dk[d.name] = d.issued ? d.received / d.issued : 0;
+    console.log(d)
+    dk[d.name] = d.issuedDollar ? d.receivedDollar / d.issuedDollar : 0;
     return dk
   }, {})
 

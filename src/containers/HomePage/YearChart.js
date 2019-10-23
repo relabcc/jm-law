@@ -31,7 +31,7 @@ const YearChart = ({
             const formattedData = map(data, (d, month) => ({
               month,
               ...d,
-              receivedRate: d.received / d.issued,
+              receivedRate: d.issuedDollar ? d.receivedDollar / d.issuedDollar : 0,
               width,
             }))
             const yStart = 2 * em

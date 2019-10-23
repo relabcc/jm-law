@@ -1,6 +1,7 @@
 import map from 'lodash/map'
 import reduce from 'lodash/reduce'
 import last from 'lodash/last'
+import get from 'lodash/get'
 
 const keys = [
   'canceled',
@@ -16,7 +17,7 @@ export const getBureauTotal = (data, activeType) => data.map(({ label, id, month
   id,
   ...keys.reduce((allData, key) => {
     allData[key] = monthData.reduce((all, d) => all + (activeType ? d.types[activeType].data[key] : d.data[key]), 0)
-    allData.executed = last(monthData).data.executed
+    allData.executed = get(last(monthData), (activeType ? ['types', activeType] : []).concat('data', 'executed'))
     return allData
   }, {})
 })).map((d) => ({
@@ -29,9 +30,13 @@ export const getTypes = (data, lockId) => Object.values(reduce(data, (allTypes, 
   if (!lockId || lockId === id) {
     monthData.forEach(m => {
       m.types.forEach((type) => {
-        allTypes[type.id] = allTypes[type.id] || { id: type.id, name: type.name, issued: 0, received: 0 }
-        allTypes[type.id].issued += type.data.issued
-        allTypes[type.id].received += type.data.received
+        allTypes[type.id] = allTypes[type.id] || keys.reduce((df, k) => {
+          df[k] = 0
+          return df
+        }, { id: type.id, name: type.name })
+        keys.forEach(k => {
+          allTypes[type.id][k] += type.data[k]
+        })
       })
     })
   }

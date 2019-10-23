@@ -22,7 +22,7 @@ const f = format('.2f')
 
 const emPercent = n => (
   <Fragment>
-    {isNaN(n) ? '-' : f(n * 100)}
+    {isNaN(n) || n === Infinity ? '-' : f(n * 100)}
     <tspan fontSize="0.6em">%</tspan>
   </Fragment>
 )
