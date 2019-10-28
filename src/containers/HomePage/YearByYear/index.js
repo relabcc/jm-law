@@ -3,6 +3,7 @@ import { compose } from 'redux'
 import reduce from 'lodash/reduce'
 import forEach from 'lodash/forEach'
 import groupBy from 'lodash/groupBy'
+import range from 'lodash/range'
 
 import Box from '../../../components/Box'
 import Flex from '../../../components/Flex'
@@ -34,14 +35,17 @@ const colors = [
   theme.colors.orange4,
 ];
 
+const getPath = () => `data/bureaus${typeof window !== 'undefined' && window.__BUREAU_ID !== '00000000' ? `/${window.__BUREAU_ID}` : ''}`
+
 class YearByYear extends PureComponent {
   static getDerivedStateFromProps(nextProps) {
     const { year } = nextProps
+    const p = getPath()
     return {
       data: {
-        [year]: nextProps[`data/bureaus?year=${year}`],
-        [year - 1]: nextProps[`data/bureaus?year=${year - 1}`],
-        [year - 2]: nextProps[`data/bureaus?year=${year - 2}`],
+        [year]: nextProps[`${p}?year=${year}`],
+        [year - 1]: nextProps[`${p}?year=${year - 1}`],
+        [year - 2]: nextProps[`${p}?year=${year - 2}`],
       }
     }
   }
@@ -123,7 +127,5 @@ class YearByYear extends PureComponent {
 }
 
 export default (props) => createElement(compose(
-  withDataState(`data/bureaus?year=${props.year}`),
-  withDataState(`data/bureaus?year=${props.year - 1}`),
-  withDataState(`data/bureaus?year=${props.year - 2}`),
+  ...range(3).map(i => withDataState(`${getPath()}?year=${props.year - i}`))
 )(YearByYear), props);
