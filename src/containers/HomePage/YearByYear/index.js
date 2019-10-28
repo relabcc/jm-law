@@ -35,17 +35,16 @@ const colors = [
   theme.colors.orange4,
 ];
 
-const getPath = () => `data/bureaus${typeof window !== 'undefined' && window.__BUREAU_ID !== '00000000' ? `/${window.__BUREAU_ID}` : ''}`
+const path = `data/bureaus${typeof window !== 'undefined' && window.__BUREAU_ID !== '00000000' ? `/${window.__BUREAU_ID}` : ''}`
 
 class YearByYear extends PureComponent {
   static getDerivedStateFromProps(nextProps) {
     const { year } = nextProps
-    const p = getPath()
     return {
       data: {
-        [year]: nextProps[`${p}?year=${year}`],
-        [year - 1]: nextProps[`${p}?year=${year - 1}`],
-        [year - 2]: nextProps[`${p}?year=${year - 2}`],
+        [year]: nextProps[`${path}?year=${year}`],
+        [year - 1]: nextProps[`${path}?year=${year - 1}`],
+        [year - 2]: nextProps[`${path}?year=${year - 2}`],
       }
     }
   }
@@ -127,5 +126,5 @@ class YearByYear extends PureComponent {
 }
 
 export default (props) => createElement(compose(
-  ...range(3).map(i => withDataState(`${getPath()}?year=${props.year - i}`))
+  ...range(3).map(i => withDataState(`${path}?year=${props.year - i}`))
 )(YearByYear), props);

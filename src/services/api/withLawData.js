@@ -3,10 +3,9 @@ import withData from './withData';
 
 export default ({ publicOnly, ...params }, lockId) => (SubComp) => {
   let key = 'data/bureaus'
-  if (typeof window !== 'undefined' && window.__BUREAU_ID !== '00000000') {
-    key = `${key}/${window.__BUREAU_ID}`
-  }
-  if (lockId) {
+  if (window.__SHOW_BUREAU_ID !== '00000000') {
+    key = `${key}/${window.__SHOW_BUREAU_ID}`
+  } else if (lockId) {
     key = `${key}/${lockId}`
   }
   key = `${key}/laws`

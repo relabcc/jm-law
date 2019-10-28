@@ -35,7 +35,8 @@ import {
   mapData,
 } from './dataHandler'
 
-const isTopBureau = window.__BUREAU_ID === '00000000'
+const isTopBureau = window.__SHOW_BUREAU_ID === '00000000'
+const singleBureau = isTopBureau && window.__BUREAU_ID !== '00000000'
 
 class IndexPage extends PureComponent {
   static getDerivedStateFromProps(nexProps) {
@@ -55,6 +56,7 @@ class IndexPage extends PureComponent {
     publicOnly: 0,
     typeLegends: [],
     year: last(this.props.yearsList),
+    lockId: singleBureau ? window.__BUREAU_ID : null,
   }
 
   handleTypeFilter = activeType => this.setState({ activeType })
@@ -72,7 +74,7 @@ class IndexPage extends PureComponent {
   setLock = lockId => this.setState({ lockId })
 
   handleReset = () => this.setState({
-    lockId: null,
+    lockId: singleBureau ? window.__BUREAU_ID : null,
     chartIndex: 0,
     publicOnly: 0,
     activeType: null,
@@ -122,7 +124,7 @@ class IndexPage extends PureComponent {
                 />
               </Flex>
               <Box textAlign="right" my="1em">
-                {window.__CAN_BACK && <Button onClick={() => window.history.back()} mr="1em">返回全局處</Button>}
+                {!isTopBureau && <Button onClick={() => window.history.back()} mr="1em">返回全局處</Button>}
                 <Button onClick={this.handleReset}>切回預設</Button>
               </Box>
               <BubbleLine

@@ -19,6 +19,7 @@ import FontSizeContext from '../../components/ThemeProvider/FontSizeContext'
 import InfoSection from './InfoSection'
 
 const f = format('.2f')
+const fade = 0.15
 
 const emPercent = n => (
   <Fragment>
@@ -27,7 +28,8 @@ const emPercent = n => (
   </Fragment>
 )
 
-const isTopBureau = window.__BUREAU_ID === '00000000'
+const isTopBureau = window.__SHOW_BUREAU_ID === '00000000'
+const singleBureau = isTopBureau && window.__BUREAU_ID !== '00000000'
 
 class BubbleLine extends PureComponent {
   static getDerivedStateFromProps({ data }) {
@@ -41,11 +43,13 @@ class BubbleLine extends PureComponent {
 
   state = {
     labelStart: 0,
+    activeId: singleBureau ? window.__BUREAU_ID : null,
   }
 
   wrapper = createRef()
 
   handleTooltip = ({ event, xScale, data }) => {
+    if (singleBureau) return
     const { x } = localPoint(event);
     const index = Math.round(xScale.invert(x))
     const d = data[index]
@@ -57,6 +61,7 @@ class BubbleLine extends PureComponent {
   }
 
   handleClick = () => {
+    if (singleBureau) return
     const { activeId } = this.state
     const { lockId, onLock } = this.props
     if (lockId) {
@@ -162,7 +167,7 @@ class BubbleLine extends PureComponent {
                       opacity: 1,
                     }}
                     update={{
-                      opacity: [(activeId || lockId) ? 0.1 : 1],
+                      opacity: [(activeId || lockId) ? fade : 1],
                       timing: { duration: 250 }
                     }}
                   >
@@ -223,7 +228,7 @@ class BubbleLine extends PureComponent {
                         data: sortedData,
                       })
                     }
-                    onMouseLeave={() => this.setState({ activeId: null })}
+                    onMouseLeave={() => !singleBureau && this.setState({ activeId: null })}
                     onClick={this.handleClick}
                   />
                   <g ref={this.wrapper}>
@@ -258,8 +263,8 @@ class BubbleLine extends PureComponent {
                             timing: { duration: 500 },
                           },
                           {
-                            opacity: [active ? 0.5 : 0.1],
-                            otherOpacity: [active ? 1 : 0.1],
+                            opacity: [active ? 0.5 : fade],
+                            otherOpacity: [active ? 1 : fade],
                             centerR: [centerActive ? em : 0],
                             timing: { duration: 250 },
                           },
@@ -381,7 +386,7 @@ class BubbleLine extends PureComponent {
                                           style={isTopBureau ? { cursor: 'pointer' } : {}}
                                           onClick={() => {
                                             if (isTopBureau) {
-                                              window.location.search = `?bureauId=${encodeURIComponent(d.id)}`
+                                              window.location.search = `?showBureau=${encodeURIComponent(d.id)}`
                                             }
                                           }}
                                         />
