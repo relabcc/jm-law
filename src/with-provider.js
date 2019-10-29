@@ -7,7 +7,7 @@ import creatStore from './stores/createStore';
 
 const store = creatStore();
 
-window.__DEPARTMENT_ID = '1631100000000'
+// window.__DEPARTMENT_ID = '1631100000000'
 // window.__BUREAU_ID = '13'
 window.__BUREAU_ID = window.__BUREAU_ID || '00000000'
 window.__SHOW_BUREAU_ID = '00000000'

@@ -12,7 +12,7 @@ import ChartBase from '../../../components/Charts/ChartBase'
 
 const xValue = d => d.index
 const yValue = d => d.receivedRate
-const pd = format('.0%')
+const pd = format('.2%')
 
 const ReceivedChart = ({
   data,
