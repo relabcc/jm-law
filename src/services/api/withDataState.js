@@ -23,10 +23,12 @@ export default (key, params) => {
         setTimeout(this.request);
       }
 
-      request = (skip) => {
+      request = (skip, newParams) => {
         if (!this.checkIsPending()) {
+          console.log(newParams, 'isPending')
           if (skip || !this.checkIsDone()) {
-            this.props.getData({ key, params })
+            console.log(newParams, 'isDone')
+            this.props.getData({ key, params: newParams || params })
           }
         }
       };
@@ -42,7 +44,7 @@ export default (key, params) => {
           content = createElement(SubComp, {
             ...props,
             [key]: data,
-            resync: () => this.request(true),
+            resync: (newParams) => this.request(true, newParams),
             // isLoading: this.checkIsPending(),
           });
         }

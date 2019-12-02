@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, createElement, Fragment, PureComponent } from 'react'
 
 import Container from '../../components/Container'
 import Box from '../../components/Box'
@@ -7,11 +7,11 @@ import Flex from '../../components/Flex'
 import Text from '../../components/Text'
 import PatternBg from '../../components/PatternBg';
 import LineBg from '../../components/LineBg';
+import Dropdown from '../../components/Dropdown';
 
 import withDataState from '../../services/api/withDataState'
 
 import Layout from '../Layout';
-// {label.replace(String.fromCharCode(92).concat('n'), '\n')}
 
 const Module = ({ color, value, label, unit, datas, ...props}) => (
   <Flex flexWrap="wrap" px="4em" {...props}>
@@ -33,24 +33,60 @@ const Module = ({ color, value, label, unit, datas, ...props}) => (
   </Flex>
 )
 
-const SummaryPage = ({ summary }) => {
-  const primarys = summary.primary;
-  const secondarys = summary.secondary
+class SummaryPage extends PureComponent {
+  componentDidUpdate(prevProps, prevState) {
+    const { type, resync } = this.props
+
+    if (type !== prevProps.type) {
+      resync(type ? { type } : {})
+    }
+  }
+
+  render() {
+    const { summary } = this.props
+    const primarys = summary.primary;
+    const secondarys = summary.secondary
+    return (
+      <Fragment>
+        <Module datas={primarys} color="textYellow" my="2em" />
+        <LineBg>
+          <Box height="2em" />
+        </LineBg>
+        <Module datas={secondarys} color="textBlue" />
+      </Fragment>
+    )
+  }
+}
+
+const TypeSummary = withDataState(
+  'summary',
+  window.__DEPARTMENT_ID && { departmentId: window.__DEPARTMENT_ID }
+)(SummaryPage)
+
+const TypeWrapper = ({ typeList }) => {
+  const [type, handleTypeFilter] = useState()
+  console.log(type)
 
   return (
     <Layout>
       <PatternBg py="2em">
         <Container>
-          <Module datas={primarys} color="textYellow" my="2em" />
-          <LineBg>
-            <Box height="2em" />
-          </LineBg>
-          <Module datas={secondarys} color="textBlue" />
+          <Flex py="1em" alignItems="center">
+            <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">案件類別</Text>
+            <Box width="12em">
+              <Dropdown
+                placeholder="全部"
+                value={type}
+                options={typeList.map(({ name }) => name)}
+                onChange={({ value }) => handleTypeFilter(value)}
+              />
+            </Box>
+          </Flex>
+          <TypeSummary type={type} />
         </Container>
       </PatternBg>
     </Layout>
   )
 }
 
-
-export default withDataState('summary', window.__DEPARTMENT_ID && { departmentId: window.__DEPARTMENT_ID })(SummaryPage)
+export default withDataState('typeList')(TypeWrapper)
