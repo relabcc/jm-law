@@ -25,9 +25,7 @@ export default (key, params) => {
 
       request = (skip, newParams) => {
         if (!this.checkIsPending()) {
-          console.log(newParams, 'isPending')
           if (skip || !this.checkIsDone()) {
-            console.log(newParams, 'isDone')
             this.props.getData({ key, params: newParams || params })
           }
         }

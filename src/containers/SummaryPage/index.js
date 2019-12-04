@@ -65,7 +65,7 @@ const TypeSummary = withDataState(
 
 const TypeWrapper = ({ typeList }) => {
   const [type, handleTypeFilter] = useState()
-  console.log(type)
+  // console.log(type)
 
   return (
     <Layout>
