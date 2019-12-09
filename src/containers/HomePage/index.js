@@ -42,11 +42,13 @@ class IndexPage extends PureComponent {
   static getDerivedStateFromProps(nexProps) {
     const { typeList, data } = nexProps
     const mappedData = mapData(data)
-    const typeLegends = typeList.map(({ name }, i) => ({
+    const typeLegends = typeList.map(({ name, id }, i) => ({
+      id,
       label: name,
       color: theme.colors.spectrum[theme.colors.spectrum.length - 1 - i],
     }))
-    return { mappedData, typeLegends }
+    const typeOptions = typeList.map(({ name, id }) => ({ label: name, value: id }))
+    return { mappedData, typeLegends, typeOptions }
   }
 
   state = {
@@ -57,6 +59,7 @@ class IndexPage extends PureComponent {
     typeLegends: [],
     year: last(this.props.yearsList),
     lockId: singleBureau ? window.__BUREAU_ID : null,
+    typeOptions: [],
   }
 
   handleTypeFilter = activeType => this.setState({ activeType })
@@ -81,7 +84,7 @@ class IndexPage extends PureComponent {
   })
 
   render() {
-    const { data, typeList, yearsList: years } = this.props
+    const { data, yearsList: years } = this.props
     const {
       sortBy,
       sortOrder,
@@ -92,6 +95,7 @@ class IndexPage extends PureComponent {
       publicOnly,
       typeLegends,
       lockId,
+      typeOptions,
     } = this.state
 
     const bureauTotal = getBureauTotal(mappedData, activeType)
@@ -108,7 +112,7 @@ class IndexPage extends PureComponent {
                   <Dropdown
                     placeholder="全部"
                     value={activeType}
-                    options={typeList.map(({ name }) => name)}
+                    options={typeOptions}
                     onChange={({ value }) => this.handleTypeFilter(value)}
                   />
                 </Box>

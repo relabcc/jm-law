@@ -41,11 +41,11 @@ class TypeDonut extends PureComponent {
       dataLength: data.length,
       labelLength: Math.floor(data.length / 2) + 1,
       getColorByName: legends.reduce((cn, l) => {
-        cn[l.label] = l.color
+        cn[l.id] = l.color
         return cn
       }, {}),
       getIndexByName: legends.reduce((cn, l, i) => {
-        cn[l.label] = i
+        cn[l.id] = i
         return cn
       }, {}),
       spaceForLabels,
@@ -99,8 +99,8 @@ class TypeDonut extends PureComponent {
                       key={i}
                       left={notEnoughSpace ? 0 : em}
                       top={legendBottom - (dataLength - 1 - i) * em * 1.75}
-                      onClick={() => onLegendClick(legend.label === activeLegend ? null : legend.label)}
-                      opacity={!activeLegend || legend.label === activeLegend ? 1 : 0.3}
+                      onClick={() => onLegendClick(legend.id === activeLegend ? null : legend.id)}
+                      opacity={!activeLegend || legend.id === activeLegend ? 1 : 0.3}
                       style={{ cursor: 'pointer' }}
                     >
                       <circle cx={em / 2} cy={-em * 0.3} r={em / 2} fill={legend.color} />
@@ -118,12 +118,12 @@ class TypeDonut extends PureComponent {
                       outerRadius={donutR * 1.05}
                       innerRadius={donutR * 0.4}
                       padAngle={0}
-                      pieSort={(a, b) => getIndexByName[a.name] - getIndexByName[b.name]}
+                      pieSort={(a, b) => getIndexByName[a.id] - getIndexByName[b.id]}
                     >
                       {pie => pie.arcs.map((arc, i) => {
                         const d = pie.path(arc)
                         return (
-                          <g key={`outer-${arc.data.name}-${i}`}>
+                          <g key={`outer-${arc.data.id}-${i}`}>
                             <path d={d} fill="transparent" ref={() => this.handleOuterShape(i, d)} />
                           </g>
                         )
@@ -137,7 +137,7 @@ class TypeDonut extends PureComponent {
                       padAngle={0}
                     >
                       {pie => pie.arcs.map((arc, i) => (
-                        <g key={`bg-${arc.data.name}-${i}`}>
+                        <g key={`bg-${arc.data.id}-${i}`}>
                           <path d={pie.path(arc)} fill="white" opacity="0.2" />
                         </g>
                       ))}
@@ -150,7 +150,7 @@ class TypeDonut extends PureComponent {
                   outerRadius={donutR}
                   innerRadius={donutR * 0.4}
                   padAngle={0}
-                  pieSort={(a, b) => getIndexByName[a.name] - getIndexByName[b.name]}
+                  pieSort={(a, b) => getIndexByName[a.id] - getIndexByName[b.id]}
                 >
                   {pie => {
                     let sideOrders
@@ -184,17 +184,17 @@ class TypeDonut extends PureComponent {
                     return pie.arcs.map((arc, i) => {
                       const [centroidX, centroidY] = pie.path.centroid(arc);
                       const value = valueGetter(arc.data)
-                      const opacity = (!activeLegend || arc.data.name === activeLegend) ? 1 : 0.3
+                      const opacity = (!activeLegend || arc.data.id === activeLegend) ? 1 : 0.3
                       return (
-                        <Fragment key={`inner-${arc.data.name}-${i}`}>
+                        <Fragment key={`inner-${arc.data.id}-${i}`}>
                           <HoverSensor>
                             {({ isHover }) => (
                               <g>
                                 <TweenShape
-                                  d={((!activeLegend && isHover) || activeLegend === arc.data.name) && this.outerShapes[i] ? this.outerShapes[i] : pie.path(arc)}
-                                  fill={getColorByName[arc.data.name]}
+                                  d={((!activeLegend && isHover) || activeLegend === arc.data.id) && this.outerShapes[i] ? this.outerShapes[i] : pie.path(arc)}
+                                  fill={getColorByName[arc.data.id]}
                                   opacity={opacity}
-                                  onClick={() => onLegendClick(arc.data.name === activeLegend ? null : arc.data.name)}
+                                  onClick={() => onLegendClick(arc.data.id === activeLegend ? null : arc.data.id)}
                                   duration={150}
                                 />
                                 {arc.value && spaceForLabels[i] && (
@@ -257,7 +257,7 @@ class TypeDonut extends PureComponent {
                                     y={-0.75 * em}
                                     textAnchor={sign > 0 ? 'end' : 'start'}
                                     fontSize={(showLabel ? 1.5 : 1) * em}
-                                    fill={showLabel ? theme.colors.primary : getColorByName[arc.data.name]}
+                                    fill={showLabel ? theme.colors.primary : getColorByName[arc.data.id]}
                                     fontWeight="bold"
                                   >{valueGetter(arc.data)}</text>
                                 </Group>

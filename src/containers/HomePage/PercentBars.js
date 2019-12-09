@@ -19,12 +19,12 @@ const PercentBars = ({
   ...props
 }) => {
   const dataByKey = data.reduce((dk, d) => {
-    dk[d.name] = d.issuedDollar ? d.receivedDollar / d.issuedDollar : 0;
+    dk[d.id] = d.issuedDollar ? d.receivedDollar / d.issuedDollar : 0;
     return dk
   }, {})
 
   const legendsLength = Math.max(...legends.map(l => l.label.length))
-  const maxRate = Math.ceil(max(legends, ({ label }) => dataByKey[label]))
+  const maxRate = Math.ceil(max(legends, ({ id }) => dataByKey[id]))
   return (
     <FontSizeContext.Consumer>
       {({ em }) => (
@@ -37,13 +37,13 @@ const PercentBars = ({
             });
             return (
               <Group top={yStart}>
-                {legends.map(({ label, color }, i) => {
-                  const handleClick = () => onLegendClick(label === activeLegend ? null : label)
+                {legends.map(({ label, color, id }, i) => {
+                  const handleClick = () => onLegendClick(id === activeLegend ? null : id)
                   return (
                     <Group
                       top={i * em * 2.5}
-                      opacity={!activeLegend || activeLegend === label ? 1 : 0.3}
-                      key={label + i}
+                      opacity={!activeLegend || activeLegend === id ? 1 : 0.3}
+                      key={id}
                     >
                       <text
                         fill="white"
@@ -64,11 +64,11 @@ const PercentBars = ({
                       <Animate
                         start={{ width: 0 }}
                         enter={{
-                          width: [xScale(dataByKey[label])],
+                          width: [xScale(dataByKey[id])],
                           timing: { duration: 500 },
                         }}
                         update={{
-                          width: [xScale(dataByKey[label])],
+                          width: [xScale(dataByKey[id])],
                           timing: { duration: 500 },
                         }}
                       >
@@ -88,7 +88,7 @@ const PercentBars = ({
                               fill="white"
                               fontSize={em * 0.8}
                             >
-                              {pd(dataByKey[label])}
+                              {pd(dataByKey[id])}
                             </text>
                           </Fragment>
                         )}

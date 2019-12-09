@@ -59,14 +59,16 @@ const CustomDropdown = ({
   name,
   placeholder,
   disabled,
+  defaultValue,
   ...props
 }) => {
+  const activeTypeOption = options.find((opt) => opt.value === value)
   return (
     <Box {...props}>
       <StyledDropdown
         onChange={onChange}
-        options={[{ label: '全部', value: '' }].concat(options.map(value => ({ value, label: value })))}
-        value={value}
+        options={[defaultValue].concat(options)}
+        value={activeTypeOption || defaultValue}
         placeholder={placeholder}
         disabled={disabled}
       />
@@ -76,6 +78,7 @@ const CustomDropdown = ({
 
 CustomDropdown.defaultProps = {
   placeholder: '請選擇',
+  defaultValue: { label: '全部', value: '' },
   onChange: () => {}
 }
 

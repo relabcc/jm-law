@@ -62,7 +62,7 @@ export const mapData = data => map(data, ({ id, name, monthData }) => ({
   monthData: monthData.map(m => ({
     ...m,
     types: m.types.reduce((t, td) => {
-      t[td.name] = td
+      t[td.id] = td
       return t
     },{})
   }))
