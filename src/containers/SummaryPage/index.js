@@ -1,4 +1,4 @@
-import React, { useState, createElement, Fragment, PureComponent } from 'react'
+import React, { useState, Fragment, PureComponent } from 'react'
 
 import Container from '../../components/Container'
 import Box from '../../components/Box'
@@ -34,7 +34,7 @@ const Module = ({ color, value, label, unit, datas, ...props}) => (
 )
 
 class SummaryPage extends PureComponent {
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     const { type, resync } = this.props
 
     if (type !== prevProps.type) {
@@ -64,8 +64,7 @@ const TypeSummary = withDataState(
 )(SummaryPage)
 
 const TypeWrapper = ({ typeList }) => {
-  const [type, handleTypeFilter] = useState()
-  // console.log(type)
+  const [type, handleTypeFilter] = useState('')
 
   return (
     <Layout>
@@ -75,9 +74,8 @@ const TypeWrapper = ({ typeList }) => {
             <Text mr="0.75em" fontSize="1.25em" fontWeight="bold" letterSpacing="0.15em">案件類別</Text>
             <Box width="12em">
               <Dropdown
-                placeholder="全部"
                 value={type}
-                options={typeList.map(({ name }) => name)}
+                options={typeList.map(({ name, id }) => ({ value: id, label: name }))}
                 onChange={({ value }) => handleTypeFilter(value)}
               />
             </Box>
