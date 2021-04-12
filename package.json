@@ -59,7 +59,7 @@
     "libreact": "^2.13.1",
     "lodash": "^4.17.20",
     "mini-css-extract-plugin": "0.5.0",
-    "open-color": "^1.6.3",
+    "open-color": "^1.8.0",
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "pnp-webpack-plugin": "1.5.0",
     "polymorph-js": "^1.0.2",
