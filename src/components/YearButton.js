@@ -1,5 +1,5 @@
 import React, { createElement, PureComponent } from 'react';
-import { IoMdArrowDropleft,  IoMdArrowDropright} from 'react-icons/io';
+import { IoIosArrowBack, IoIosArrowForward} from 'react-icons/io';
 
 import Box from './Box'
 import Flex from './Flex'
@@ -38,24 +38,36 @@ class YearButton extends PureComponent {
     const { currentYear, years, darkBg, onChange, ...props} = this.props
     const { activeYear } = this.state
     return (
-      <Flex alignItems="center" {...props}>
-        {createElement(darkBg ? Button.lightBg : Button, {
-          px: '0.125em',
-          py: '0.125em',
-          borderRadius: '0.25em',
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        bg={darkBg ? 'white' : 'lightGray'}
+        px="0.5em"
+        py="0.25em"
+        borderRadius="999px"
+        {...props}
+      >
+        {createElement(Button, {
+          px: 0,
+          py: 0,
+          width: '1.5em',
+          height: '1.5em',
+          borderRadius: '100%',
           disabled: !activeYear,
           onClick: this.handleLastYear,
-        }, <IoMdArrowDropleft size="1.5em" />)}
-        <Box px="1.5em" py="0.375em" border="1px solid" mx="0.5em" borderRadius="0.5em">
+        }, <IoIosArrowBack size="1em" />)}
+        <Box px="2em" fontWeight="bold" fontSize="1.25em">
           {years[activeYear]}
         </Box>
-        {createElement(darkBg ? Button.lightBg : Button, {
-          px: '0.125em',
-          py: '0.125em',
-          borderRadius: '0.25em',
+        {createElement(Button, {
+          px: 0,
+          py: 0,
+          width: '1.5em',
+          height: '1.5em',
+          borderRadius: '100%',
           disabled: activeYear === years.length - 1,
           onClick: this.handleNextYear,
-        }, <IoMdArrowDropright size="1.5em" />)}
+        }, <IoIosArrowForward size="1em" />)}
       </Flex>
     );
   }

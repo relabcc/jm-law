@@ -18,7 +18,7 @@ import FontSizeContext from '../../components/ThemeProvider/FontSizeContext'
 
 import InfoSection from './InfoSection'
 
-const f = format('.2f')
+const f = format('.0f')
 const fade = 0.15
 
 const emPercent = n => (
@@ -116,20 +116,10 @@ class BubbleLine extends PureComponent {
 
               return (
                 <Fragment>
-                  <LinearGradient from={theme.colors.darkBlue} to={theme.colors.darkerBlue} vertical={false} id="dark" />
-                  <LinearGradient from={theme.colors.orange6} to={theme.colors.orange3} vertical={false} id="rate" />
-                  <RadialGradient from={theme.colors.orange3} to={theme.colors.orange4} fromOffset="30%" id="radial-fill" />
+                  <LinearGradient from="#FF7B34" to="#FFAB3C" vertical={false} id="rate" />
+                  <RadialGradient from="#AEE6EB" to="#11BBC2" fromOffset="70%" id="radial-fill" />
                   <RadialGradient from={theme.colors.orange5} to={theme.colors.orange5} toOpacity={0} id="radial-trans" />
                   <g>
-                    <rect
-                      width={leftLabelWidth}
-                      height={height - rLabelHeight / 2}
-                      x={0}
-                      y={rLabelHeight / 2}
-                      opacity={0.15}
-                      fill="url('#dark')"
-                      rx={em}
-                    />
                     {[lableY, rateY - 2 * em / 3, executedRateY - 2 * em / 3].map((y, i) => (
                       <line
                         key={i}
@@ -163,9 +153,7 @@ class BubbleLine extends PureComponent {
                     ))}
                   </g>
                   <Animate
-                    start={{
-                      opacity: 1,
-                    }}
+                    start={{ opacity: 1 }}
                     update={{
                       opacity: [(activeId || lockId) ? fade : 1],
                       timing: { duration: 250 }
@@ -177,7 +165,7 @@ class BubbleLine extends PureComponent {
                         y1={rLabelHeight + rMax}
                         x2={width}
                         y2={rLabelHeight + rMax}
-                        stroke={theme.colors.lightGray}
+                        stroke="#C9CACA"
                         strokeWidth="2"
                         strokeLinecap="round"
                         {...state}
@@ -192,14 +180,6 @@ class BubbleLine extends PureComponent {
                     y={rateY - em}
                     rx={em}
                   />
-                  {/* <rect
-                  width={xEnd - xStart + rMax}
-                  height={2 * em}
-                  fill="url('#rate')"
-                  x={xStart - rMax / 2}
-                  y={executedRateY - em}
-                  rx={em}
-                /> */}
                   <Bar
                     x={0}
                     y={0}
@@ -296,7 +276,7 @@ class BubbleLine extends PureComponent {
                                   x={cx}
                                   y={rLabelHeight + rMax - Math.max(r, 0.15 * rMax) - 0.5 * em}
                                   textAnchor="middle"
-                                  fontSize={em}
+                                  fontSize={1.125 * em}
                                   opacity={otherOpacity}
                                   style={{ pointerEvents: 'none' }}
                                 >
@@ -307,7 +287,7 @@ class BubbleLine extends PureComponent {
                                   x2={cx}
                                   y1={rLabelHeight + rMax}
                                   y2={lableY + em}
-                                  stroke={theme.colors.lightGray}
+                                  stroke={theme.colors.darkGray}
                                   opacity={otherOpacity}
                                   style={{ pointerEvents: 'none' }}
                                 />

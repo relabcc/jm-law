@@ -27,15 +27,16 @@ const darkerBlue = '#171835'
 const textBlue = '#1E213E'
 const textYellow = '#F2B817'
 const dropdownBg = '#E7EAF6'
+const teal = '#00AEB7'
 
 const white = '#fff';
 const black = '#000';
 const text = '#040000';
 const gray = '#7d7e80'
-const lightGray = '#c9caca'
-const darkGray = '#4c4948'
-const orange = spectrum[3]
-const darkOrange = spectrum[4]
+const lightGray = '#EFEFEF'
+const darkGray = '#4C4948'
+const orange = '#FF832A'
+const darkOrange = orange
 const lightOrange = spectrum[2]
 const darkRed = spectrum[5]
 const oranges = spectrum.reduce((o, c, i) => {
@@ -46,6 +47,7 @@ const primary = darkOrange;
 
 export default {
   colors: {
+    teal,
     white,
     black,
     gray,
@@ -82,5 +84,12 @@ export default {
       backgroundImage: `linear-gradient(to right, ${darkBlue}, ${darkerBlue})`,
       color: white,
     },
+    lightBlue: {
+      backgroundImage: `linear-gradient(to bottom, #D7ECEC, rgba(242,242,242,0))`,
+    },
+    orange: {
+      backgroundImage: `linear-gradient(to right, #FF832A, #FFAB2A 80%)`,
+      color: white,
+    }
   }
 };
