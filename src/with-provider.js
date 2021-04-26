@@ -18,6 +18,11 @@ if (window.location.search) {
     window.__SHOW_BUREAU_ID = id
     window.__BUREAU_ID = id
   }
+  const resDep = /showDepartment=([^&]+)/g.exec(window.location.search)
+  if (resDep && resDep[1]) {
+    const id = decodeURIComponent(resDep[1])
+    window.__SHOW_DEPARTMENT_ID = id
+  }
 }
 
 class InitialDispatch extends Component {

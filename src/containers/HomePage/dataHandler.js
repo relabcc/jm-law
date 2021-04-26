@@ -10,11 +10,13 @@ const keys = [
   'issuedDollar',
   'received',
   'receivedDollar',
+  'executed',
 ]
 
-export const getBureauTotal = (data, activeType) => data.map(({ label, id, monthData }) => ({
+export const getBureauTotal = (data, activeType) => data.map(({ label, id, monthData, hasChildren }) => ({
   label,
   id,
+  hasChildren,
   ...keys.reduce((allData, key) => {
     allData[key] = monthData.reduce((all, d) => all + (activeType ? d.types[activeType].data[key] : d.data[key]), 0)
     allData.executed = get(last(monthData), (activeType ? ['types', activeType] : []).concat('data', 'executed'))
@@ -56,14 +58,9 @@ export const getMonthData = (data, activeType, lockId) => data.reduce((md, d) =>
   return md
 }, {})
 
-export const mapData = data => map(data, ({ id, name, monthData }) => ({
+export const mapData = data => map(data, ({ id, name, monthData, hasChildren }) => ({
   label: name,
   id,
-  monthData: monthData.map(m => ({
-    ...m,
-    types: m.types.reduce((t, td) => {
-      t[td.id] = td
-      return t
-    },{})
-  }))
+  monthData,
+  hasChildren,
 }))

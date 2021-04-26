@@ -35,7 +35,16 @@ const colors = [
   theme.colors.orange4,
 ];
 
-const path = `data/bureaus${typeof window !== 'undefined' && window.__SHOW_BUREAU_ID !== '00000000' ? `/${window.__SHOW_BUREAU_ID}` : ''}`
+const path = (() => {
+  let base = 'data/bureaus'
+  if (window.__SHOW_BUREAU_ID !== '00000000') {
+    base += `/${window.__SHOW_BUREAU_ID}`
+    if (window.__SHOW_DEPARTMENT_ID) {
+      base += `/${window.__SHOW_DEPARTMENT_ID}`
+    }
+  }
+  return base
+})()
 
 class YearByYear extends PureComponent {
   static getDerivedStateFromProps(nextProps) {

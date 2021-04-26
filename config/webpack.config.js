@@ -524,11 +524,6 @@ module.exports = function(webpackEnv) {
       new HtmlWebpackPlugin(
         Object.assign(
           {},
-          {
-            inject: true,
-            template: paths.summaryHtml,
-            filename: 'summary.html',
-          },
           isEnvProduction
             ? {
                 minify: {

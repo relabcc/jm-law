@@ -3,8 +3,9 @@ import { Group } from '@vx/group';
 import { scaleBand, scaleLinear } from '@vx/scale';
 import { AxisLeft, AxisBottom } from '@vx/axis';
 import { Grid } from '@vx/grid';
-import { LinePath, Bar } from '@vx/shape';
+import { LinePath } from '@vx/shape';
 import { LinearGradient } from '@vx/gradient';
+import { curveCardinal } from '@vx/curve'
 import range from 'lodash/range'
 import map from 'lodash/map'
 import { NodeGroup } from 'react-move'
@@ -22,7 +23,7 @@ const YearChart = ({
   data,
   ...props
 }) => {
-
+  console.log(data)
   return (
     <FontSizeContext.Consumer>
       {({ em }) => (
@@ -42,7 +43,7 @@ const YearChart = ({
             const xScale = scaleBand({
               range: [0, xEnd - xStart],
               domain: range(1, 13),
-              paddingInner: 0.3,
+              paddingInner: 0.5,
               paddingOuter: 0.3,
             })
             const percentYScale = scaleLinear({
@@ -68,7 +69,7 @@ const YearChart = ({
                       stroke={theme.colors.lightGray}
                       width={xEnd - xStart}
                       height={yHeight}
-                      numTicksRows={3}
+                      numTicksRows={4}
                       numTicksColumns={0}
                       columnLineStyle={{
                         strokeWidth: 0,
@@ -78,7 +79,7 @@ const YearChart = ({
                       top={0}
                       left={0}
                       scale={percentYScale}
-                      numTicks={3}
+                      numTicks={4}
                       stroke={theme.colors.darkGray}
                       strokeWidth={1.5}
                       tickStroke="none"
@@ -91,36 +92,9 @@ const YearChart = ({
                       })}
                       tickFormat={d => Math.round(d * 100)}
                     />
-                    <AxisBottom
-                      top={yHeight}
-                      left={0}
-                      scale={xScale}
-                      numTicks={12}
-                      stroke={theme.colors.darkGray}
-                      strokeWidth={1.5}
-                      tickStroke="none"
-                      tickFormat={d => `${d}月`}
-                      tickLabelProps={() => ({
-                        fill: theme.colors.darkGray,
-                        fontSize: em * 0.8,
-                        textAnchor: 'middle',
-                      })}
-                    />
+
                     <Group left={xStart}>
-                      <LinePath
-                        x={dd => xScale(xValue(dd)) - barWidth / 2}
-                        y={dd => valueYScale(yValue(dd))}
-                      >
-                        {({ path }) => (
-                          <TweenShape
-                            d={path(formattedData)}
-                            stroke={theme.colors.teal}
-                            strokeWidth="1.5"
-                            fill="transparent"
-                            duration={500}
-                          />
-                        )}
-                      </LinePath>
+
                       <NodeGroup
                         data={formattedData}
                         keyAccessor={xValue}
@@ -148,17 +122,18 @@ const YearChart = ({
                               const dotX = xPos - barWidth / 2
                               return (
                                 <Fragment key={key}>
-                                  <Bar
+                                  <rect
                                     x={xPos - barWidth}
                                     y={barY}
                                     width={barWidth}
                                     height={barHeight}
                                     fill="url('#bar')"
+                                    rx={em * 0.25}
                                   />
                                   <circle
                                     cx={dotX}
                                     cy={dotY}
-                                    r={em / 5}
+                                    r={em / 4}
                                     fill={theme.colors.teal}
                                   />
                                   <text
@@ -176,7 +151,38 @@ const YearChart = ({
                           </Fragment>
                         )}
                       </NodeGroup>
+                      <LinePath
+                        x={dd => xScale(xValue(dd)) - barWidth / 2}
+                        y={dd => valueYScale(yValue(dd))}
+                        curve={curveCardinal}
+                      >
+                        {({ path }) => (
+                          <TweenShape
+                            d={path(formattedData)}
+                            stroke={theme.colors.teal}
+                            strokeWidth="1.5"
+                            fill="transparent"
+                            duration={500}
+                          />
+                        )}
+                      </LinePath>
                     </Group>
+                    <text fill={theme.colors.darkGray} fontSize={em * 0.8} x={-1.25 * em}>%</text>
+                    <AxisBottom
+                      top={yHeight}
+                      left={0}
+                      scale={xScale}
+                      numTicks={12}
+                      stroke={theme.colors.darkGray}
+                      strokeWidth={1.5}
+                      tickStroke="none"
+                      tickFormat={d => `${d}月`}
+                      tickLabelProps={() => ({
+                        fill: theme.colors.darkGray,
+                        fontSize: em * 0.8,
+                        // textAnchor: 'middle',
+                      })}
+                    />
                   </Group>
                 </Group>
 

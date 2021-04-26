@@ -8,10 +8,8 @@ import Flex from '../../components/Flex'
 import Text from '../../components/Text'
 import Button from '../../components/Button'
 import YearButton from '../../components/YearButton'
-import Toggler from '../../components/Toggler'
-import Dropdown from '../../components/Dropdown';
-import ModalButton from '../../components/ModalButton';
 import PatternBg from '../../components/PatternBg';
+import Image from '../../components/Image';
 
 import theme, { mobileOrDesktop } from '../../components/ThemeProvider/theme';
 
@@ -20,18 +18,15 @@ import withDataState from '../../services/api/withDataState'
 
 import Layout from '../Layout';
 import BubbleLine from './BubbleLine'
-import TypeDonut from './TypeDonut'
-import PercentBars from './PercentBars'
-import LawTops from './LawTops'
 import YearChart from './YearChart'
 // import AvgDays from './AvgDays'
-import YearByYear from './YearByYear'
 import LastUpdated from './LastUpdated'
+
+import legend from './legend.svg'
 
 import {
   getBureauTotal,
   getMonthData,
-  getTypes,
   mapData,
 } from './dataHandler'
 
@@ -106,9 +101,8 @@ class IndexPage extends PureComponent {
                 <Box flex="1" />
                 <LastUpdated />
               </Flex>
-
               <Box textAlign="right" my="1em">
-                <Button onClick={this.handleReset}>切回上層</Button>
+                <Button onClick={() => window.history.back()}>切回上層</Button>
               </Box>
               <BubbleLine
                 ratio={1 / 4}
@@ -136,6 +130,18 @@ class IndexPage extends PureComponent {
                   onChange={this.handleYearChange}
                 />
                 <Box fontSize="1.5em" letterSpacing="0.15em" my="1em" borderBottom="1px solid" pb="0.5rem">月案件量分析</Box>
+                <Box fontSize="1.25em">
+                  <Flex my="1em" justifyContent="center">
+                    <Text>案件量</Text>
+                    <Box ml="1em" width="3em">
+                      <Image src={legend} />
+                    </Box>
+                  </Flex>
+                  <Flex my="1em" justifyContent="center">
+                    <Text>收繳率</Text>
+                    <Box ml="1em" width="3em" height="1em" bg="#B6E6EB" />
+                  </Flex>
+                </Box>
               </Box>
               <Box flex="1" bg="white" px="2em" py="1em" borderRadius="2em">
                 <YearChart ratio={1 / 5} data={monthData} />

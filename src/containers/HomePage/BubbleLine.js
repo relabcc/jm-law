@@ -28,8 +28,8 @@ const emPercent = n => (
   </Fragment>
 )
 
-const isTopBureau = window.__SHOW_BUREAU_ID === '00000000'
-const singleBureau = isTopBureau && window.__BUREAU_ID !== '00000000'
+// const isTopBureau = window.__SHOW_BUREAU_ID === '00000000'
+// const singleBureau = isTopBureau && window.__BUREAU_ID !== '00000000'
 
 class BubbleLine extends PureComponent {
   static getDerivedStateFromProps({ data }) {
@@ -43,13 +43,13 @@ class BubbleLine extends PureComponent {
 
   state = {
     labelStart: 0,
-    activeId: singleBureau ? window.__BUREAU_ID : null,
+    // activeId: singleBureau ? window.__BUREAU_ID : null,
   }
 
   wrapper = createRef()
 
   handleTooltip = ({ event, xScale, data }) => {
-    if (singleBureau) return
+    // if (singleBureau) return
     const { x } = localPoint(event);
     const index = Math.round(xScale.invert(x))
     const d = data[index]
@@ -61,7 +61,7 @@ class BubbleLine extends PureComponent {
   }
 
   handleClick = () => {
-    if (singleBureau) return
+    // if (singleBureau) return
     const { activeId } = this.state
     const { lockId, onLock } = this.props
     if (lockId) {
@@ -134,7 +134,7 @@ class BubbleLine extends PureComponent {
                     ))}
                     {[
                       { label: '已開案件量', y: rLabelHeight + rMax - em / 2 },
-                      { label: isTopBureau ? '局處' : '科室', y: lableY + em },
+                      { label: '單位', y: lableY + em },
                       { label: '收繳率', y: rateY + em / 3 },
                       { label: '執行率', y: executedRateY + em / 3 },
                     ].map(({ label, y }, i) => (
@@ -208,7 +208,7 @@ class BubbleLine extends PureComponent {
                         data: sortedData,
                       })
                     }
-                    onMouseLeave={() => !singleBureau && this.setState({ activeId: null })}
+                    onMouseLeave={() => this.setState({ activeId: null })}
                     onClick={this.handleClick}
                   />
                   <g ref={this.wrapper}>
@@ -343,64 +343,70 @@ class BubbleLine extends PureComponent {
                                   opacity={otherOpacity}
                                   style={{ pointerEvents: 'none' }}
                                 />
-                                <HoverSensor>
-                                  {({ isHover }) => {
-                                    const cy = rLabelHeight + rMax
-                                    const boxHeight = 2.5 * em
-                                    const boxWidth = 5 * em
-                                    return (
-                                      <g>
-                                        <Circle
-                                          cx={cx}
-                                          cy={cy}
-                                          r={centerR * 0.6}
-                                          fill={theme.colors.orange5}
-                                        />
-                                        <Circle
-                                          cx={cx}
-                                          cy={cy}
-                                          r={centerR}
-                                          fill="transparent"
-                                          strokeWidth="2"
-                                          stroke={theme.colors.orange5}
-                                          style={isTopBureau ? { cursor: 'pointer' } : {}}
-                                          onClick={() => {
-                                            if (isTopBureau) {
-                                              window.location.search = `?showBureau=${encodeURIComponent(d.id)}`
-                                            }
-                                          }}
-                                        />
-                                        {isTopBureau && isHover && createPortal((
-                                          <Group top={rLabelHeight + rMax} left={cx + 2 * em}>
-                                            <polygon
-                                              points={[
-                                                [-0.75 * em, 0],
-                                                [0.1 * em, -0.5 * em],
-                                                [0.1 * em, 0.5 * em]
-                                              ].map(p => p.join()).join(' ')}
-                                              fill={theme.colors.orange5}
-                                            />
-                                            <rect
-                                              x={0}
-                                              y={-boxHeight / 2}
-                                              width={boxWidth}
-                                              height={boxHeight}
-                                              fill={theme.colors.orange5}
-                                              rx={0.5 * em}
-                                            />
-                                            <text
-                                              fontSize={em}
-                                              fill="white"
-                                              x={boxWidth / 2}
-                                              y={0.3*em}
-                                              textAnchor="middle"
-                                            >前往局處</text>
-                                          </Group>
-                                        ), this.wrapper.current)}
-                                      </g>
-                                    )
-                                  }}
-                                </HoverSensor>
+                                {d.hasChildren && (
+                                  <HoverSensor>
+                                    {({ isHover }) => {
+                                      const cy = rLabelHeight + rMax
+                                      const boxHeight = 2.5 * em
+                                      const boxWidth = 5 * em
+                                      return (
+                                        <g>
+                                          <Circle
+                                            cx={cx}
+                                            cy={cy}
+                                            r={centerR * 0.6}
+                                            fill={theme.colors.orange5}
+                                          />
+                                          <Circle
+                                            cx={cx}
+                                            cy={cy}
+                                            r={centerR}
+                                            fill="transparent"
+                                            strokeWidth="2"
+                                            stroke={theme.colors.orange5}
+                                            style={{ cursor: 'pointer' }}
+                                            onClick={() => {
+                                              const isSecondTier = /showBureau/.test(window.location.search)
+                                              if (isSecondTier) {
+                                                window.location.search = window.location.search + `&showDepartment=${encodeURIComponent(d.id)}`
+                                              } else {
+                                                window.location.search = `?showBureau=${encodeURIComponent(d.id)}`
+                                              }
+                                            }}
+                                          />
+                                          {isHover && createPortal((
+                                            <Group top={rLabelHeight + rMax} left={cx + 2 * em}>
+                                              <polygon
+                                                points={[
+                                                  [-0.75 * em, 0],
+                                                  [0.1 * em, -0.5 * em],
+                                                  [0.1 * em, 0.5 * em]
+                                                ].map(p => p.join()).join(' ')}
+                                                fill={theme.colors.orange5}
+                                              />
+                                              <rect
+                                                x={0}
+                                                y={-boxHeight / 2}
+                                                width={boxWidth}
+                                                height={boxHeight}
+                                                fill={theme.colors.orange5}
+                                                rx={0.5 * em}
+                                              />
+                                              <text
+                                                fontSize={em}
+                                                fill="white"
+                                                x={boxWidth / 2}
+                                                y={0.3*em}
+                                                textAnchor="middle"
+                                              >向下一層</text>
+                                            </Group>
+                                          ), this.wrapper.current)}
+                                        </g>
+                                      )
+                                    }}
+                                  </HoverSensor>
+
+                                )}
                               </g>
                             );
                           })}
