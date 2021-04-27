@@ -1,6 +1,7 @@
-import React, { PureComponent, createElement } from 'react'
+import React, { PureComponent } from 'react'
 import { compose } from 'redux'
 import last from 'lodash/last'
+import { LocalStorage } from 'libreact'
 
 import Container from '../../components/Container'
 import Box from '../../components/Box'
@@ -57,9 +58,11 @@ class IndexPage extends PureComponent {
   handleChartToggle = chartIndex => this.setState({ chartIndex })
 
   handleYearChange = year => {
-    const { updateParams } = this.props
-    updateParams({ year })
-    this.setState({ year })
+    if (year) {
+      const { updateParams } = this.props
+      updateParams({ year })
+      this.setState({ year })
+    }
   }
 
   setPublicOnly = publicOnly => this.setState({ publicOnly })
@@ -88,8 +91,14 @@ class IndexPage extends PureComponent {
     const monthData = getMonthData(mappedData, activeType, lockId)
     return (
       <Layout>
+        <LocalStorage
+          name="chiayi-law-year"
+          data={year}
+          persist
+          onMount={this.handleYearChange}
+        />
         <Box>
-          <PatternBg pt="2em" pb="3em">
+          <PatternBg pt="2em">
             <Container>
               <Flex alignItems="center">
                 <Text mr="0.75em" fontSize="1.5em" fontWeight="bold" letterSpacing="0.15em">各單位案件量分析</Text>
@@ -101,7 +110,7 @@ class IndexPage extends PureComponent {
                 <Box flex="1" />
                 <LastUpdated />
               </Flex>
-              <Box textAlign="right" my="1em">
+              <Box textAlign="right">
                 <Button onClick={() => window.history.back()}>切回上層</Button>
               </Box>
               <BubbleLine
@@ -115,10 +124,7 @@ class IndexPage extends PureComponent {
             </Container>
           </PatternBg>
         </Box>
-        <Box
-          py={mobileOrDesktop(0, '2em')}
-          gradient="lightBlue"
-        >
+        <Box gradient="lightBlue">
           <Container>
             <Flex px="5%" py="2em" alignItems="center">
               <Box px="2em">

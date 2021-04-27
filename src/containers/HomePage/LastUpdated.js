@@ -7,7 +7,7 @@ import withDataState from '../../services/api/withDataState'
 
 const LastUpdated = ({ lastUpdated }) => {
   return (
-    <Text>資料更新日期：{get(lastUpdated, 'date')}</Text>
+    <Text fontSize="0.875em">資料更新日期：{get(lastUpdated, 'date')}</Text>
   );
 }
 
