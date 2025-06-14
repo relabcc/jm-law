@@ -1,23 +1,28 @@
-# 法制局儀錶板
+# 嘉義市儀錶板
 
 ## 系統介面展示
 
 ![系統主介面](screenshot.jpeg)
 
-*主要功能包含各局處案件量視覺化、案件類型分析、違法條文統計及月度趨勢分析*
+*嘉義市各單位案件量分析系統，提供直觀的案件統計與月度趨勢視覺化*
 
 ### UI 組件對應說明
 
 | 介面區域 | 對應組件檔案 | 功能說明 |
 |---------|-------------|----------|
-| 🔵 **頂部氣泡圖表** | `BubbleLine.js` | 各局處案件量視覺化，圓形大小代表案件數量，下方顯示收繳率 |
-| 🟠 **左下甜甜圈圖** | `TypeDonut.js` | 案件類型分布圓餅圖（罰鍰、稅務、特權行費用、其他） |
-| 🟢 **右下橫條圖** | `LawTops.js` | 違反法條 TOP 5 排行榜 |
-| 🟡 **底部月度圖表** | `YearChart.js` | 月案件量分析（折線圖+長條圖組合） |
-| 📊 **右側統計數據** | `InfoSection.js`, `AvgDays.js` | 已開案量、金額、收繳、撤銷等統計資訊 |
-| 🎛️ **頂部控制項** | `Dropdown.js`, `YearButton.js` | 案件類別篩選、年度切換等控制介面 |
+| 🔵 **頂部氣泡圖表區** | `BubbleLine.js` | 各單位案件量視覺化，氣泡大小代表案件量，顯示收繳率和執行率 |
+| 🟡 **底部月度分析區** | `YearChart.js` | 月案件量分析，結合折線圖與長條圖展示月度趨勢 |
+| 📊 **右側統計面板** | 內建於主組件 | 顯示已開案件量、案件金額、收繳案件/金額、撤銷案件等統計 |
+| 🎛️ **年度切換控制** | `YearButton.js` | 年度選擇器，支援不同年度資料切換 |
+| 📅 **更新時間顯示** | `LastUpdated.js` | 顯示資料最後更新時間 |
+| 🔗 **導航按鈕** | `Button.js` | 切回上層功能按鈕 |
 
-**容器組件：** `containers/HomePage/index.js` 統籌管理所有子組件的資料流與狀態
+**主要改版特色：**
+- **簡化版面設計** - 移除複雜的甜甜圈圖和法條排行，專注於核心案件量分析
+- **雙區塊布局** - 上方氣泡圖 + 下方月度分析的清晰分層
+- **專注嘉義市** - 針對嘉義市各單位（財政稅務局、環保護局、消防局、市政府、警察局）的專門分析
+
+**容器組件：** `containers/HomePage/index.js` 統籌管理頁面布局與資料流
 
 ## 使用技術架構
 
@@ -100,11 +105,11 @@ src/
 - `api/sagas.js` - 管理 API 呼叫與資料流
 
 **視覺化組件**
-- `BubbleLine.js` - 氣泡與折線複合圖表，展示趨勢與分佈
-- `TypeDonut.js` - 甜甜圈圖，顯示類型占比
-- `YearChart.js` - 年度統計圖表
-- `PercentBars.js` - 百分比橫條圖
-- `LawTops.js` - 排行榜視覺化
+- `BubbleLine.js` - 氣泡圖表，展示各單位案件量與收繳率
+- `YearChart.js` - 月度分析圖表，結合折線圖與長條圖
+- `TypeDonut.js` - 甜甜圈圖（備用組件，當前版本未使用）
+- `PercentBars.js` - 百分比橫條圖（備用組件）
+- `LawTops.js` - 排行榜視覺化（備用組件）
 
 **UI 組件**
 - `ThemeProvider/theme.js` - 統一管理顏色、字體、斷點設定
@@ -186,15 +191,14 @@ npm run deploy
 
 2. `src/containers/HomePage/dataHandler.js`
    - 修改資料處理函式以支援新的篩選邏輯
-   - 更新 `getBureauTotal()`, `getTypes()`, `getMonthData()` 函式
+   - 更新 `getBureauTotal()`, `getMonthData()` 函式
 
-3. 各圖表組件 (`BubbleLine.js`, `TypeDonut.js` 等)
-   - 接收新的篩選參數 props
-   - 調整圖表渲染邏輯
+3. 主要圖表組件
+   - `BubbleLine.js` - 調整氣泡圖的篩選邏輯
+   - `YearChart.js` - 更新月度圖表的資料處理
 
-4. UI 控制組件
-   - `src/components/Dropdown.js` - 新增篩選選項
-   - `src/components/Toggler.js` - 新增切換控制
+4. 年度控制組件
+   - `YearButton.js` - 年度選擇器的選項管理
 
 **範例：新增年份篩選**
 ```javascript
@@ -234,16 +238,16 @@ export default {
 
 **2. 個別圖表顏色：**
 
-**TypeDonut.js (甜甜圈圖)：**
-- 修改 legends 陣列中的 `color` 屬性
-- 顏色透過 `getColorByName` 物件映射
+**BubbleLine.js (氣泡圖)：**
+- 氣泡顏色：修改漸層色彩定義中的 `<LinearGradient>` 和 `<RadialGradient>` 組件
+- 收繳率條形：調整 `fill` 和 `stroke` 屬性的顏色值
 
-**BubbleLine.js (氣泡線圖)：**
-- 漸層色彩定義在 `<LinearGradient>` 和 `<RadialGradient>` 組件中
-- 修改 `from` 和 `to` 屬性值
+**YearChart.js (月度圖表)：**
+- 長條圖顏色：修改 `fill` 屬性設定
+- 折線圖顏色：調整 `stroke` 屬性的主題色彩引用
 
-**其他圖表組件：**
-- 直接在 JSX 中修改 `fill` 或 `stroke` 屬性
+**統計面板顏色：**
+- 直接在主組件的 JSX 中修改 `color` 和 `bg` 屬性
 - 使用 `theme.colors.顏色名稱` 引用主題色彩
 
 **3. 條件式顏色：**
