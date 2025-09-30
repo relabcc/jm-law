@@ -57,7 +57,7 @@
     "jest-resolve": "24.8.0",
     "jest-watch-typeahead": "0.3.1",
     "libreact": "^2.13.1",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "mini-css-extract-plugin": "0.5.0",
     "open-color": "^1.8.0",
     "optimize-css-assets-webpack-plugin": "5.0.3",
